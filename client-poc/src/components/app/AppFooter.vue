@@ -1,6 +1,5 @@
 <template>
   <footer>
-    <div class="copyright">&copy;</div>
     <div class="links">
       <div class="github">
         <Github class="icon" />
@@ -18,10 +17,11 @@ import { Github } from 'lucide-vue-next';
 @import '@/styles/_utilities.scss';
 
 footer {
+  margin-top: calc(2 * $box-padding);
   margin-bottom: $box-padding;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 
 .icon {

@@ -26,7 +26,6 @@ header {
   justify-content: space-between;
   align-items: center;
 
-  margin-bottom: $box-padding;
   padding-top: $box-padding;
   padding-bottom: $box-padding;
   background-color: var(--hiq-color-gray-7);

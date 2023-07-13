@@ -2,6 +2,10 @@
 
 $app-max-width: 75rem;
 
+html, body {
+  overflow-y: hidden;
+}
+
 #app {
   height: 100vh;
 
@@ -24,13 +28,15 @@ $app-max-width: 75rem;
   }
 
   .app-body {
+    padding-top: $box-padding;
+
     flex-grow: 1;
+    overflow: auto;
 
     display: flex;
     flex-direction: column;
 
     main {
-      overflow: auto;
       flex-grow: 1;
     }
 
