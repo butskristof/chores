@@ -1,10 +1,22 @@
 @import './_variables.scss';
 
+$app-max-width: 75rem;
+
 #app {
   height: 100vh;
 
   display: flex;
   flex-direction: column;
+
+  header,
+  main,
+  footer {
+    max-width: $app-max-width;
+    margin: initial auto;
+    padding-left: $box-padding;
+    padding-right: $box-padding;
+    width: 100%;
+  }
 
   header {
     flex-shrink: 0;
