@@ -1,13 +1,28 @@
 <template>
   <div class="chore-list-item">
     <div class="header">
-      <div class="title is-large">Chore</div>
+      <div class="title is-large">{{ chore.title }}</div>
+      <a href="#" class="button btn-reset detail-link">
+        <ChevronRight />
+      </a>
     </div>
-    <div class="description">Some description</div>
+    <div class="iterations">
+      <div class="last">
+        Last iteration: {{ chore.lastIteration.toLocaleDateString() }}
+      </div>
+      <div class="next">
+        Next iteration: {{ chore.nextIteration.toLocaleDateString() }}
+      </div>
+    </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { ChevronRight } from 'lucide-vue-next';
+defineProps({
+  chore: { type: Object, required: true },
+});
+</script>
 
 <style scoped lang="scss">
 @import '@/styles/_variables.scss';
@@ -16,5 +31,18 @@
   padding: $box-padding;
   border: 1px solid black;
   border-radius: var(--hiq-border-radius);
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: $box-padding;
+  }
+}
+
+.detail-link {
+  padding: 0;
 }
 </style>

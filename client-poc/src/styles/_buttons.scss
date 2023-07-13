@@ -1,0 +1,15 @@
+// mask button as text
+.btn-reset {
+  --button-border-color: none;
+  --button-background-color: none;
+  --button-text-color: var(--hiq-link-color);
+  --button-hover-border-color: none;
+  --button-hover-background-color: none;
+  --button-hover-text-color: var(--hiq-link-hover-color);
+  --button-focus-border-color: none;
+  --button-focus-background-color: none;
+  --button-focus-text-color: var(--hiq-link-active-color);
+  --button-active-border-color: none;
+  --button-active-background-color: none;
+  --button-active-text-color: var(--hiq-link-active-color);
+}

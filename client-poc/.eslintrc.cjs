@@ -26,8 +26,8 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
     'sort-imports': 'off',
     'sort-keys': 'off',
+    'no-magic-numbers': 'off', // TODO evaluate
     // 'capitalized-comments': 'off',
-    // 'no-magic-numbers': 'off', // TODO evaluate
     // 'one-var': 'off',
     // 'multiline-comment-style': ['error', 'separate-lines'],
   },
