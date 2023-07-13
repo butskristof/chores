@@ -1,3 +1,8 @@
+/*
+ * Icon
+ * notes
+ * description
+ */
 export const CHORES = [
   {
     id: '8955A8D5-F294-43E6-B82C-C7A80D07BD80',

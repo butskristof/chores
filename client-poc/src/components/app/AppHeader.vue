@@ -1,8 +1,11 @@
 <template>
   <header>
     <div class="brand">
-      <ListTodo />
-      <span>Chores</span>
+      <router-link to="/" class="brand-link">
+        <ListTodo class="brand-icon" />
+        &nbsp;
+        <span>Chores</span>
+      </router-link>
     </div>
     <div class="actions">Log in</div>
   </header>
@@ -14,6 +17,8 @@ import { ListTodo } from 'lucide-vue-next';
 
 <style scoped lang="scss">
 @import '@/styles/_variables.scss';
+@import '@/styles/_typography.scss';
+@import '@/styles/_utilities.scss';
 
 header {
   display: flex;
@@ -26,16 +31,20 @@ header {
   padding-bottom: $box-padding;
   background-color: var(--hiq-color-gray-7);
 
-  .brand {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    font-weight: 500;
-    font-size: 120%;
+  box-shadow: $box-shadow;
 
-    :first-child {
-      display: block;
-      margin-right: 0.5rem;
+  .brand {
+    .brand-link {
+      @include link-reset;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      font-weight: 500;
+      font-size: 120%;
+
+      .brand-icon {
+        @include icon-font-size;
+      }
     }
   }
 }

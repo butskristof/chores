@@ -29,8 +29,9 @@ defineProps({
 
 .chore-list-item {
   padding: $box-padding;
-  border: 1px solid black;
+  border: 1px solid var(--hiq-color-gray-6);
   border-radius: var(--hiq-border-radius);
+  box-shadow: $box-shadow;
 
   .header {
     display: flex;

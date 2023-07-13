@@ -1,0 +1,4 @@
+@mixin icon-font-size($percent: 1) {
+  width: calc(#{$percent} * 1em);
+  height: calc(#{$percent} * 1em);
+}

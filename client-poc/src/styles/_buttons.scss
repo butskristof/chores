@@ -1,3 +1,5 @@
+@import './_utilities.scss';
+
 // mask button as text
 .btn-reset {
   --button-border-color: none;
@@ -12,4 +14,8 @@
   --button-active-border-color: none;
   --button-active-background-color: none;
   --button-active-text-color: var(--hiq-link-active-color);
+}
+
+.btn-icon {
+  @include icon-font-size;
 }
