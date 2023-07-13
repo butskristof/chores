@@ -2,9 +2,15 @@
   <div class="chore-list-item">
     <div class="header">
       <div class="title is-large">{{ chore.title }}</div>
-      <a href="#" class="button btn-reset detail-link">
+      <router-link
+        :to="{
+          name: ROUTES.chores.children.detail.name,
+          params: { id: chore.id },
+        }"
+        class="button btn-reset detail-link"
+      >
         <ChevronRight />
-      </a>
+      </router-link>
     </div>
     <div class="iterations">
       <div class="last">
@@ -19,13 +25,14 @@
 
 <script setup>
 import { ChevronRight } from 'lucide-vue-next';
+import { ROUTES } from '@/router/routes';
 defineProps({
   chore: { type: Object, required: true },
 });
 </script>
 
 <style scoped lang="scss">
-@import '@/styles/_variables.scss';
+@import '@/styles/variables';
 
 .chore-list-item {
   padding: $box-padding;
