@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChoresPoc.Api", "ChoresPoc.Api\ChoresPoc.Api.csproj", "{542208BD-B113-4E9F-994B-FF0B4CB04423}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Api\Api.csproj", "{542208BD-B113-4E9F-994B-FF0B4CB04423}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
