@@ -1,13 +1,14 @@
 using ChoresPoc.Api.Extensions;
+using FastEndpoints;
+using FastEndpoints.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddApi();
+builder.Services.AddApi(builder.Configuration);
 
 var app = builder.Build();
 
-app.MapSwagger();
-if (app.Environment.IsDevelopment())
-	app.UseSwaggerUI(); // no "MapSwaggerUI" available (yet)
+app.UseFastEndpoints();
+app.UseSwaggerGen();
 
 app.Run();
