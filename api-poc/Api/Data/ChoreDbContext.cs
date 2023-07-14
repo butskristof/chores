@@ -1,4 +1,4 @@
-using ChoresPoc.Api.Models;
+using ChoresPoc.Api.Modules.Chores.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChoresPoc.Api.Data;
