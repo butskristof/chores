@@ -10,11 +10,9 @@ public static class GetChore
 {
 	public record Request(Guid Id);
 	
-	public record Response(Guid Id, string Title, int Interval) : ChoreDto(Id, Title, Interval);
-
 	[HttpGet("/chores/{Id}")]
 	[AllowAnonymous]
-	public class Endpoint : Endpoint<Request, Response>
+	public class Endpoint : Endpoint<Request, ChoreDto>
 	{
 		private readonly ChoreDbContext _context;
 
@@ -34,7 +32,7 @@ public static class GetChore
 				return;
 			}
 			
-			var response = new Response(chore.Id, chore.Title, chore.Interval);
+			var response = chore.ToDto();
 			await SendOkAsync(response, ct);
 		}
 	}
