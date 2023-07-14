@@ -11,7 +11,6 @@ public static class GetChore
 	public record Request(Guid Id);
 	
 	[HttpGet("/chores/{Id}")]
-	[AllowAnonymous]
 	public class Endpoint : Endpoint<Request, ChoreDto>
 	{
 		private readonly ChoreDbContext _context;

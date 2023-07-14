@@ -31,7 +31,6 @@ public static class CreateChore
 		public override void Configure()
 		{
 			Post("/chores");
-			AllowAnonymous();
 		}
 
 		public override async Task HandleAsync(Request req, CancellationToken ct)
