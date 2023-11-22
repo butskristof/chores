@@ -6,8 +6,10 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
-    "format": "prettier --write src/"
+    "lint:check": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --ignore-path .gitignore",
+    "lint:fix": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
+    "format:check": "prettier --check src/",
+    "format:fix": "prettier --write src/"
   },
   "dependencies": {
     "pinia": "^2.1.7",
@@ -18,10 +20,13 @@
     "@rushstack/eslint-patch": "^1.3.3",
     "@vitejs/plugin-vue": "^4.4.0",
     "@vue/eslint-config-prettier": "^8.0.0",
-    "eslint": "^8.49.0",
+    "eslint": "^8.54.0",
     "eslint-plugin-vue": "^9.17.0",
+    "eslint-plugin-vue-scoped-css": "^2.5.1",
     "prettier": "^3.0.3",
     "sass": "^1.69.5",
-    "vite": "^4.4.11"
+    "vite": "^4.4.11",
+    "vite-plugin-eslint": "^1.8.1",
+    "vue-eslint-parser": "^9.3.2"
   }
 }
