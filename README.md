@@ -1,0 +1,3 @@
+# Chores
+
+Chores is a personal to-do software to keep track of recurring tasks in day-to-day life: household upkeep, regular maintenance, personal care, ...
