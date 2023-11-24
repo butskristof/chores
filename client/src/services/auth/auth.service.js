@@ -65,7 +65,7 @@ class AuthService {
     return this.#userManager.signinRedirect(args);
   };
   callback = (silent = false) =>
-    silent ? this.#userManager.signinCallback() : this.#userManager.signinSilentCallback();
+    silent ? this.#userManager.signinSilentCallback() : this.#userManager.signinCallback();
   logout = (silent = false) =>
     silent ? this.#userManager.removeUser() : this.#userManager.signoutRedirect();
 }
