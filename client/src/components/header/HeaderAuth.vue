@@ -8,6 +8,14 @@
         Log in
       </button>
     </div>
+    <div v-else>
+      <button
+        type="button"
+        @click="logout"
+      >
+        Log out
+      </button>
+    </div>
   </div>
 </template>
 
@@ -22,6 +30,7 @@ const route = useRoute();
 const login = () => {
   authService.login(route.fullPath);
 };
+const logout = () => authService.logout(false);
 </script>
 
 <style scoped></style>
