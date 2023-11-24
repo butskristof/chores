@@ -68,6 +68,8 @@ class AuthService {
     silent ? this.#userManager.signinSilentCallback() : this.#userManager.signinCallback();
   logout = (silent = false) =>
     silent ? this.#userManager.removeUser() : this.#userManager.signoutRedirect();
+
+  getUser = () => this.#userManager.getUser();
 }
 
 export default new AuthService();
