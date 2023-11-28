@@ -13,6 +13,7 @@
     "api": "json-server --watch api/db.json"
   },
   "dependencies": {
+    "@headlessui/vue": "^1.7.16",
     "@tanstack/vue-query": "^5.8.7",
     "axios": "^1.6.2",
     "date-fns": "^2.30.0",
