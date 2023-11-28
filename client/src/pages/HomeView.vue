@@ -1,8 +1,10 @@
 <template>
-  <h1>Chores</h1>
+  <h1 v-if="false">Chores</h1>
   <main>
-    <div>Hello, world!</div>
+    <AuthDebug />
   </main>
 </template>
 
-<script setup></script>
+<script setup>
+import AuthDebug from '@/components/debug/AuthDebug.vue';
+</script>

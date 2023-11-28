@@ -47,32 +47,18 @@ const router = createRouter({
               },
               component: () => import('@/pages/auth/oidc/SignIn.vue'),
             },
-            // {
-            //   name: routes.auth.children.oidc.children.silentRenew.name,
-            //   path: routes.auth.children.oidc.children.silentRenew.path,
-            //   meta: {
-            //     allowAnonymous: routes.auth.children.oidc.children.silentRenew.allowAnonymous,
-            //   },
-            // },
+            {
+              name: routes.auth.children.oidc.children.silentRenew.name,
+              path: routes.auth.children.oidc.children.silentRenew.path,
+              meta: {
+                allowAnonymous: routes.auth.children.oidc.children.silentRenew.allowAnonymous,
+              },
+              component: () => import('@/pages/auth/oidc/SilentRenew.vue'),
+            },
           ],
         },
       ],
     },
-    // {
-    //   path: '/auth/unauthorized',
-    //   name: 'auth.unauthorized',
-    //   component: () => import('@/pages/auth/AuthUnauthorized.vue'),
-    // },
-    // {
-    //   path: '/auth/oidc/sign-in',
-    //   name: 'auth.oidc.sign-in',
-    //   component: () => import('@/pages/auth/oidc/SignIn.vue'),
-    // },
-    // {
-    //   path: '/auth/oidc/silent-renew',
-    //   name: 'auth.oidc.silent-renew',
-    //   component: () => import('@/pages/auth/oidc/SilentRenew.vue'),
-    // },
     {
       name: routes.notFound.name,
       path: routes.notFound.path,

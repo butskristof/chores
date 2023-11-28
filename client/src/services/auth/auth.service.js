@@ -1,15 +1,15 @@
 /* eslint-disable camelcase */
 import { OIDC_AUTHORITY, OIDC_CLIENT_ID, OIDC_LOGGING } from '@/utilities/env';
-import { Log, UserManager } from 'oidc-client-ts';
+import { Log, UserManager, WebStorageStateStore } from 'oidc-client-ts';
 import { stringIsNullOrWhitespace } from '@/utilities/string';
 import { useAuthStore } from '@/stores/auth';
+import router from '@/router';
+import { routes } from '@/router/routes';
 
 if (OIDC_LOGGING) {
   Log.setLogger(console);
   Log.setLevel(Log.DEBUG);
 }
-
-const oidcPath = `${window.location.origin}/auth/oidc`;
 
 class AuthService {
   #userManager;
@@ -19,14 +19,23 @@ class AuthService {
   }
 
   #createUserManager = () => {
+    const redirectUri =
+      window.location.origin +
+      router.resolve({ name: routes.auth.children.oidc.children.signIn.name }).fullPath;
+    const silentRedirectUri =
+      window.location.origin +
+      router.resolve({ name: routes.auth.children.oidc.children.silentRenew.name }).fullPath;
+
     const settings = {
       authority: OIDC_AUTHORITY,
       client_id: OIDC_CLIENT_ID,
-      redirect_uri: `${oidcPath}/sign-in`,
-      silent_redirect_uri: `${oidcPath}/silent-renew`,
-      // TODO post logout redirect uri
-      // TODO userStore
-      // TODO load user info?
+      scope: 'openid profile',
+      redirect_uri: redirectUri,
+      silent_redirect_uri: silentRedirectUri,
+      post_logout_redirect_uri: window.location.origin,
+      // default is session storage, but we opt to persist user sessions client-side as well
+      userStore: new WebStorageStateStore({ store: window.localStorage }),
+      loadUserInfo: true,
 
       // monitoring the session continuously (using a 'check session' iframe)
       // allows us to detect when a session is stopped elsewhere (e.g. another
