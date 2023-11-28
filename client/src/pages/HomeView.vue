@@ -1,10 +1,6 @@
 <template>
-  <h1 v-if="false">Chores</h1>
-  <main>
-    <AuthDebug />
-  </main>
+  <h1>Chores</h1>
+  <main></main>
 </template>
 
-<script setup>
-import AuthDebug from '@/components/debug/AuthDebug.vue';
-</script>
+<script setup></script>
