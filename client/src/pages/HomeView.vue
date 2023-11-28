@@ -1,6 +1,9 @@
 <template>
-  <h1>Chores</h1>
-  <main></main>
+  <main>
+    <ChoresOverview />
+  </main>
 </template>
 
-<script setup></script>
+<script setup>
+import ChoresOverview from '@/components/chores/overview/ChoresOverview.vue';
+</script>

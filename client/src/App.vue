@@ -2,7 +2,7 @@
   <header>
     <nav>
       <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/about">About</RouterLink>
+      <RouterLink :to="{ name: routes.tags.name }">Tags</RouterLink>
     </nav>
     <HeaderAuth />
   </header>
@@ -11,6 +11,7 @@
 </template>
 <script setup>
 import HeaderAuth from '@/components/header/HeaderAuth.vue';
+import { routes } from '@/router/routes';
 </script>
 
 <style scoped lang="scss">
