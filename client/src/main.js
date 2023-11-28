@@ -2,6 +2,8 @@ import { createApp } from 'vue';
 import App from './App.vue';
 const app = createApp(App);
 
+import '@/styles/app.scss';
+
 //#region router
 
 import router from './router';
