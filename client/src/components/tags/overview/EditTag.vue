@@ -1,21 +1,19 @@
 <template>
-  <Dialog
+  <AppDialog
     :open="open"
     @close="emit('close')"
   >
-    <DialogPanel>
-      <DialogTitle>{{ title }}</DialogTitle>
-      <div>hey</div>
-      <div v-if="props.tag != null">
-        <pre>{{ JSON.stringify(props.tag, null, 2) }}</pre>
-      </div>
-    </DialogPanel>
-  </Dialog>
+    <template #title>{{ title }}</template>
+    <div>hey</div>
+    <div v-if="props.tag != null">
+      <pre>{{ JSON.stringify(props.tag, null, 2) }}</pre>
+    </div>
+  </AppDialog>
 </template>
 
 <script setup>
 import { computed } from 'vue';
-import { Dialog, DialogPanel, DialogTitle } from '@headlessui/vue';
+import AppDialog from '@/components/common/AppDialog.vue';
 
 const props = defineProps({
   open: {
