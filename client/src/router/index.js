@@ -18,6 +18,20 @@ const router = createRouter({
       component: () => import('@/pages/AboutView.vue'),
     },
     {
+      name: routes.tags.name,
+      path: routes.tags.path,
+      redirect: {
+        name: routes.tags.children.overview.name,
+      },
+      children: [
+        {
+          name: routes.tags.children.overview.name,
+          path: routes.tags.children.overview.path,
+          component: () => import('@/pages/tags/TagsOverview.vue'),
+        },
+      ],
+    },
+    {
       name: routes.auth.name,
       path: routes.auth.path,
       meta: {

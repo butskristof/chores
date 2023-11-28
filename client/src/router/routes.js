@@ -7,6 +7,16 @@ export const routes = {
     name: 'about',
     path: '/about',
   },
+  tags: {
+    name: 'tags',
+    path: '/tags',
+    children: {
+      overview: {
+        name: 'tags.overview',
+        path: '',
+      },
+    },
+  },
   auth: {
     name: 'auth',
     path: '/auth',

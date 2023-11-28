@@ -16,4 +16,9 @@ app.use(createPinia());
 
 //#endregion
 
+//#region tanstack query
+import { VueQueryPlugin } from '@tanstack/vue-query';
+app.use(VueQueryPlugin);
+//#endregion
+
 app.mount('#app');
