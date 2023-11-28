@@ -4,8 +4,18 @@
       <div>{{ tag.name }}</div>
     </div>
     <div class="right">
-      <button type="button">edit</button>
-      <button type="button">delete</button>
+      <button
+        type="button"
+        @click="emit('edit')"
+      >
+        edit
+      </button>
+      <button
+        type="button"
+        @click="emit('delete')"
+      >
+        delete
+      </button>
     </div>
   </div>
 </template>
@@ -17,6 +27,7 @@ defineProps({
     required: true,
   },
 });
+const emit = defineEmits(['edit', 'delete']);
 </script>
 
 <style scoped lang="scss">
