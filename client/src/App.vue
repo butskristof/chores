@@ -19,5 +19,13 @@ header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
+  margin-bottom: 1rem;
+
+  nav {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+  }
 }
 </style>

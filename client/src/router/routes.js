@@ -10,12 +10,6 @@ export const routes = {
   tags: {
     name: 'tags',
     path: '/tags',
-    children: {
-      overview: {
-        name: 'tags.overview',
-        path: '',
-      },
-    },
   },
   auth: {
     name: 'auth',
