@@ -23,4 +23,12 @@ import { VueQueryPlugin } from '@tanstack/vue-query';
 app.use(VueQueryPlugin);
 //#endregion
 
+//#region tippy
+// import VueTippy from 'vue-tippy';
+import 'tippy.js/dist/tippy.css';
+// app.use(VueTippy, {
+//   component: 'tippy',
+// });
+//#endregion
+
 app.mount('#app');
