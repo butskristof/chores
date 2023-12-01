@@ -11,6 +11,10 @@ class ChoresApiService extends AuthenticatedApiService {
 
   getTags = () => this.get('/tags').then((r) => r.data);
 
+  createTag = (payload) => this.post('/tags', payload).then((r) => r.data);
+
+  updateTag = (payload) => this.put(`/tags/${payload.id}`, payload).then((r) => r.data);
+
   deleteTag = (id) => this.delete(`/tags/${id}`);
 
   //#endregion

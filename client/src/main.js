@@ -39,4 +39,13 @@ app.use(Toast, {
 });
 //#endregion
 
+//#region uid
+
+import { Uid } from '@shimyshack/uid';
+app
+  // .use(UidPlugin)
+  .directive('uid', Uid);
+
+//#endregion
+
 app.mount('#app');

@@ -13,6 +13,15 @@ export const useChoresApiTags = () =>
     queryFn: choresApiService.getTags,
   });
 
+export const useChoresApiUpsertTag = (queryClient) =>
+  useMutation({
+    mutationFn: (payload) =>
+      payload.id ? choresApiService.updateTag(payload) : choresApiService.createTag(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: CHORES_API_QUERY_KEYS.TAGS.GET });
+    },
+  });
+
 export const useChoreApiDeleteTag = (queryClient) =>
   useMutation({
     mutationFn: (id) => choresApiService.deleteTag(id),

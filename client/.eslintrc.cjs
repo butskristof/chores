@@ -36,5 +36,6 @@ module.exports = {
     'line-comment-position': 'off',
     'no-inline-comments': 'off',
     'no-plusplus': 'off',
+    'no-use-before-define': 'off',
   },
 };
