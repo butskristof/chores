@@ -6,7 +6,7 @@
     <div class="actions">
       <button
         type="button"
-        @click="showEditDialog = true"
+        @click="openEditDialog"
       >
         create new
       </button>
@@ -14,8 +14,10 @@
   </div>
 
   <EditTag
-    :open="showEditDialog"
-    @close="showEditDialog = false"
+    v-if="showEditDialog"
+    :open="true"
+    :tag="tagForEdit"
+    @close="closeEditDialog"
   />
 
   <DeleteTag
@@ -31,6 +33,7 @@
   >
     <TagsList
       :tags="data.value"
+      @edit="openEditDialog"
       @delete="setTagForDelete"
     />
   </QueryData>
@@ -47,7 +50,16 @@ import EditTag from '@/components/tags/overview/EditTag.vue';
 const tagsQuery = useChoresApiTags();
 
 //#region edit
-const showEditDialog = ref(true);
+const showEditDialog = ref(false);
+const tagForEdit = ref(null);
+const openEditDialog = (id = null) => {
+  tagForEdit.value = id == null ? null : tagsQuery.data.value?.find((t) => t.id === id);
+  showEditDialog.value = true;
+};
+const closeEditDialog = () => {
+  showEditDialog.value = false;
+  tagForEdit.value = null;
+};
 //#endregion
 
 //#region delete

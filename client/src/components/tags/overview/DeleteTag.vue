@@ -91,7 +91,6 @@ const mutation = useChoreApiDeleteTag(queryClient);
 const deleteTag = async () => {
   try {
     await mutation.mutateAsync(props.tag.id);
-    // TODO toast
     toast.success('Tag deleted');
     emit('close');
   } catch (e) {
