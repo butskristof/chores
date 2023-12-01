@@ -4,9 +4,19 @@
       <h2>Tags</h2>
     </div>
     <div class="actions">
-      <button type="button">create new</button>
+      <button
+        type="button"
+        @click="showEditDialog = true"
+      >
+        create new
+      </button>
     </div>
   </div>
+
+  <EditTag
+    :open="showEditDialog"
+    @close="showEditDialog = false"
+  />
 
   <DeleteTag
     v-if="tagForDelete != null"
@@ -32,8 +42,13 @@ import { useChoresApiTags } from '@/composables/queries/chores-api';
 import QueryData from '@/components/common/QueryData.vue';
 import { ref } from 'vue';
 import DeleteTag from '@/components/tags/overview/DeleteTag.vue';
+import EditTag from '@/components/tags/overview/EditTag.vue';
 
 const tagsQuery = useChoresApiTags();
+
+//#region edit
+const showEditDialog = ref(true);
+//#endregion
 
 //#region delete
 
