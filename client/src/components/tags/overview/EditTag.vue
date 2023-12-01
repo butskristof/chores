@@ -1,7 +1,7 @@
 <template>
   <AppDialog
     :open="open"
-    @close="emit('close')"
+    @close="tryClose"
   >
     <div
       v-if="mutation.isSuccess.value === true"
@@ -11,7 +11,7 @@
       <div class="actions">
         <button
           type="button"
-          @click="emit('close')"
+          @click="tryClose(true)"
         >
           Close
         </button>
@@ -77,7 +77,7 @@ const isEdit = computed(() => props.tag != null);
 
 //#region form
 
-const { handleSubmit } = useForm({
+const { handleSubmit, meta } = useForm({
   validationSchema: toTypedSchema(
     yup.object({
       name: yup.string().required().label('Name'),
@@ -107,13 +107,20 @@ const save = handleSubmit.withControlled(async (values) => {
     if (isEdit.value === true) payload.id = props.tag.id;
     await mutation.mutateAsync(payload);
     toast.success(isEdit.value === true ? 'Tag updated' : 'Tag created');
-    emit('close');
+    tryClose(true);
   } catch (e) {
     console.error(e);
   }
 });
 
 //#endregion
+
+const tryClose = (force = false) => {
+  let close = true;
+  if (!force && meta.value.dirty)
+    close = confirm('There may be unsaved changes, are you sure you want to stop editing?');
+  if (close) emit('close');
+};
 </script>
 
 <style scoped lang="scss">
