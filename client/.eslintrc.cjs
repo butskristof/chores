@@ -37,5 +37,6 @@ module.exports = {
     'no-inline-comments': 'off',
     'no-plusplus': 'off',
     'no-use-before-define': 'off',
+    'no-alert': 'off',
   },
 };

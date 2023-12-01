@@ -5,6 +5,16 @@
       "id": "045DDF8C-7372-4FB2-BBE5-E9F4B236B86D",
       "name": "Bathroom",
       "choresCount": 2
+    },
+    {
+      "name": "Plants",
+      "choresCount": 2,
+      "id": "0y2A5vm"
+    },
+    {
+      "name": "Skincare",
+      "choresCount": 2,
+      "id": "7TjWoUO"
     }
   ]
 }
