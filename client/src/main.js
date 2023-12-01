@@ -31,4 +31,12 @@ import 'tippy.js/dist/tippy.css';
 // });
 //#endregion
 
+//#region toast
+import 'vue-toastification/dist/index.css';
+import Toast, { POSITION } from 'vue-toastification';
+app.use(Toast, {
+  position: POSITION.BOTTOM_RIGHT,
+});
+//#endregion
+
 app.mount('#app');

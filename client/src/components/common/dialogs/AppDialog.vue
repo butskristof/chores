@@ -1,6 +1,7 @@
 <template>
   <Dialog
     class="dialog"
+    :class="{ 'alert-dialog': props.alert }"
     :open="open"
     @close="emit('close')"
   >
@@ -11,7 +12,7 @@
 
     <div class="dialog-scroll-container">
       <div class="dialog-panel-container">
-        <DialogPanel class="dialog-panel">
+        <DialogPanel class="dialog-panel alert-dialog">
           <DialogTitle v-if="$slots.title">
             <slot name="title"></slot>
           </DialogTitle>
@@ -29,8 +30,13 @@
 
 <script setup>
 import { Dialog, DialogDescription, DialogPanel, DialogTitle } from '@headlessui/vue';
-defineProps({
+
+const props = defineProps({
   open: {
+    type: Boolean,
+    default: false,
+  },
+  alert: {
     type: Boolean,
     default: false,
   },
@@ -69,12 +75,18 @@ const emit = defineEmits(['close']);
 
 .dialog-panel {
   width: 100%;
-  max-width: 24rem;
+  max-width: 36rem;
   background-color: white;
   padding: 1rem;
 
   h2 {
     margin: auto;
+  }
+}
+
+.alert-dialog {
+  .dialog-panel {
+    max-width: 24rem;
   }
 }
 </style>

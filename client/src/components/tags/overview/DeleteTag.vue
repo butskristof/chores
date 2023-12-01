@@ -1,6 +1,7 @@
 <template>
-  <AppAlertDialog
+  <AppDialog
     :open="open"
+    :alert="true"
     @close="emit('close')"
   >
     <div v-if="mutation.isPending.value === true">
@@ -58,14 +59,15 @@
         </button>
       </div>
     </template>
-  </AppAlertDialog>
+  </AppDialog>
 </template>
 
 <script setup>
-import AppAlertDialog from '@/components/common/dialogs/AppAlertDialog.vue';
 import { useChoreApiDeleteTag } from '@/composables/queries/chores-api';
 import { useQueryClient } from '@tanstack/vue-query';
 import { DialogTitle } from '@headlessui/vue';
+import { useToast } from 'vue-toastification';
+import AppDialog from '@/components/common/dialogs/AppDialog.vue';
 
 const props = defineProps({
   open: {
@@ -79,19 +81,21 @@ const props = defineProps({
 });
 const emit = defineEmits(['close']);
 
+const queryClient = useQueryClient();
+const toast = useToast();
+
 //#region delete
 
-const queryClient = useQueryClient();
 const mutation = useChoreApiDeleteTag(queryClient);
 
 const deleteTag = async () => {
   try {
     await mutation.mutateAsync(props.tag.id);
     // TODO toast
+    toast.success('Tag deleted');
     emit('close');
   } catch (e) {
     console.error(e);
-    // TODO toast
   }
 };
 
