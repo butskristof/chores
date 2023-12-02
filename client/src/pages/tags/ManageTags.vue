@@ -80,9 +80,5 @@ const setTagForDelete = (id) => {
   align-items: center;
 
   margin-bottom: 1rem;
-
-  .title h2 {
-    margin: auto;
-  }
 }
 </style>
