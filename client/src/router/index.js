@@ -30,6 +30,11 @@ const router = createRouter({
           path: routes.chores.children.overview.path,
           component: () => import('@/pages/chores/ChoresOverview.vue'),
         },
+        {
+          name: routes.chores.children.detail.name,
+          path: routes.chores.children.detail.path,
+          component: () => import('@/pages/chores/ChoreDetail.vue'),
+        },
       ],
     },
     {

@@ -38,5 +38,7 @@ module.exports = {
     'no-plusplus': 'off',
     'no-use-before-define': 'off',
     'no-alert': 'off',
+    'new-cap': 'off',
+    'max-statements': 'off',
   },
 };
