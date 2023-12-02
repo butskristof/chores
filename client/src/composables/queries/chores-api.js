@@ -2,10 +2,25 @@ import { useMutation, useQuery } from '@tanstack/vue-query';
 import choresApiService from '@/services/chores-api.service';
 
 export const CHORES_API_QUERY_KEYS = {
+  CHORES: {
+    GET: ['chores'],
+  },
   TAGS: {
     GET: ['tags'],
   },
 };
+
+//#region chores
+
+export const useChoresApiChores = () =>
+  useQuery({
+    queryKey: CHORES_API_QUERY_KEYS.CHORES.GET,
+    queryFn: choresApiService.getChores,
+  });
+
+//#endregion
+
+//#region tags
 
 export const useChoresApiTags = () =>
   useQuery({
@@ -29,3 +44,5 @@ export const useChoreApiDeleteTag = (queryClient) =>
       queryClient.invalidateQueries({ queryKey: CHORES_API_QUERY_KEYS.TAGS.GET });
     },
   });
+
+//#endregion

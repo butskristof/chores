@@ -7,6 +7,16 @@ export const routes = {
     name: 'about',
     path: '/about',
   },
+  chores: {
+    name: 'chores',
+    path: '/chores',
+    children: {
+      overview: {
+        name: 'chores.overview',
+        path: '',
+      },
+    },
+  },
   tags: {
     name: 'tags',
     path: '/tags',

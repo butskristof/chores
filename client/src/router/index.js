@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import HomeView from '@/pages/HomeView.vue';
 import { routes } from '@/router/routes';
 import authService from '@/services/auth/auth.service';
 import { useAuthStore } from '@/stores/auth';
@@ -10,12 +9,28 @@ const router = createRouter({
     {
       name: routes.home.name,
       path: routes.home.path,
-      component: HomeView,
+      redirect: {
+        name: routes.chores.name,
+      },
     },
     {
       name: routes.about.name,
       path: routes.about.path,
       component: () => import('@/pages/AboutView.vue'),
+    },
+    {
+      name: routes.chores.name,
+      path: routes.chores.path,
+      redirect: {
+        name: routes.chores.children.overview.name,
+      },
+      children: [
+        {
+          name: routes.chores.children.overview.name,
+          path: routes.chores.children.overview.path,
+          component: () => import('@/pages/chores/ChoresOverview.vue'),
+        },
+      ],
     },
     {
       name: routes.tags.name,

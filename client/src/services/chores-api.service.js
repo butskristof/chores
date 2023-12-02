@@ -7,6 +7,12 @@ class ChoresApiService extends AuthenticatedApiService {
     super(CHORES_API_BASEURL, accessTokenGetter);
   }
 
+  //#region chores
+
+  getChores = () => this.get('/chores').then((r) => r.data);
+
+  //#endregion
+
   //#region tags
 
   getTags = () => this.get('/tags').then((r) => r.data);

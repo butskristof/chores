@@ -1,5 +1,27 @@
 {
-  "chores": [],
+  "chores": [
+    {
+      "id": "8EC7A219-CFC8-4CFA-B645-E346F5C2FB42",
+      "title": "Clean shower head",
+      "tags": [{
+        "title": "Bathroom"
+      }]
+    },
+    {
+      "id": "F77C34D3-1BED-462E-84B3-BE99C42C69D2",
+      "title": "Clean shower drain",
+      "tags": [{
+        "title": "Bathroom"
+      }]
+    },
+    {
+      "id": "41C70F3F-A9AB-4E2D-9DCB-BE7728B591EF",
+      "title": "water plants",
+      "tags": [{
+        "title": "plants"
+      }]
+    }
+  ],
   "tags": [
     {
       "id": "045DDF8C-7372-4FB2-BBE5-E9F4B236B86D",
