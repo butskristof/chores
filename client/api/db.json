@@ -1,42 +1,24 @@
 {
   "chores": [
     {
-      "id": "8EC7A219-CFC8-4CFA-B645-E346F5C2FB42",
-      "title": "Clean shower head",
-      "tags": [{
-        "title": "Bathroom"
-      }]
+      "id": "F9721B2C-39DF-4BE2-8D95-71DD408D948A",
+      "title": "Clean bathroom",
+      "tags": ["D07187D6-BB75-421F-BC86-5FC371D36FB3"]
     },
     {
-      "id": "F77C34D3-1BED-462E-84B3-BE99C42C69D2",
-      "title": "Clean shower drain",
-      "tags": [{
-        "title": "Bathroom"
-      }]
-    },
-    {
-      "id": "41C70F3F-A9AB-4E2D-9DCB-BE7728B591EF",
-      "title": "water plants",
-      "tags": [{
-        "title": "plants"
-      }]
+      "id": "0EE0DB54-EB35-419B-B29F-1FF95F9E32E0",
+      "title": "Clean car",
+      "tags": ["D07187D6-BB75-421F-BC86-5FC371D36FB3", "8058E805-8907-443F-88D8-EC94DF5DA42A"]
     }
   ],
   "tags": [
     {
-      "id": "045DDF8C-7372-4FB2-BBE5-E9F4B236B86D",
-      "name": "Bathroom",
-      "choresCount": 2
+      "id": "D07187D6-BB75-421F-BC86-5FC371D36FB3",
+      "name": "Cleaning"
     },
     {
-      "name": "Plants",
-      "choresCount": 2,
-      "id": "0y2A5vm"
-    },
-    {
-      "name": "Skincare",
-      "choresCount": 2,
-      "id": "7TjWoUO"
+      "id": "8058E805-8907-443F-88D8-EC94DF5DA42A",
+      "name": "Car"
     }
   ]
 }

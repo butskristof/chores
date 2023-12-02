@@ -1,11 +1,17 @@
 <template>
   <div class="chores-list-item">
-    <div class="title">{{ chore.title }}</div>
+    <div class="title">
+      <router-link :to="{ name: routes.chores.children.detail.name, params: { id: chore.id } }">
+        {{ chore.title }}
+      </router-link>
+    </div>
     <div class="due">due in {{ due }} days</div>
   </div>
 </template>
 
 <script setup>
+import { routes } from '@/router/routes';
+
 defineProps({
   chore: {
     type: Object,

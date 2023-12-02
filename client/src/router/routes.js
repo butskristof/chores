@@ -15,6 +15,10 @@ export const routes = {
         name: 'chores.overview',
         path: '',
       },
+      detail: {
+        name: 'chores.detail',
+        path: ':id',
+      },
     },
   },
   tags: {

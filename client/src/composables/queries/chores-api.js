@@ -4,6 +4,7 @@ import choresApiService from '@/services/chores-api.service';
 export const CHORES_API_QUERY_KEYS = {
   CHORES: {
     GET: ['chores'],
+    GET_BY_ID: (id) => ['chores', id],
   },
   TAGS: {
     GET: ['tags'],
@@ -16,6 +17,12 @@ export const useChoresApiChores = () =>
   useQuery({
     queryKey: CHORES_API_QUERY_KEYS.CHORES.GET,
     queryFn: choresApiService.getChores,
+  });
+
+export const useChoresApiChore = (id) =>
+  useQuery({
+    queryKey: CHORES_API_QUERY_KEYS.CHORES.GET_BY_ID(id),
+    queryFn: () => choresApiService.getChore(id.value),
   });
 
 //#endregion
