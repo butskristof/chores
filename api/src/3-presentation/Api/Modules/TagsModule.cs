@@ -16,8 +16,7 @@ internal static class TagsModule
             .MapPost("", CreateTag)
             .WithName(nameof(CreateTag))
             .Produces(StatusCodes.Status201Created, typeof(CreateTag.Response));
-        group
-            .MapGet("{id:guid}", (Guid id) => TypedResults.NotFound());
+        group.MapGet("{id:guid}", (Guid id) => TypedResults.NotFound());
 
         return endpoints;
     }

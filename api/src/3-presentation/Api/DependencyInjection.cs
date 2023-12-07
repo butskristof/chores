@@ -4,6 +4,7 @@ internal static class DependencyInjection
 {
     internal static IServiceCollection AddApi(this IServiceCollection services)
     {
+        // set up Swagger to generate OpenAPI definitions
         services
             .AddEndpointsApiExplorer()
             .AddSwaggerGen(options =>
@@ -29,6 +30,9 @@ internal static class DependencyInjection
                     return type.Name;
                 });
             });
+
+        // add support for ProblemDetails to handle failed requests
+        services.AddProblemDetails();
 
         return services;
     }

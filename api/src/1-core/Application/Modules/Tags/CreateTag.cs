@@ -35,13 +35,21 @@ public static class CreateTag
 
         public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
         {
+            _logger.LogDebug("Creating a new Tag");
+            
             await Task.Delay(1, cancellationToken);
             var entity = new Tag
             {
                 Id = Guid.Empty,
                 Name = request.Name,
             };
-            return new Response(entity.Id, entity.Name);
+            _logger.LogDebug("Mapped request to entity");
+            
+            // TODO persist
+
+            var response = new Response(entity.Id, entity.Name);
+            _logger.LogDebug("Mapped entity to response");
+            return response;
         }
     }
 }
