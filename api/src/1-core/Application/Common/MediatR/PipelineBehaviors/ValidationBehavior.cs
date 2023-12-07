@@ -1,3 +1,4 @@
+using ErrorOr;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -14,7 +15,8 @@ namespace Chores.Application.Common.MediatR.PipelineBehaviors;
 // "an *invalid* request should never reach the handler"
 
 internal sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : IBaseRequest
+    where TRequest : IRequest<TResponse>
+    where TResponse : IErrorOr
 {
     #region construction
 
@@ -62,7 +64,14 @@ internal sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavio
             // an exception should *not* be thrown: we're doing flow control here, and validation failures
             // are kind of expected (hence, not exceptional)
             _logger.LogDebug("Validation resulted in {Count} failures", failures.Count);
-            throw new Exception(); // TODO factor out
+            
+            // map the validation failures to validation errors, preserving the property and message
+            var errors = failures
+                .ConvertAll(f => Error.Validation(f.PropertyName, f.ErrorMessage));
+
+            // use a dynamic cast, followed by casting to the response type
+            // this feels wrong, but otherwise reflection has to be used to call TResponse.From(errors)
+            return (TResponse)(dynamic)errors;
         }
 
         // validation passed, continue in the pipeline as usual

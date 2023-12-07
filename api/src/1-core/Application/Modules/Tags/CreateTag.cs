@@ -1,4 +1,5 @@
 using Chores.Domain.Models;
+using ErrorOr;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -7,7 +8,7 @@ namespace Chores.Application.Modules.Tags;
 
 public static class CreateTag
 {
-    public sealed record Request(string Name) : IRequest<Response>;
+    public sealed record Request(string Name) : IRequest<ErrorOr<Response>>;
 
     public sealed record Response(Guid Id, string Name);
 
@@ -20,7 +21,7 @@ public static class CreateTag
         }
     }
 
-    internal sealed class Handler : IRequestHandler<Request, Response>
+    internal sealed class Handler : IRequestHandler<Request, ErrorOr<Response>>
     {
         #region construction
 
@@ -33,10 +34,12 @@ public static class CreateTag
 
         #endregion
 
-        public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Response>> Handle(Request request, CancellationToken cancellationToken)
         {
+            if (request.Name == "hey")
+                return Error.NotFound(description: "something not found");
             _logger.LogDebug("Creating a new Tag");
-            
+
             await Task.Delay(1, cancellationToken);
             var entity = new Tag
             {
@@ -44,7 +47,7 @@ public static class CreateTag
                 Name = request.Name,
             };
             _logger.LogDebug("Mapped request to entity");
-            
+
             // TODO persist
 
             var response = new Response(entity.Id, entity.Name);

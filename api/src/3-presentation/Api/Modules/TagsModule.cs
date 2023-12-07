@@ -1,3 +1,4 @@
+using Chores.Api.Extensions;
 using Chores.Application.Modules.Tags;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +16,9 @@ internal static class TagsModule
         group
             .MapPost("", CreateTag)
             .WithName(nameof(CreateTag))
-            .Produces(StatusCodes.Status201Created, typeof(CreateTag.Response));
+            .ProducesCreated<CreateTag.Response>()
+            .ProducesValidationProblem();
+
         group.MapGet("{id:guid}", (Guid id) => TypedResults.NotFound());
 
         return endpoints;
@@ -24,6 +27,6 @@ internal static class TagsModule
     private static async Task<IResult> CreateTag([FromBody] CreateTag.Request request, ISender sender)
     {
         var result = await sender.Send(request);
-        return TypedResults.Created($"/Tags/{result.Id}", result);
+        return result.MapToValueOrProblem(response => TypedResults.Created($"/Tags/{response.Id}", result));
     }
 }
