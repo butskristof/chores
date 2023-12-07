@@ -1,3 +1,4 @@
+using Chores.Application.Common.Persistence;
 using Chores.Domain.Models;
 using ErrorOr;
 using FluentValidation;
@@ -26,32 +27,33 @@ public static class CreateTag
         #region construction
 
         private readonly ILogger<Handler> _logger;
+        private readonly IAppDbContext _db;
 
-        public Handler(ILogger<Handler> logger)
+        public Handler(ILogger<Handler> logger, IAppDbContext db)
         {
             _logger = logger;
+            _db = db;
         }
 
         #endregion
 
         public async Task<ErrorOr<Response>> Handle(Request request, CancellationToken cancellationToken)
         {
-            if (request.Name == "hey")
-                return Error.NotFound(description: "something not found");
             _logger.LogDebug("Creating a new Tag");
 
-            await Task.Delay(1, cancellationToken);
-            var entity = new Tag
+            var tag = new Tag
             {
-                Id = Guid.Empty,
                 Name = request.Name,
             };
             _logger.LogDebug("Mapped request to entity");
 
-            // TODO persist
+            _db.Tags.Add(tag);
+            await _db.SaveChangesAsync(CancellationToken.None);
+            _logger.LogDebug("Persisted new entity to database");
 
-            var response = new Response(entity.Id, entity.Name);
+            var response = new Response(tag.Id, tag.Name);
             _logger.LogDebug("Mapped entity to response");
+            
             return response;
         }
     }
