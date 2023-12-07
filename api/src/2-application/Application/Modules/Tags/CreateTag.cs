@@ -41,7 +41,7 @@ public static class CreateTag
             var tag = new Tag { Name = request.Name };
             _context.Tags.Add(tag);
             await _context.SaveChangesAsync(CancellationToken.None);
-            
+
             return new Response(tag.Id, tag.Name);
         }
     }
