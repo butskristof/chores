@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9F32F8D8-0DD9-4969-9371-BA0437F2486D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A1A0B8AA-CD6C-49F3-B074-576782E152E3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Presentation", "3. Presentation", "{5FADC949-9564-4F71-B62A-76BDB06A1CC1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Core", "1. Core", "{9B455734-AA8E-4892-AB77-53C737E953DF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Infrastructure", "2. Infrastructure", "{E5682835-64B5-401C-B159-880D23DCD84F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "src\3-presentation\Api\Api.csproj", "{6177ED84-94A3-4D69-B7B2-3AE9E612B090}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5FADC949-9564-4F71-B62A-76BDB06A1CC1} = {9F32F8D8-0DD9-4969-9371-BA0437F2486D}
+		{9B455734-AA8E-4892-AB77-53C737E953DF} = {9F32F8D8-0DD9-4969-9371-BA0437F2486D}
+		{E5682835-64B5-401C-B159-880D23DCD84F} = {9F32F8D8-0DD9-4969-9371-BA0437F2486D}
+		{6177ED84-94A3-4D69-B7B2-3AE9E612B090} = {5FADC949-9564-4F71-B62A-76BDB06A1CC1}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6177ED84-94A3-4D69-B7B2-3AE9E612B090}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6177ED84-94A3-4D69-B7B2-3AE9E612B090}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6177ED84-94A3-4D69-B7B2-3AE9E612B090}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6177ED84-94A3-4D69-B7B2-3AE9E612B090}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
