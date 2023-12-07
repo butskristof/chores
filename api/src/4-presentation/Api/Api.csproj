@@ -6,6 +6,23 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <AssemblyName>Chores.Api</AssemblyName>
         <RootNamespace>Chores.Api</RootNamespace>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\2-application\Application\Application.csproj" />
+      <ProjectReference Include="..\..\3-infrastructure\Infrastructure\Infrastructure.csproj" />
+      <ProjectReference Include="..\..\3-infrastructure\Persistence\Persistence.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MicroElements.Swashbuckle.FluentValidation" Version="6.0.0-beta.3" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    </ItemGroup>
 
 </Project>
