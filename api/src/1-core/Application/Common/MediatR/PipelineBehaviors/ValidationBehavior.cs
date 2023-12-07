@@ -8,6 +8,11 @@ namespace Chores.Application.Common.MediatR.PipelineBehaviors;
 // request passes all of them 
 // in case it doesn't, the pipeline execution will be cut short and an error result will be returned
 
+// keep in mind the validators registered with the FluentValidation library should mainly do input validation
+// and not be concerned with business logic
+// effectively, this behavior is intended to stop unprocessable requests from continuing further into the pipeline
+// "an *invalid* request should never reach the handler"
+
 internal sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IBaseRequest
 {
@@ -47,8 +52,8 @@ internal sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavio
             _validators.Select(v => v.ValidateAsync(context, cancellationToken)));
         // aggregate failures from all validators into a single list
         var failures = results
-            .Where(result => result.Errors.Any())
-            .SelectMany(e => e.Errors)
+            .Where(result => !result.IsValid)
+            .SelectMany(result => result.Errors)
             .ToList();
 
         if (failures.Any())
