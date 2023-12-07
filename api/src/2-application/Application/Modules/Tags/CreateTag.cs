@@ -1,5 +1,6 @@
 using Chores.Application.Common.Persistence;
 using Chores.Domain.Models.Tags;
+using ErrorOr;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -8,7 +9,7 @@ namespace Chores.Application.Modules.Tags;
 
 public static class CreateTag
 {
-    public sealed record Request(string Name) : IRequest<Response>;
+    public sealed record Request(string Name) : IRequest<ErrorOr<Response>>;
 
     public sealed record Response(Guid Id, string Name);
 
@@ -21,7 +22,7 @@ public static class CreateTag
         }
     }
 
-    internal sealed class Handler : IRequestHandler<Request, Response>
+    internal sealed class Handler : IRequestHandler<Request, ErrorOr<Response>>
     {
         #region construction
 
@@ -36,7 +37,7 @@ public static class CreateTag
 
         #endregion
 
-        public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Response>> Handle(Request request, CancellationToken cancellationToken)
         {
             var tag = new Tag { Name = request.Name };
             _context.Tags.Add(tag);

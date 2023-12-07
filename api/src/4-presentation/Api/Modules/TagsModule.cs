@@ -30,7 +30,9 @@ internal static class TagsModule
     private static async Task<IResult> CreateTag([FromBody] CreateTag.Request request,
         ISender sender)
     {
-        var response = await sender.Send(request);
-        return TypedResults.Created("/Tags", response);
+        var result = await sender.Send(request);
+        return result.Match(
+            response => TypedResults.Created("/Tags", response),
+            errors => Results.Problem());
     }
 }

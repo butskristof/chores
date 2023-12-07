@@ -34,7 +34,7 @@ internal sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavio
         }
 
         _logger.LogDebug("Applying {Count} validators", _validators.Count());
-        
+
         var context = new ValidationContext<TRequest>(request);
         var results = await Task.WhenAll(
             _validators.Select(v => v.ValidateAsync(context, cancellationToken)));
@@ -46,6 +46,7 @@ internal sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavio
         if (failures.Any())
         {
             _logger.LogDebug("Validation resulted in {Count} failures", failures.Count);
+            return (dynamic)failures;
         }
 
         _logger.LogDebug("Validation passed successfully");
