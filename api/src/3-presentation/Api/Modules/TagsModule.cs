@@ -24,6 +24,19 @@ internal static class TagsModule
             .ProducesCreated<CreateTag.Response>()
             .ProducesValidationProblem();
 
+        group
+            .MapPut("{TagId:guid}", UpdateTag)
+            .WithName(nameof(UpdateTag))
+            .ProducesNoContent()
+            .ProducesValidationProblem()
+            .ProducesNotFound();
+
+        group
+            .MapDelete("{TagId:guid}", DeleteTag)
+            .WithName(nameof(DeleteTag))
+            .ProducesNoContent()
+            .ProducesNotFound();
+
         return endpoints;
     }
 
@@ -34,5 +47,18 @@ internal static class TagsModule
     {
         var result = await sender.Send(request);
         return result.MapToValueOrProblem(response => TypedResults.Created($"/Tags/{response.Id}", response));
+    }
+
+    private static async Task<IResult> UpdateTag([FromBody] UpdateTag.Request request, ISender sender)
+    {
+        var result = await sender.Send(request);
+        return result.MapToValueOrProblem(_ => TypedResults.NoContent());
+    }
+
+    private static async Task<IResult> DeleteTag([FromRoute] Guid TagId, ISender sender)
+    {
+        var request = new DeleteTag.Request(TagId);
+        var result = await sender.Send(request);
+        return result.MapToValueOrProblem(_ => TypedResults.NoContent());
     }
 }
