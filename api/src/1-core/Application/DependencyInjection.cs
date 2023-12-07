@@ -19,7 +19,8 @@ public static class DependencyInjection
                     .RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
 
                 configuration
-                    .AddOpenBehavior(typeof(LoggingBehavior<,>));
+                    .AddOpenBehavior(typeof(LoggingBehavior<,>))
+                    .AddOpenBehavior(typeof(ValidationBehavior<,>));
             });
 
         return services;

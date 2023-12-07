@@ -12,7 +12,8 @@ internal static class TagsModule
             .MapGroup("/Tags")
             .WithTags("Tags");
 
-        group.MapPost("", CreateTag)
+        group
+            .MapPost("", CreateTag)
             .WithName(nameof(CreateTag))
             .Produces(StatusCodes.Status201Created, typeof(CreateTag.Response));
         group

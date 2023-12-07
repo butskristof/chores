@@ -1,4 +1,5 @@
 using Chores.Domain.Models;
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -10,7 +11,16 @@ public static class CreateTag
 
     public sealed record Response(Guid Id, string Name);
 
-    internal class Handler : IRequestHandler<Request, Response>
+    internal sealed class Validator : AbstractValidator<Request>
+    {
+        public Validator()
+        {
+            RuleFor(r => r.Name)
+                .NotEmpty();
+        }
+    }
+
+    internal sealed class Handler : IRequestHandler<Request, Response>
     {
         #region construction
 
