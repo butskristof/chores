@@ -7,6 +7,7 @@
         <AssemblyName>Chores.Api</AssemblyName>
         <RootNamespace>Chores.Api</RootNamespace>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <UserSecretsId>52125985-0217-47fc-a30c-638e3116ec84</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
