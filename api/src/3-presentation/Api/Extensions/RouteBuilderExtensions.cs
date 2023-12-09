@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
-
 namespace Chores.Api.Extensions;
 
 internal static class RouteBuilderExtensions

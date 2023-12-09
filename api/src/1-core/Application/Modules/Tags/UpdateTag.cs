@@ -10,14 +10,25 @@ namespace Chores.Application.Modules.Tags;
 
 public static class UpdateTag
 {
-    public sealed record Request(Guid Id, string Name) : IRequest<ErrorOr<Updated>>;
+    // public sealed record Request(Guid Id, string Name) : IRequest<ErrorOr<Updated>>;
+    public sealed record Request : IRequest<ErrorOr<Updated>>
+    {
+        public Guid Id { get; }
+        public string Name { get; }
+
+        public Request(Guid id, string name)
+        {
+            Id = id;
+            Name = name.Trim();
+        }
+    }
 
     internal sealed class Validator : AbstractValidator<Request>
     {
         public Validator()
         {
             RuleFor(r => r.Name)
-                .NotEmptyWithErrorCode();
+                .ValidString();
         }
     }
 

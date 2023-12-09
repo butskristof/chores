@@ -10,7 +10,16 @@ namespace Chores.Application.Modules.Tags;
 
 public static class CreateTag
 {
-    public sealed record Request(string Name) : IRequest<ErrorOr<Response>>;
+    // public sealed record Request(string Name) : IRequest<ErrorOr<Response>>;
+    public sealed record Request : IRequest<ErrorOr<Response>>
+    {
+        public Request(string name)
+        {
+            Name = name.Trim();
+        }
+
+        public string Name { get; }
+    }
 
     public sealed record Response(Guid Id, string Name);
 
@@ -19,7 +28,7 @@ public static class CreateTag
         public Validator()
         {
             RuleFor(r => r.Name)
-                .NotEmptyWithErrorCode();
+                .ValidString();
         }
     }
 

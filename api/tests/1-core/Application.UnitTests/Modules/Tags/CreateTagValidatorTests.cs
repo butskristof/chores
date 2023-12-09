@@ -1,4 +1,3 @@
-using Chores.Application.Common.FluentValidation;
 using Chores.Application.Modules.Tags;
 using Chores.Application.UnitTests.Common;
 using FluentValidation.TestHelper;
@@ -14,11 +13,27 @@ public sealed class CreateTagValidatorTests
     public void Name_NullOrWhitespace_Fails(string value)
     {
         var request = new CreateTag.Request(value);
-
         var result = _sut.TestValidate(request);
-
         result
             .ShouldHaveValidationErrorFor(r => r.Name)
-            .WithErrorMessage(ErrorCodes.Required);
+            .WithErrorMessage("Required");
+    }
+
+    [Fact]
+    public void Name_TooLong_Fails()
+    {
+        var request = new CreateTag.Request(new string('*', 513));
+        var result = _sut.TestValidate(request);
+        result
+            .ShouldHaveValidationErrorFor(r => r.Name)
+            .WithErrorMessage("Invalid");
+    }
+
+    [Fact]
+    public void Name_Valid_Passes()
+    {
+        var request = new CreateTag.Request("super tag");
+        var result = _sut.TestValidate(request);
+        result.ShouldNotHaveValidationErrorFor(r => r.Name);
     }
 }
