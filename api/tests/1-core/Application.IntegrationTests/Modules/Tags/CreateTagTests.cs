@@ -2,9 +2,8 @@ namespace Chores.Application.IntegrationTests.Modules.Tags;
 
 public sealed class CreateTagTests
 {
-    // [Fact]
-    // public void Test()
-    // {
-    //     Assert.True(false);
-    // }
+    // TODO validation failure -> Error.Validation w/ errors
+    // TODO fixture w/ asserts in multiple methods
+    // - entity in DB w/ correctly mapped values
+    // - response correctly mapped
 }

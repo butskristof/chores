@@ -1,3 +1,4 @@
+using Chores.Application.Common.FluentValidation;
 using Chores.Application.Common.Persistence;
 using Chores.Domain.Models;
 using ErrorOr;
@@ -18,7 +19,7 @@ public static class CreateTag
         public Validator()
         {
             RuleFor(r => r.Name)
-                .NotEmpty();
+                .NotEmptyWithErrorCode();
         }
     }
 

@@ -1,3 +1,4 @@
+using Chores.Application.Common.FluentValidation;
 using Chores.Application.Modules.Tags;
 using Chores.Application.UnitTests.Common;
 using FluentValidation.TestHelper;
@@ -16,6 +17,8 @@ public sealed class CreateTagValidatorTests
 
         var result = _sut.TestValidate(request);
 
-        result.ShouldHaveValidationErrorFor(r => r.Name);
+        result
+            .ShouldHaveValidationErrorFor(r => r.Name)
+            .WithErrorMessage(ErrorCodes.Required);
     }
 }

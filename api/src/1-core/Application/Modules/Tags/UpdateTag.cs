@@ -1,3 +1,4 @@
+using Chores.Application.Common.FluentValidation;
 using Chores.Application.Common.Persistence;
 using ErrorOr;
 using FluentValidation;
@@ -16,7 +17,7 @@ public static class UpdateTag
         public Validator()
         {
             RuleFor(r => r.Name)
-                .NotEmpty();
+                .NotEmptyWithErrorCode();
         }
     }
 
