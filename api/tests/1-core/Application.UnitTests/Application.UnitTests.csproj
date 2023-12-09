@@ -7,16 +7,13 @@
 
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
-        <AssemblyName>Chores.Application.IntegrationTests</AssemblyName>
-        <RootNamespace>Chores.Application.IntegrationTests</RootNamespace>
-        
+        <AssemblyName>Chores.Application.UnitTests</AssemblyName>
+        <RootNamespace>Chores.Application.UnitTests</RootNamespace>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0"/>
-        <PackageReference Include="Testcontainers.MsSql" Version="3.6.0" />
         <PackageReference Include="xunit" Version="2.4.2"/>
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -30,10 +27,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\src\1-core\Application\Application.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Common\" />
     </ItemGroup>
 
 </Project>

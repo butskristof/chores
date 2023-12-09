@@ -21,4 +21,9 @@
       <ProjectReference Include="..\Domain\Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="Chores.Application.UnitTests" />
+    </ItemGroup>
+
+
 </Project>
