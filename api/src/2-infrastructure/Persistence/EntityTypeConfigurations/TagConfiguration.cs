@@ -2,7 +2,7 @@ using Chores.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Chores.Persistence.EntityTagConfigurations;
+namespace Chores.Persistence.EntityTypeConfigurations;
 
 internal sealed class TagConfiguration : IEntityTypeConfiguration<Tag>
 {
