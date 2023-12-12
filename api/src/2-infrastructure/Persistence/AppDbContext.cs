@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Chores.Persistence;
 
-internal sealed class AppDbContext : DbContext, IAppDbContext
+public sealed class AppDbContext : DbContext, IAppDbContext
 {
     #region construction
 
