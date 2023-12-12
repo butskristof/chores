@@ -1,80 +1,61 @@
 using Chores.Application.IntegrationTests.Common;
 using Chores.Application.Modules.Tags;
+using Chores.Domain.Models;
 using ErrorOr;
 
 namespace Chores.Application.IntegrationTests.Modules.Tags;
 
-// [Collection(nameof(TestFixture))]
-// public sealed class CreateTagTests : TestBase
-// {
-//     public CreateTagTests(TestFixture fixture) : base(fixture)
-//     {
-//     }
-//
-//     [Fact]
-//     public async Task InvalidRequest_ReturnsValidationError()
-//     {
-//         var request = new CreateTag.Request(string.Empty);
-//         var result = await Fixture.SendAsync(request);
-//         Assert.True(result.IsError);
-//         var error = result.ErrorsOrEmptyList.SingleOrDefault();
-//         Assert.Equal(ErrorType.Validation, error.Type);
-//     }
-//     
-//     [Fact]
-//     public async Task CreatesTag()
-//     {
-//         var request = new CreateTag.Request("hey");
-//         var response = await Fixture.SendAsync(request);
-//         Assert.False(response.IsError);
-//         Assert.NotEqual(Guid.Empty, response.Value.Id);
-//         Assert.Equal("hey", response.Value.Name);
-//     }
-//
-//     public sealed class RequestWithValidationErrors
-//     {
-//         [Fact]
-//         public void ReturnsValidationError()
-//         {
-//             
-//         }
-//     }
-// }
-
-public static class CreateTagTests
+[Collection(nameof(ApplicationFixture))]
+public sealed class CreateTagTests : ApplicationTestBase
 {
-    [Collection(nameof(TestFixture))]
-    public sealed class InvalidRequest : TestBase, IClassFixture<InvalidRequest.InnerFixture>
+    public CreateTagTests(ApplicationFixture application) : base(application)
     {
-        public InvalidRequest(TestFixture fixture, InnerFixture innerFixture) : base(fixture)
-        {
-            _fixture = innerFixture;
-        }
+    }
 
-        public class InnerFixture : IAsyncLifetime
-        {
-            public ErrorOr<CreateTag.Response> Result { get; }
+    [Fact]
+    public async Task InvalidRequest_ReturnsValidationError()
+    {
+        var request = new CreateTag.Request(string.Empty);
 
-            public async Task InitializeAsync()
-            {
-                var request = new CreateTag.Request(string.Empty);
-                var result = await Fixture.SendAsync(request);
-            }
+        var result = await Application.SendAsync(request);
 
-            public Task DisposeAsync()
-            {
-                throw new NotImplementedException();
-            }
-        }
+        Assert.True(result.IsError);
+        var error = result.ErrorsOrEmptyList.SingleOrDefault();
+        Assert.Equal(ErrorType.Validation, error.Type);
+    }
 
-        private readonly InnerFixture _fixture;
+    [Fact]
+    public async Task UntrimmedInput_SavesAsTrimmed()
+    {
+        var request = new CreateTag.Request("  untrimmed     ");
 
-        [Fact]
-        public async Task ReturnsValidationResult()
-        {
-            Assert.True(result.IsError);
-            var error = result.Errors.SingleOrDefault();
-            Assert.Equal(ErrorType.Validation, error.Type);
-        }
+        var result = await Application.SendAsync(request);
+
+        Assert.False(result.IsError);
+        var tagDto = result.Value;
+        Assert.Equal("untrimmed", tagDto.Name);
+
+        var tag = await Application.FindAsync<Tag>(tagDto.Id);
+        Assert.NotNull(tag);
+        Assert.Equal(tagDto.Id, tag.Id);
+        Assert.Equal("untrimmed", tag.Name);
+    }
+
+    [Fact]
+    public async Task CreatesTag()
+    {
+        var request = new CreateTag.Request("hey");
+
+        var result = await Application.SendAsync(request);
+
+        Assert.False(result.IsError);
+        var tagDto = result.Value;
+        Assert.NotEqual(Guid.Empty, tagDto.Id);
+        Assert.Equal("hey", tagDto.Name);
+        
+        var tag = await Application.FindAsync<Tag>(tagDto.Id);
+        Assert.NotNull(tag);
+        Assert.Equal(tagDto.Id, tag.Id);
+        Assert.Equal("hey", tag.Name);
     }
 }

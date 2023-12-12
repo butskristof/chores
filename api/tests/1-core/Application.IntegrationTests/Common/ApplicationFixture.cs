@@ -13,16 +13,17 @@ namespace Chores.Application.IntegrationTests.Common;
 // it also provides various utility methods to access the underlying database and authentication 
 // so integration tests can be easily "arranged" before "acting" by sending requests into the mediator
 
-[CollectionDefinition(nameof(TestFixture))]
-public class TestFixtureCollection : ICollectionFixture<TestFixture>;
+[CollectionDefinition(nameof(ApplicationFixture))]
+public class TestFixtureCollection : ICollectionFixture<ApplicationFixture>;
 
-public sealed class TestFixture : IAsyncLifetime
+public sealed class ApplicationFixture : IAsyncLifetime
 {
     // these explicit nulls are unfortunate, but since we're using IAsyncLifetime and setting them there
     // it's somewhat acceptable
     private ITestDatabase _database = null!;
     private IServiceScopeFactory _scopeFactory = null!;
     private readonly FakeTimeProvider _timeProvider = new();
+    public string? UserId { get; set; } = TestConstants.DefaultUserId;
 
     public async Task InitializeAsync()
     {
@@ -61,7 +62,7 @@ public sealed class TestFixture : IAsyncLifetime
         {
         }
 
-        // TODO userId
+        UserId = null;
     }
 
     public async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
@@ -76,6 +77,31 @@ public sealed class TestFixture : IAsyncLifetime
         using var scope = _scopeFactory.CreateScope();
         var sender = scope.ServiceProvider.GetRequiredService<ISender>();
         await sender.Send(request);
+    }
+
+    public async Task<TEntity?> FindAsync<TEntity>(params object[] keyValues)
+        where TEntity : class
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        return await context.FindAsync<TEntity>(keyValues);
+    }
+
+    public async Task AddAsync<TEntity>(TEntity entity)
+        where TEntity : class
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        context.Add(entity);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task<int> CountAsync<TEntity>()
+        where TEntity : class
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        return await context.Set<TEntity>().CountAsync();
     }
 
     public async Task DisposeAsync()
