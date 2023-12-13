@@ -1,4 +1,5 @@
 using System.Reflection;
+using Chores.Application.Common.Authentication;
 using Chores.Application.Common.Constants;
 using Chores.Application.Common.Persistence;
 using Chores.Domain.Models;
@@ -10,8 +11,11 @@ public sealed class AppDbContext : DbContext, IAppDbContext
 {
     #region construction
 
-    public AppDbContext(DbContextOptions options) : base(options)
+    private readonly IAuthenticationInfo _authenticationInfo;
+
+    public AppDbContext(DbContextOptions options, IAuthenticationInfo authenticationInfo) : base(options)
     {
+        _authenticationInfo = authenticationInfo;
     }
 
     #endregion
@@ -19,6 +23,21 @@ public sealed class AppDbContext : DbContext, IAppDbContext
     #region entities
 
     public DbSet<Tag> Tags => Set<Tag>();
+
+    #endregion
+
+    #region queryables
+
+    public IQueryable<Tag> CurrentUserTags(bool tracking = false)
+    {
+        var query = Tags
+            .Where(t => t.CreatedBy == _authenticationInfo.UserId)
+            .AsQueryable();
+        
+        if (!tracking) query = query.AsNoTracking();
+        
+        return query;
+    }
 
     #endregion
 

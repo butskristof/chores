@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Chores.Persistence.EntityTypeConfigurations;
 
-internal sealed class TagConfiguration : IEntityTypeConfiguration<Tag>
+internal sealed class TagConfiguration : AuditableEntityConfiguration<Tag>
 {
-    public void Configure(EntityTypeBuilder<Tag> builder)
+    protected override void Configure(EntityTypeBuilder<Tag> builder)
     {
         builder
             .HasIndex(t => t.Name)
