@@ -4,24 +4,21 @@ using Chores.Domain.Models;
 using ErrorOr;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Chores.Application.Modules.Tags;
 
 public static class CreateTag
 {
-    // public sealed record Request(string Name) : IRequest<ErrorOr<Response>>;
-    public sealed record Request : IRequest<ErrorOr<Response>>
-    {
-        public Request(string name)
-        {
-            Name = name.Trim();
-        }
+    public sealed record Request(
+        string Name
+    ) : IRequest<ErrorOr<Response>>;
 
-        public string Name { get; }
-    }
-
-    public sealed record Response(Guid Id, string Name);
+    public sealed record Response(
+        Guid Id,
+        string Name
+    );
 
     internal sealed class Validator : AbstractValidator<Request>
     {
@@ -51,6 +48,9 @@ public static class CreateTag
         {
             _logger.LogDebug("Creating a new Tag");
 
+            if (await _db.CurrentUserTags(false).AnyAsync(t => t.Name == request.Name, cancellationToken))
+                return Error.Conflict(nameof(request.Name));
+
             var tag = new Tag
             {
                 Name = request.Name,
@@ -63,7 +63,7 @@ public static class CreateTag
 
             var response = new Response(tag.Id, tag.Name);
             _logger.LogDebug("Mapped entity to response");
-            
+
             return response;
         }
     }

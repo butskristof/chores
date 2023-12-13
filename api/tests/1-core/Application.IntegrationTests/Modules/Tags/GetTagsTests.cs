@@ -37,4 +37,22 @@ public sealed class GetTagsTests : ApplicationTestBase
             .And.ContainSingle(t => t.Name == "tag 1")
             .And.ContainSingle(t => t.Name == "tag 2");
     }
+
+    [Fact]
+    public async Task ReturnOnlyOwnedTags()
+    {
+        await Application.AddAsync(new Tag { Name = "tag 1" });
+        await Application.AddAsync(new Tag { Name = "tag 2" });
+        Application.SetUserId("other_user");
+        await Application.AddAsync(new Tag { Name = "tag 3" });
+        
+        var request = new GetTags.Request();
+        var result = await Application.SendAsync(request);
+        result.IsError.Should().BeFalse();
+        result.Value.Tags
+            .Should()
+            .NotBeEmpty()
+            .And.HaveCount(1)
+            .And.ContainSingle(t => t.Name == "tag 3");
+    }
 }

@@ -1,7 +1,9 @@
 using System.Data.Common;
+using Chores.Application.Common.Authentication;
 using Chores.Persistence;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using NSubstitute;
 using Respawn;
 using Respawn.Graph;
 using Testcontainers.MsSql;
@@ -35,7 +37,7 @@ internal sealed class TestcontainersTestDatabase : ITestDatabase
         var options = new DbContextOptionsBuilder<AppDbContext>()
             .UseSqlServer(_connectionString)
             .Options;
-        var context = new AppDbContext(options);
+        var context = new AppDbContext(options, Substitute.For<IAuthenticationInfo>());
         context.Database.Migrate();
         _respawner = await Respawner.CreateAsync(_connectionString, new RespawnerOptions
         {

@@ -17,7 +17,7 @@ public abstract class ApplicationTestBase : IAsyncLifetime
     {
         // since this functions as basically an async constructor, it will be executed before each test
         // hence, we reset the state before every single test
-        await Application.ResetStateAsync();
+        await Application.ResetStateAsync(userId: TestConstants.DefaultUserId);
     }
 
     public Task DisposeAsync() => Task.CompletedTask;

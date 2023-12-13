@@ -1,6 +1,7 @@
 using Chores.Api;
 using Chores.Api.Modules;
 using Chores.Application;
+using Chores.Application.Common.Constants;
 using Chores.Infrastructure;
 using Chores.Persistence;
 
@@ -10,7 +11,7 @@ builder
     .Services
     .AddApplication()
     .AddInfrastructure()
-    .AddPersistence(builder.Configuration)
+    .AddPersistence(builder.Configuration.GetConnectionString(ConfigurationConstants.AppDbContextConnectionStringKey))
     .AddApi();
 
 var app = builder.Build();

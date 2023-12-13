@@ -10,18 +10,10 @@ namespace Chores.Application.Modules.Tags;
 
 public static class UpdateTag
 {
-    // public sealed record Request(Guid Id, string Name) : IRequest<ErrorOr<Updated>>;
-    public sealed record Request : IRequest<ErrorOr<Updated>>
-    {
-        public Guid Id { get; }
-        public string Name { get; }
-
-        public Request(Guid id, string name)
-        {
-            Id = id;
-            Name = name.Trim();
-        }
-    }
+    public sealed record Request(
+        Guid Id,
+        string Name
+    ) : IRequest<ErrorOr<Updated>>;
 
     internal sealed class Validator : AbstractValidator<Request>
     {
@@ -49,9 +41,18 @@ public static class UpdateTag
 
         public async Task<ErrorOr<Updated>> Handle(Request request, CancellationToken cancellationToken)
         {
-            var tag = await _db.Tags.SingleOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
-            if (tag == null) return Error.NotFound(description: $"Could not find Tag with id {request.Id}");
+            _logger.LogDebug("Updating Tag");
+
+            var tag = await _db
+                .CurrentUserTags(true)
+                .SingleOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
+            if (tag is null)
+                return Error.NotFound(nameof(tag.Id), $"Could not find Tag with id {request.Id}");
             _logger.LogDebug("Fetched entity from database");
+
+            if (await _db.CurrentUserTags(false)
+                    .AnyAsync(t => t.Name == request.Name && t.Id != tag.Id, cancellationToken))
+                return Error.Conflict(nameof(request.Name));
 
             tag.Name = request.Name;
             _logger.LogDebug("Applied changes from request to entity");

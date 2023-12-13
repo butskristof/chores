@@ -27,8 +27,10 @@ public static class DeleteTag
 
         public async Task<ErrorOr<Deleted>> Handle(Request request, CancellationToken cancellationToken)
         {
-            var tag = await _db.Tags.SingleOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
-            if (tag == null) return Error.NotFound(description: $"Could not find Tag with id {request.Id}");
+            var tag = await _db
+                .CurrentUserTags(true)
+                .SingleOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
+            if (tag is null) return Error.NotFound(nameof(request.Id), $"Could not find Tag with id {request.Id}");
             _logger.LogDebug("Fetched entity from database");
 
             _db.Tags.Remove(tag);

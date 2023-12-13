@@ -40,8 +40,7 @@ public static class GetTags
         public async Task<ErrorOr<Response>> Handle(Request request, CancellationToken cancellationToken)
         {
             var tags = await _db
-                .Tags
-                .AsNoTracking()
+                .CurrentUserTags(false)
                 .Select(t => new Response.TagDto(t.Id, t.Name))
                 .ToListAsync(cancellationToken);
             _logger.LogDebug("Fetched all tags from database as DTO");

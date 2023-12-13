@@ -1,3 +1,6 @@
+using Chores.Api.Common;
+using Chores.Application.Common.Authentication;
+
 namespace Chores.Api;
 
 internal static class DependencyInjection
@@ -21,7 +24,7 @@ internal static class DependencyInjection
                         var outerClass = type.ReflectedType;
                         // if we find the outer class, return the schema ID as the type name 
                         // prefixed with the outer class name
-                        if (outerClass != null) return $"{outerClass.Name}-{type.Name}";
+                        if (outerClass is not null) return $"{outerClass.Name}-{type.Name}";
 
                         // if we don't find the outer type name, fall back to the unique identifier
                         return type.GUID.ToString();
@@ -37,6 +40,10 @@ internal static class DependencyInjection
         // it adds a default problem details response for all client and server error responses (400-599)
         // that don't have body content yet
         services.AddProblemDetails();
+
+        services
+            .AddHttpContextAccessor()
+            .AddScoped<IAuthenticationInfo, ApiAuthenticationInfo>();
 
         return services;
     }

@@ -1,3 +1,4 @@
+using Chores.Application.Common.Authentication;
 using Chores.Application.Common.Persistence;
 using Chores.Application.IntegrationTests.Common.Database;
 using Chores.Persistence;
@@ -5,6 +6,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Time.Testing;
+using NSubstitute;
 
 namespace Chores.Application.IntegrationTests.Common;
 
@@ -22,8 +24,8 @@ public sealed class ApplicationFixture : IAsyncLifetime
     // it's somewhat acceptable
     private ITestDatabase _database = null!;
     private IServiceScopeFactory _scopeFactory = null!;
-    private readonly FakeTimeProvider _timeProvider = new();
-    public string? UserId { get; set; } = TestConstants.DefaultUserId;
+    private FakeTimeProvider _timeProvider = new();
+    private string? _userId;
 
     public async Task InitializeAsync()
     {
@@ -40,29 +42,30 @@ public sealed class ApplicationFixture : IAsyncLifetime
         // infrastructure
         services
             .AddLogging()
-            .AddSingleton<TimeProvider>(_timeProvider);
+            .AddScoped<TimeProvider>(_ => _timeProvider);
 
         // persistence
         services
-            .AddDbContext<AppDbContext>(options => { options.UseSqlServer(_database.GetConnection()); })
-            .AddScoped<IAppDbContext, AppDbContext>();
+            .AddPersistence(null, _database.GetConnection());
+
+        // authentication
+        var authenticationInfo = Substitute.For<IAuthenticationInfo>();
+        authenticationInfo
+            .UserId
+            .Returns(_ => GetUserId());
+        services
+            .AddSingleton(authenticationInfo);
 
         // build a scope factory from the service collection
         var provider = services.BuildServiceProvider();
         _scopeFactory = provider.GetRequiredService<IServiceScopeFactory>();
     }
 
-    public async Task ResetStateAsync()
+    public async Task ResetStateAsync(string? userId = null)
     {
-        try
-        {
-            await _database.ResetAsync();
-        }
-        catch (Exception)
-        {
-        }
-
-        UserId = null;
+        await _database.ResetAsync();
+        _timeProvider = new FakeTimeProvider();
+        SetUserId(userId);
     }
 
     public async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request)
@@ -103,6 +106,12 @@ public sealed class ApplicationFixture : IAsyncLifetime
         var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         return await context.Set<TEntity>().CountAsync();
     }
+
+    public void SetDateTime(DateTimeOffset dateTime)
+        => _timeProvider.SetUtcNow(dateTime);
+
+    public string? GetUserId() => _userId;
+    public void SetUserId(string? userId) => _userId = userId;
 
     public async Task DisposeAsync()
     {
