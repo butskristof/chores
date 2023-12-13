@@ -39,7 +39,7 @@ public sealed class GetTagsTests : ApplicationTestBase
     }
 
     [Fact]
-    public async Task ReturnOnlyOwnedTags()
+    public async Task ReturnsOnlyOwnedTags()
     {
         await Application.AddAsync(new Tag { Name = "tag 1" });
         await Application.AddAsync(new Tag { Name = "tag 2" });

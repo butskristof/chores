@@ -26,7 +26,7 @@ public sealed class DeleteTagTests : ApplicationTestBase
     }
 
     [Fact]
-    public async Task InaccessibleId_ReturnsNotFoundErrorAndDoesNotUpdateTag()
+    public async Task InaccessibleId_ReturnsNotFoundErrorAndDoesNotDeleteTag()
     {
         var id = new Guid("8DA0E36D-898E-4682-8084-099209EF1173");
         {
