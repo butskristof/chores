@@ -1,7 +1,8 @@
+using Chores.Domain.Common;
+
 namespace Chores.Domain.Models;
 
-public sealed class Tag
+public sealed class Tag : BaseAuditableEntity
 {
-    public Guid Id { get; set; }
     public required string Name { get; set; }
 }

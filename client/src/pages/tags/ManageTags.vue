@@ -32,7 +32,7 @@
     :query="tagsQuery"
   >
     <TagsList
-      :tags="data.value"
+      :tags="data.value.tags"
       @edit="openEditDialog"
       @delete="setTagForDelete"
     />
@@ -53,7 +53,7 @@ const tagsQuery = useChoresApiTags();
 const showEditDialog = ref(false);
 const tagForEdit = ref(null);
 const openEditDialog = (id = null) => {
-  tagForEdit.value = id == null ? null : tagsQuery.data.value?.find((t) => t.id === id);
+  tagForEdit.value = id == null ? null : tagsQuery.data.value.tags?.find((t) => t.id === id);
   showEditDialog.value = true;
 };
 const closeEditDialog = () => {
@@ -66,7 +66,7 @@ const closeEditDialog = () => {
 
 const tagForDelete = ref(null);
 const setTagForDelete = (id) => {
-  tagForDelete.value = id == null ? null : tagsQuery.data.value?.find((t) => t.id === id);
+  tagForDelete.value = id == null ? null : tagsQuery.data.value.tags?.find((t) => t.id === id);
 };
 
 //#endregion

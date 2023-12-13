@@ -1,14 +1,18 @@
 using Chores.Api;
 using Chores.Api.Modules;
 using Chores.Application;
+using Chores.Application.Common.Constants;
 using Chores.Infrastructure;
+using Chores.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder
     .Services
+    .AddConfiguration(builder.Configuration)
     .AddApplication()
     .AddInfrastructure()
+    .AddPersistence(builder.Configuration.GetConnectionString(ConfigurationConstants.AppDbContextConnectionStringKey))
     .AddApi();
 
 var app = builder.Build();
@@ -23,6 +27,9 @@ app
     // keep in mind that this middleware will only activate if the body is empty when
     // it reaches it
     .UseStatusCodePages();
+
+app.UseAuthorization();
+app.UseCors(ApplicationConstants.CorsPolicy);
 
 // add endpoint to retrieve OpenAPI definition
 app.MapSwagger();
