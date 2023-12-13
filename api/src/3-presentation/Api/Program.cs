@@ -29,6 +29,7 @@ app
     .UseStatusCodePages();
 
 app.UseAuthorization();
+app.UseCors(ApplicationConstants.CorsPolicy);
 
 // add endpoint to retrieve OpenAPI definition
 app.MapSwagger();

@@ -42,7 +42,8 @@ const props = defineProps({
 });
 const emit = defineEmits(['edit', 'delete']);
 
-const canDelete = computed(() => props.tag.choresCount === 0);
+// const canDelete = computed(() => props.tag.choresCount != null && props === 0);
+const canDelete = computed(() => props.tag != null);
 </script>
 
 <style scoped lang="scss">

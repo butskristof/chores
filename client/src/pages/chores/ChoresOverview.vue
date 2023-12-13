@@ -12,15 +12,12 @@
   >
     <ChoresList :chores="data.value" />
   </QueryData>
-
-  <AuthDebug />
 </template>
 
 <script setup>
 import ChoresList from '@/components/chores/overview/ChoresList.vue';
 import { useChoresApiChores } from '@/composables/queries/chores-api';
 import QueryData from '@/components/common/QueryData.vue';
-import AuthDebug from '@/components/debug/AuthDebug.vue';
 
 const choresQuery = useChoresApiChores();
 </script>

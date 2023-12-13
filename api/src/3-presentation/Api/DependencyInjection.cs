@@ -12,7 +12,8 @@ internal static class DependencyInjection
     internal static IServiceCollection AddConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
         services
-            .Configure<AuthenticationSettings>(configuration.GetSection(ConfigurationConstants.Authentication));
+            .Configure<AuthenticationSettings>(configuration.GetSection(ConfigurationConstants.Authentication))
+            .Configure<ClientSettings>(configuration.GetSection(ConfigurationConstants.Clients));
 
         return services;
     }
@@ -81,6 +82,26 @@ internal static class DependencyInjection
             });
         services.AddAuthorization();
 
+        services.AddCorsPolicy();
+
         return services;
     }
+    
+	private static IServiceCollection AddCorsPolicy(this IServiceCollection services)
+	{
+		using var serviceProvider = services.BuildServiceProvider();
+		var configuration = serviceProvider.GetRequiredService<IOptions<ClientSettings>>().Value;
+
+		services
+			.AddCors(options => options
+				.AddPolicy(ApplicationConstants.CorsPolicy,
+					builder =>
+					{
+						builder.WithOrigins(configuration.ClientUrls);
+						builder.AllowAnyMethod();
+						builder.AllowAnyHeader();
+					}));
+
+		return services;
+	}
 }
