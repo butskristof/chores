@@ -11,7 +11,8 @@ internal static class TagsModule
     {
         var group = endpoints
             .MapGroup("/Tags")
-            .WithTags("Tags");
+            .WithTags("Tags")
+            .RequireAuthorization();
 
         group
             .MapGet("", GetTags)

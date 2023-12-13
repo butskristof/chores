@@ -1,10 +1,22 @@
 using Chores.Api.Common;
 using Chores.Application.Common.Authentication;
+using Chores.Application.Common.Configuration;
+using Chores.Application.Common.Constants;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Chores.Api;
 
 internal static class DependencyInjection
 {
+    internal static IServiceCollection AddConfiguration(this IServiceCollection services, IConfiguration configuration)
+    {
+        services
+            .Configure<AuthenticationSettings>(configuration.GetSection(ConfigurationConstants.Authentication));
+
+        return services;
+    }
+
     internal static IServiceCollection AddApi(this IServiceCollection services)
     {
         // set up Swagger to generate OpenAPI definitions
@@ -44,6 +56,30 @@ internal static class DependencyInjection
         services
             .AddHttpContextAccessor()
             .AddScoped<IAuthenticationInfo, ApiAuthenticationInfo>();
+
+        services
+            .AddAuthentication()
+            .AddJwtBearer(options =>
+            {
+                using var serviceProvider = services.BuildServiceProvider();
+                var configuration = serviceProvider
+                    .GetRequiredService<IOptions<AuthenticationSettings>>()
+                    .Value;
+
+                options.Authority = configuration.Issuer;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = true,
+                    ValidAudiences = configuration.Audiences,
+                    ValidateIssuer = true,
+                    ValidIssuer = configuration.Issuer,
+                    ValidateIssuerSigningKey = true,
+                    RequireSignedTokens = true,
+                    RequireExpirationTime = true,
+                    ValidateLifetime = true,
+                };
+            });
+        services.AddAuthorization();
 
         return services;
     }

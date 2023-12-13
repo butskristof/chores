@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder
     .Services
+    .AddConfiguration(builder.Configuration)
     .AddApplication()
     .AddInfrastructure()
     .AddPersistence(builder.Configuration.GetConnectionString(ConfigurationConstants.AppDbContextConnectionStringKey))
@@ -26,6 +27,8 @@ app
     // keep in mind that this middleware will only activate if the body is empty when
     // it reaches it
     .UseStatusCodePages();
+
+app.UseAuthorization();
 
 // add endpoint to retrieve OpenAPI definition
 app.MapSwagger();
