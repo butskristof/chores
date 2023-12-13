@@ -1,4 +1,5 @@
 using Chores.Application.IntegrationTests.Common;
+using Chores.Application.IntegrationTests.Common.Builders.Tags;
 using Chores.Application.Modules.Tags;
 using Chores.Domain.Models;
 using ErrorOr;
@@ -29,9 +30,7 @@ public sealed class DeleteTagTests : ApplicationTestBase
     public async Task InaccessibleId_ReturnsNotFoundErrorAndDoesNotDeleteTag()
     {
         var id = new Guid("8DA0E36D-898E-4682-8084-099209EF1173");
-        {
-            await Application.AddAsync(new Tag { Id = id, Name = "inaccessible" });
-        }
+        await Application.AddAsync(new TagBuilder().WithId(id).Build());
 
         Application.SetUserId("other_user");
         var request = new DeleteTag.Request(id);
@@ -51,9 +50,7 @@ public sealed class DeleteTagTests : ApplicationTestBase
     public async Task DeletesTask()
     {
         var id = new Guid("5B6035C2-9FB6-433D-B315-C6AE1384274B");
-        {
-            await Application.AddAsync(new Tag { Id = id, Name = string.Empty });
-        }
+        await Application.AddAsync(new TagBuilder().WithId(id).Build());
         var request = new DeleteTag.Request(id);
         var result = await Application.SendAsync(request);
 

@@ -1,4 +1,5 @@
 using Chores.Application.IntegrationTests.Common;
+using Chores.Application.IntegrationTests.Common.Builders.Tags;
 using Chores.Application.Modules.Tags;
 using Chores.Domain.Models;
 using ErrorOr;
@@ -30,10 +31,7 @@ public sealed class CreateTagTests : ApplicationTestBase
     [Fact]
     public async Task DuplicateName_ReturnsConflictError()
     {
-        {
-            var tag = new Tag { Name = "super tag" };
-            await Application.AddAsync(tag);
-        }
+        await Application.AddAsync(new TagBuilder().WithName("super tag").Build());
 
         var request = new CreateTag.Request("SUPER TAG  ");
         var result = await Application.SendAsync(request);
@@ -75,9 +73,7 @@ public sealed class CreateTagTests : ApplicationTestBase
     [Fact]
     public async Task DuplicateNameOfOtherUser_CreatesTag()
     {
-        {
-            await Application.AddAsync(new Tag { Name = "super tag" });
-        }
+        await Application.AddAsync(new TagBuilder().WithName("super tag").Build());
 
         Application.SetUserId("other_user");
         var request = new CreateTag.Request("super tag");

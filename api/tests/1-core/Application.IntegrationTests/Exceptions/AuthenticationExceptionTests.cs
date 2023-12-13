@@ -1,6 +1,6 @@
 using Chores.Application.Common.Exceptions;
 using Chores.Application.IntegrationTests.Common;
-using Chores.Domain.Models;
+using Chores.Application.IntegrationTests.Common.Builders.Tags;
 
 namespace Chores.Application.IntegrationTests.Exceptions;
 
@@ -15,7 +15,7 @@ public sealed class AuthenticationExceptionTests : ApplicationTestBase
     public async Task UserIdNull_ThrowsOnAudit()
     {
         Application.SetUserId(null);
-        var action = () => Application.AddAsync(new Tag { Name = "never gonna happen" });
+        var action = () => Application.AddAsync(new TagBuilder().Build());
         await action
             .Should()
             .ThrowAsync<AuthenticationException>();
