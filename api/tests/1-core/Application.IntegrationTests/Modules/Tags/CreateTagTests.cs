@@ -19,43 +19,46 @@ public sealed class CreateTagTests : ApplicationTestBase
 
         var result = await Application.SendAsync(request);
 
-        Assert.True(result.IsError);
+        result.IsError.Should().BeTrue("validation failure should be reported as error");
+
         var error = result.ErrorsOrEmptyList.SingleOrDefault();
-        Assert.Equal(ErrorType.Validation, error.Type);
+        error.Should().NotBeNull("errors should only contain one validation error");
+        error.Type.Should().Be(ErrorType.Validation);
+        error.Code.Should().Be(nameof(CreateTag.Request.Name));
     }
 
     [Fact]
-    public async Task UntrimmedInput_SavesAsTrimmed()
+    public async Task DuplicateName_ReturnsConflictError()
     {
-        var request = new CreateTag.Request("  untrimmed     ");
-
-        var result = await Application.SendAsync(request);
-
-        Assert.False(result.IsError);
-        var tagDto = result.Value;
-        Assert.Equal("untrimmed", tagDto.Name);
-
-        var tag = await Application.FindAsync<Tag>(tagDto.Id);
-        Assert.NotNull(tag);
-        Assert.Equal(tagDto.Id, tag.Id);
-        Assert.Equal("untrimmed", tag.Name);
-    }
-
-    [Fact]
-    public async Task CreatesTag()
-    {
-        var request = new CreateTag.Request("hey");
-
-        var result = await Application.SendAsync(request);
-
-        Assert.False(result.IsError);
-        var tagDto = result.Value;
-        Assert.NotEqual(Guid.Empty, tagDto.Id);
-        Assert.Equal("hey", tagDto.Name);
+        {
+            var tag = new Tag { Name = "super tag" };
+            await Application.AddAsync(tag);
+        }
         
+        var request = new CreateTag.Request("SUPER TAG  ");
+        var result = await Application.SendAsync(request);
+        
+        result.IsError.Should().BeTrue();
+        result.ErrorsOrEmptyList.Single().Type.Should().Be(ErrorType.Conflict);
+    }
+
+    [Theory]
+    [InlineData("  untrimmed     ", "untrimmed")]
+    [InlineData("hey", "hey")]
+    public async Task CreatesTag(string input, string expected)
+    {
+        var request = new CreateTag.Request(input);
+
+        var result = await Application.SendAsync(request);
+
+        result.IsError.Should().BeFalse();
+        var tagDto = result.Value;
+        tagDto.Id.Should().NotBeEmpty();
+        tagDto.Name.Should().Be(expected);
+
         var tag = await Application.FindAsync<Tag>(tagDto.Id);
-        Assert.NotNull(tag);
-        Assert.Equal(tagDto.Id, tag.Id);
-        Assert.Equal("hey", tag.Name);
+        tag.Should().NotBeNull();
+        tag!.Id.Should().Be(tagDto.Id);
+        tag.Name.Should().Be(expected);
     }
 }
