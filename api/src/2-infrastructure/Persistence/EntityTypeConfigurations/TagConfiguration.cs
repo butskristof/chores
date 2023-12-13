@@ -9,7 +9,7 @@ internal sealed class TagConfiguration : AuditableEntityConfiguration<Tag>
     protected override void Configure(EntityTypeBuilder<Tag> builder)
     {
         builder
-            .HasIndex(t => t.Name)
+            .HasIndex(t => new { t.Name, t.CreatedBy })
             .IsUnique();
     }
 }
