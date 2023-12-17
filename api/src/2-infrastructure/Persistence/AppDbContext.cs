@@ -3,6 +3,7 @@ using Chores.Application.Common.Authentication;
 using Chores.Application.Common.Constants;
 using Chores.Application.Common.Persistence;
 using Chores.Domain.Models;
+using Chores.Domain.Models.Tags;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chores.Persistence;

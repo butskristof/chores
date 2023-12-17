@@ -1,6 +1,6 @@
 using Chores.Domain.Common;
 
-namespace Chores.Domain.Models;
+namespace Chores.Domain.Models.Tags;
 
 public sealed class Tag : BaseAuditableEntity
 {

@@ -1,4 +1,5 @@
 using Chores.Domain.Models;
+using Chores.Domain.Models.Tags;
 
 namespace Chores.Application.IntegrationTests.Common.Builders.Tags;
 

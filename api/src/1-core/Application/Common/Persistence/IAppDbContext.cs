@@ -1,4 +1,5 @@
 using Chores.Domain.Models;
+using Chores.Domain.Models.Tags;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chores.Application.Common.Persistence;

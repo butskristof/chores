@@ -2,6 +2,7 @@ using Chores.Application.IntegrationTests.Common;
 using Chores.Application.IntegrationTests.Common.Builders.Tags;
 using Chores.Application.Modules.Tags;
 using Chores.Domain.Models;
+using Chores.Domain.Models.Tags;
 using ErrorOr;
 
 namespace Chores.Application.IntegrationTests.Modules.Tags;
