@@ -1,6 +1,4 @@
-using Chores.Domain.Models;
 using Chores.Domain.Models.Tags;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Chores.Persistence.EntityTypeConfigurations;

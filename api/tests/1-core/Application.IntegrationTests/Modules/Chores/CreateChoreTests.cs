@@ -36,7 +36,7 @@ public sealed class CreateChoreTests : ApplicationTestBase
             LastModifiedBy = TestConstants.DefaultUserId,
             LastModifiedOn = dt,
         };
-        var chore = Application.FindAsync<Chore>(choreDto.Id);
+        var chore = await Application.FindAsync<Chore>(choreDto.Id);
         chore.Should().BeEquivalentTo(expectedChore);
     }
 }

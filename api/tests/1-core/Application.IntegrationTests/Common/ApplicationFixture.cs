@@ -1,5 +1,4 @@
 using Chores.Application.Common.Authentication;
-using Chores.Application.Common.Persistence;
 using Chores.Application.IntegrationTests.Common.Database;
 using Chores.Persistence;
 using MediatR;

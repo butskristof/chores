@@ -1,6 +1,5 @@
 using Chores.Application.Common.FluentValidation;
 using Chores.Application.Common.Persistence;
-using Chores.Domain.Models;
 using Chores.Domain.Models.Tags;
 using ErrorOr;
 using FluentValidation;
