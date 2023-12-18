@@ -17,4 +17,13 @@ internal static class FluentValidationExtensions
             .NotEmptyWithErrorCode()
             .MaximumLength(maxLength)
             .WithMessage(ErrorCodes.Invalid);
+
+    internal static IRuleBuilder<T, int> PositiveInteger<T>(this IRuleBuilder<T, int> ruleBuilder,
+        bool zeroInclusive)
+        => (zeroInclusive
+                ? ruleBuilder
+                    .GreaterThanOrEqualTo(0)
+                : ruleBuilder
+                    .GreaterThan(0))
+            .WithMessage(ErrorCodes.Invalid);
 }

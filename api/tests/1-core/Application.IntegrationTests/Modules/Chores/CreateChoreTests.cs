@@ -1,6 +1,7 @@
 using Chores.Application.IntegrationTests.Common;
 using Chores.Application.Modules.Chores;
 using Chores.Domain.Models.Chores;
+using ErrorOr;
 
 namespace Chores.Application.IntegrationTests.Modules.Chores;
 
@@ -9,6 +10,21 @@ public sealed class CreateChoreTests : ApplicationTestBase
 {
     public CreateChoreTests(ApplicationFixture application) : base(application)
     {
+    }
+
+    [Fact]
+    public async Task InvalidRequest_ReturnsValidationError()
+    {
+        var request = new CreateChore.Request(string.Empty, 1);
+        var result = await Application.SendAsync(request);
+
+        result.IsError.Should().BeTrue("validation failure should be reported as error");
+
+        var error = result.ErrorsOrEmptyList.SingleOrDefault();
+        error.Should().NotBeNull("errors should only contain one validation error");
+        error.Type.Should().Be(ErrorType.Validation);
+        error.Code.Should().Be("Name");
+        error.Description.Should().Be("Required");
     }
 
     [Fact]
