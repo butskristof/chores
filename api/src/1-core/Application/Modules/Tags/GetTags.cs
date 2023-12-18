@@ -22,7 +22,7 @@ public static class GetTags
         public sealed record TagDto(Guid Id, string Name);
     }
 
-    internal class Handler : IRequestHandler<Request, ErrorOr<Response>>
+    internal sealed class Handler : IRequestHandler<Request, ErrorOr<Response>>
     {
         #region construction
 

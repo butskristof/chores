@@ -72,7 +72,7 @@ public sealed class UpdateTagTests : ApplicationTestBase
         var request = new UpdateTag.Request(id, "valid name");
         var result = await Application.SendAsync(request);
 
-        result.IsError.Should().BeTrue("random ID should not be found");
+        result.IsError.Should().BeTrue("non-owned tag should not be accessible");
         var error = result.ErrorsOrEmptyList.SingleOrDefault();
         error.Should().NotBeNull("should contain exactly one error");
         error.Type.Should().Be(ErrorType.NotFound);

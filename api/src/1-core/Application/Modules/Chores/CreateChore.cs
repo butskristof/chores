@@ -29,7 +29,7 @@ public static class CreateChore
         }
     }
 
-    internal class Handler : IRequestHandler<Request, ErrorOr<Response>>
+    internal sealed class Handler : IRequestHandler<Request, ErrorOr<Response>>
     {
         #region construction
 

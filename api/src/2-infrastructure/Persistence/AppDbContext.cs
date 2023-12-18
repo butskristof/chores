@@ -41,6 +41,15 @@ public sealed class AppDbContext : DbContext, IAppDbContext
         return query;
     }
 
+    public IQueryable<Chore> CurrentUserChores(bool tracking = true)
+    {
+        var query = Chores
+            .Where(c => c.CreatedBy == _authenticationInfo.UserId)
+            .AsQueryable();
+        if (!tracking) query = query.AsNoTracking();
+        return query;
+    }
+
     #endregion
 
     #region configuration

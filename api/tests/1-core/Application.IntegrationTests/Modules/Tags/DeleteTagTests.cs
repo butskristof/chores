@@ -36,7 +36,7 @@ public sealed class DeleteTagTests : ApplicationTestBase
         var request = new DeleteTag.Request(id);
         var result = await Application.SendAsync(request);
 
-        result.IsError.Should().BeTrue("random ID should not be found");
+        result.IsError.Should().BeTrue("non-owned tag should be inaccessible");
         var error = result.ErrorsOrEmptyList.SingleOrDefault();
         error.Should().NotBeNull("should contain exactly one error");
         error.Type.Should().Be(ErrorType.NotFound);
@@ -47,7 +47,7 @@ public sealed class DeleteTagTests : ApplicationTestBase
     }
 
     [Fact]
-    public async Task DeletesTask()
+    public async Task DeletesTag()
     {
         var id = new Guid("5B6035C2-9FB6-433D-B315-C6AE1384274B");
         await Application.AddAsync(new TagBuilder().WithId(id).Build());
@@ -61,4 +61,6 @@ public sealed class DeleteTagTests : ApplicationTestBase
             .Should()
             .BeNull();
     }
+    
+    // TODO verify prevent delete when chores attached
 }

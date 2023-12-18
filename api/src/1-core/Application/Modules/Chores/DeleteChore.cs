@@ -4,9 +4,9 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace Chores.Application.Modules.Tags;
+namespace Chores.Application.Modules.Chores;
 
-public static class DeleteTag
+public static class DeleteChore
 {
     public sealed record Request(Guid Id) : IRequest<ErrorOr<Deleted>>;
 
@@ -27,24 +27,21 @@ public static class DeleteTag
 
         public async Task<ErrorOr<Deleted>> Handle(Request request, CancellationToken cancellationToken)
         {
-            _logger.LogDebug("Handling DeleteTag request");
-
-            var tag = await _db
-                .CurrentUserTags(true)
-                .SingleOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
-            if (tag is null)
+            var chore = await _db
+                .CurrentUserChores(true)
+                .SingleOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
+            if (chore is null)
             {
-                _logger.LogDebug("Tag with ID {Id} was not found in database or does not belong to this user",
+                _logger.LogDebug("Chore with ID {Id} was not found in database or does not belong to this user",
                     request.Id);
-                return Error.NotFound(nameof(request.Id), $"Could not find Tag with id {request.Id}");
+                return Error.NotFound(nameof(request.Id), $"Could not find Chore with id {request.Id}");
             }
 
             _logger.LogDebug("Fetched entity from database");
 
-            _db.Tags.Remove(tag);
+            _db.Chores.Remove(chore);
             await _db.SaveChangesAsync(CancellationToken.None);
             _logger.LogDebug("Removed entity from database");
-            // TODO handle failing delete because of FK constraints
 
             return Result.Deleted;
         }

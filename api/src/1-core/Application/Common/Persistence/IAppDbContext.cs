@@ -8,7 +8,9 @@ public interface IAppDbContext
 {
     DbSet<Tag> Tags { get; }
     DbSet<Chore> Chores { get; }
+    
     IQueryable<Tag> CurrentUserTags(bool tracking);
+    IQueryable<Chore> CurrentUserChores(bool tracking);
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
