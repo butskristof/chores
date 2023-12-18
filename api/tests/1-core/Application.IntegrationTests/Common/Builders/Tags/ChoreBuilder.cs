@@ -7,6 +7,7 @@ internal sealed class ChoreBuilder
     private Guid _id = Guid.NewGuid();
     private string _name = "some chore";
     private int _interval = 10;
+    private string? _notes = null;
 
     internal ChoreBuilder WithId(Guid id)
     {
@@ -26,6 +27,12 @@ internal sealed class ChoreBuilder
         return this;
     }
 
-    internal Chore Build() => new() { Id = _id, Name = _name, Interval = _interval };
+    internal ChoreBuilder WithNotes(string? notes)
+    {
+        _notes = notes;
+        return this;
+    }
+
+    internal Chore Build() => new() { Id = _id, Name = _name, Interval = _interval, Notes = _notes};
     public static implicit operator Chore(ChoreBuilder builder) => builder.Build();
 }

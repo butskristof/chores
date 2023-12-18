@@ -6,4 +6,6 @@ public sealed class Chore : BaseAuditableEntity
 {
     public required string Name { get; set; }
     public required int Interval { get; set; }
+
+    public string? Notes { get; set; }
 }

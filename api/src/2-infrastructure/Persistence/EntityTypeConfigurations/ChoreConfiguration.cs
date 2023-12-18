@@ -7,5 +7,8 @@ internal sealed class ChoreConfiguration : AuditableEntityConfiguration<Chore>
 {
     protected override void Configure(EntityTypeBuilder<Chore> builder)
     {
+        builder
+            .Property(c => c.Notes)
+            .HasMaxLength(-1);
     }
 }
