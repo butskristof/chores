@@ -33,6 +33,6 @@ internal sealed class ChoreBuilder
         return this;
     }
 
-    internal Chore Build() => new() { Id = _id, Name = _name, Interval = _interval, Notes = _notes};
+    internal Chore Build() => new() { Id = _id, Name = _name, Interval = _interval, Notes = _notes };
     public static implicit operator Chore(ChoreBuilder builder) => builder.Build();
 }
