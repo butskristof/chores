@@ -59,6 +59,7 @@ public sealed class GetChoreTests : ApplicationTestBase
         result.IsError.Should().BeFalse();
         var dto = result.Value;
         dto.Should().NotBeNull();
+        dto.Id.Should().Be(id);
         dto.Name.Should().Be("detailed chore");
         dto.Interval.Should().Be(3);
         dto.Notes.Should().Be("explicit notes");
