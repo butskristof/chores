@@ -19,7 +19,9 @@ public static class GetChores
 
         public IEnumerable<ChoreDto> Chores { get; }
 
-        public sealed record ChoreDto(Guid Id, string Name, int Interval);
+        public sealed record ChoreDto(Guid Id, string Name, int Interval, IEnumerable<TagDto> Tags);
+
+        public sealed record TagDto(Guid Id, string Name);
     }
 
     internal sealed class Handler : IRequestHandler<Request, ErrorOr<Response>>
@@ -40,10 +42,12 @@ public static class GetChores
         public async Task<ErrorOr<Response>> Handle(Request request, CancellationToken cancellationToken)
         {
             _logger.LogDebug("Handling GetChores request");
-            
+
             var chores = await _db
                 .CurrentUserChores(false)
-                .Select(c => new Response.ChoreDto(c.Id, c.Name, c.Interval))
+                .Select(c =>
+                    new Response.ChoreDto(c.Id, c.Name, c.Interval,
+                        c.Tags.Select(t => new Response.TagDto(t.Id, t.Name))))
                 .ToListAsync(cancellationToken);
             _logger.LogDebug("Fetched all tags from database as DTO");
 
