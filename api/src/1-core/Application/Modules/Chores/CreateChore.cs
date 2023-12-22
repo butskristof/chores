@@ -1,24 +1,21 @@
 using Chores.Application.Common.FluentValidation;
 using Chores.Application.Common.Persistence;
-using Chores.Domain.Models.Tags;
+using Chores.Domain.Models.Chores;
 using ErrorOr;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace Chores.Application.Modules.Tags;
+namespace Chores.Application.Modules.Chores;
 
-public static class CreateTag
+public static class CreateChore
 {
     public sealed record Request(
-        string Name
+        string Name,
+        int Interval
     ) : IRequest<ErrorOr<Response>>;
 
-    public sealed record Response(
-        Guid Id,
-        string Name
-    );
+    public sealed record Response(Guid Id, string Name, int Interval);
 
     internal sealed class Validator : AbstractValidator<Request>
     {
@@ -26,6 +23,9 @@ public static class CreateTag
         {
             RuleFor(r => r.Name)
                 .ValidString();
+
+            RuleFor(r => r.Interval)
+                .PositiveInteger(false);
         }
     }
 
@@ -46,22 +46,16 @@ public static class CreateTag
 
         public async Task<ErrorOr<Response>> Handle(Request request, CancellationToken cancellationToken)
         {
-            _logger.LogDebug("Creating a new Tag");
+            _logger.LogDebug("Creating a new Chore");
 
-            if (await _db.CurrentUserTags(false).AnyAsync(t => t.Name == request.Name, cancellationToken))
-                return Error.Conflict(nameof(request.Name));
-
-            var tag = new Tag
-            {
-                Name = request.Name,
-            };
+            var chore = new Chore { Name = request.Name, Interval = request.Interval };
             _logger.LogDebug("Mapped request to entity");
 
-            _db.Tags.Add(tag);
+            _db.Chores.Add(chore);
             await _db.SaveChangesAsync(CancellationToken.None);
             _logger.LogDebug("Persisted new entity to database");
 
-            var response = new Response(tag.Id, tag.Name);
+            var response = new Response(chore.Id, chore.Name, chore.Interval);
             _logger.LogDebug("Mapped entity to response");
 
             return response;

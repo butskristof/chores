@@ -2,7 +2,8 @@ using System.Reflection;
 using Chores.Application.Common.Authentication;
 using Chores.Application.Common.Constants;
 using Chores.Application.Common.Persistence;
-using Chores.Domain.Models;
+using Chores.Domain.Models.Chores;
+using Chores.Domain.Models.Tags;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chores.Persistence;
@@ -23,6 +24,7 @@ public sealed class AppDbContext : DbContext, IAppDbContext
     #region entities
 
     public DbSet<Tag> Tags => Set<Tag>();
+    public DbSet<Chore> Chores => Set<Chore>();
 
     #endregion
 
@@ -33,9 +35,18 @@ public sealed class AppDbContext : DbContext, IAppDbContext
         var query = Tags
             .Where(t => t.CreatedBy == _authenticationInfo.UserId)
             .AsQueryable();
-        
+
         if (!tracking) query = query.AsNoTracking();
-        
+
+        return query;
+    }
+
+    public IQueryable<Chore> CurrentUserChores(bool tracking = true)
+    {
+        var query = Chores
+            .Where(c => c.CreatedBy == _authenticationInfo.UserId)
+            .AsQueryable();
+        if (!tracking) query = query.AsNoTracking();
         return query;
     }
 

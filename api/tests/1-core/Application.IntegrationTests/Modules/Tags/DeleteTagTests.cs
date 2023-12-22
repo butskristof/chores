@@ -1,6 +1,7 @@
 using Chores.Application.IntegrationTests.Common;
+using Chores.Application.IntegrationTests.Common.Builders.Tags;
 using Chores.Application.Modules.Tags;
-using Chores.Domain.Models;
+using Chores.Domain.Models.Tags;
 using ErrorOr;
 
 namespace Chores.Application.IntegrationTests.Modules.Tags;
@@ -29,15 +30,13 @@ public sealed class DeleteTagTests : ApplicationTestBase
     public async Task InaccessibleId_ReturnsNotFoundErrorAndDoesNotDeleteTag()
     {
         var id = new Guid("8DA0E36D-898E-4682-8084-099209EF1173");
-        {
-            await Application.AddAsync(new Tag { Id = id, Name = "inaccessible" });
-        }
+        await Application.AddAsync(new TagBuilder().WithId(id).Build());
 
         Application.SetUserId("other_user");
         var request = new DeleteTag.Request(id);
         var result = await Application.SendAsync(request);
 
-        result.IsError.Should().BeTrue("random ID should not be found");
+        result.IsError.Should().BeTrue("non-owned tag should be inaccessible");
         var error = result.ErrorsOrEmptyList.SingleOrDefault();
         error.Should().NotBeNull("should contain exactly one error");
         error.Type.Should().Be(ErrorType.NotFound);
@@ -48,12 +47,31 @@ public sealed class DeleteTagTests : ApplicationTestBase
     }
 
     [Fact]
-    public async Task DeletesTask()
+    public async Task ChoresAttached_ReturnsErrorAndDoesNotDeleteTag()
+    {
+        var tagId = new Guid("FDEF93C4-D0D0-4647-ABF3-31EC846E2C66");
+        await Application.AddAsync(new TagBuilder().WithId(tagId).Build());
+        var choreId = new Guid("464B97F6-5C61-47E8-A279-4B10CD8990AA");
+        await Application.AddAsync(new ChoreBuilder().WithId(choreId).WithTags([tagId]).Build());
+
+        var request = new DeleteTag.Request(tagId);
+        var result = await Application.SendAsync(request);
+
+        result.IsError.Should().BeTrue("tag referenced by chore should not be deleted");
+        var error = result.ErrorsOrEmptyList.SingleOrDefault();
+        error.Should().NotBeNull("should contain exactly one error");
+        error.Type.Should().Be(ErrorType.Validation);
+        error.Code.Should().Be("Chores");
+
+        var tag = await Application.FindAsync<Tag>(tagId);
+        tag.Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task DeletesTag()
     {
         var id = new Guid("5B6035C2-9FB6-433D-B315-C6AE1384274B");
-        {
-            await Application.AddAsync(new Tag { Id = id, Name = string.Empty });
-        }
+        await Application.AddAsync(new TagBuilder().WithId(id).Build());
         var request = new DeleteTag.Request(id);
         var result = await Application.SendAsync(request);
 

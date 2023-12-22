@@ -6,13 +6,14 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace Chores.Application.Modules.Tags;
+namespace Chores.Application.Modules.Chores;
 
-public static class UpdateTag
+public static class UpdateChore
 {
     public sealed record Request(
         Guid Id,
-        string Name
+        string Name,
+        int Interval
     ) : IRequest<ErrorOr<Updated>>;
 
     internal sealed class Validator : AbstractValidator<Request>
@@ -21,10 +22,13 @@ public static class UpdateTag
         {
             RuleFor(r => r.Name)
                 .ValidString();
+
+            RuleFor(r => r.Interval)
+                .PositiveInteger(false);
         }
     }
 
-    internal class Handler : IRequestHandler<Request, ErrorOr<Updated>>
+    internal sealed class Handler : IRequestHandler<Request, ErrorOr<Updated>>
     {
         #region construction
 
@@ -41,25 +45,22 @@ public static class UpdateTag
 
         public async Task<ErrorOr<Updated>> Handle(Request request, CancellationToken cancellationToken)
         {
-            _logger.LogDebug("Handling UpdateTag request");
+            _logger.LogDebug("Handling DeleteChore request");
 
-            var tag = await _db
-                .CurrentUserTags(true)
-                .SingleOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
-            if (tag is null)
+            var chore = await _db
+                .CurrentUserChores(true)
+                .SingleOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
+            if (chore is null)
             {
-                _logger.LogDebug("Tag with ID {Id} was not found in database or does not belong to this user",
+                _logger.LogDebug("Chore with ID {Id} was not found in database or does not belong to this user",
                     request.Id);
-                return Error.NotFound(nameof(tag.Id), $"Could not find Tag with id {request.Id}");
+                return Error.NotFound(nameof(request.Id), $"Could not find Chore with id {request.Id}");
             }
 
             _logger.LogDebug("Fetched entity from database");
 
-            if (await _db.CurrentUserTags(false)
-                    .AnyAsync(t => t.Name == request.Name && t.Id != tag.Id, cancellationToken))
-                return Error.Conflict(nameof(request.Name));
-
-            tag.Name = request.Name;
+            chore.Name = request.Name;
+            chore.Interval = request.Interval;
             _logger.LogDebug("Applied changes from request to entity");
 
             await _db.SaveChangesAsync(CancellationToken.None);

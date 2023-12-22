@@ -1,5 +1,5 @@
+using System.Linq.Expressions;
 using Chores.Application.Common.Authentication;
-using Chores.Application.Common.Persistence;
 using Chores.Application.IntegrationTests.Common.Database;
 using Chores.Persistence;
 using MediatR;
@@ -88,6 +88,18 @@ public sealed class ApplicationFixture : IAsyncLifetime
         using var scope = _scopeFactory.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         return await context.FindAsync<TEntity>(keyValues);
+    }
+
+    public async Task<TEntity?> FindAsync<TEntity>(
+        Expression<Func<TEntity, bool>> identifier,
+        params Expression<Func<TEntity, object>>[] includes)
+        where TEntity : class
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        var query = context.Set<TEntity>().AsQueryable();
+        query = includes.Aggregate(query, (current, include) => current.Include(include));
+        return await query.SingleOrDefaultAsync(identifier);
     }
 
     public async Task AddAsync<TEntity>(TEntity entity)

@@ -4,6 +4,7 @@ using Chores.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chores.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231217165627_AddChores")]
+    partial class AddChores
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,28 +55,9 @@ namespace Chores.Persistence.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
 
-                    b.Property<string>("Notes")
-                        .HasMaxLength(-1)
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Chores");
-                });
-
-            modelBuilder.Entity("Chores.Domain.Models.Chores.ChoreTag", b =>
-                {
-                    b.Property<Guid>("ChoreId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TagId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ChoreId", "TagId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("ChoreTags", (string)null);
                 });
 
             modelBuilder.Entity("Chores.Domain.Models.Tags.Tag", b =>
@@ -109,31 +93,6 @@ namespace Chores.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("Tags");
-                });
-
-            modelBuilder.Entity("Chores.Domain.Models.Chores.ChoreTag", b =>
-                {
-                    b.HasOne("Chores.Domain.Models.Chores.Chore", null)
-                        .WithMany("ChoreTags")
-                        .HasForeignKey("ChoreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Chores.Domain.Models.Tags.Tag", null)
-                        .WithMany("ChoreTags")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Chores.Domain.Models.Chores.Chore", b =>
-                {
-                    b.Navigation("ChoreTags");
-                });
-
-            modelBuilder.Entity("Chores.Domain.Models.Tags.Tag", b =>
-                {
-                    b.Navigation("ChoreTags");
                 });
 #pragma warning restore 612, 618
         }

@@ -4,20 +4,22 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace Chores.Application.Modules.Tags;
+namespace Chores.Application.Modules.Chores;
 
-public static class GetTags
+public static class GetChores
 {
     public sealed record Request : IRequest<ErrorOr<Response>>;
 
     public sealed record Response
     {
-        public IEnumerable<TagDto> Tags { get; }
-
-        public Response(IEnumerable<TagDto> tags)
+        public Response(IEnumerable<ChoreDto> chores)
         {
-            Tags = tags;
+            Chores = chores;
         }
+
+        public IEnumerable<ChoreDto> Chores { get; }
+
+        public sealed record ChoreDto(Guid Id, string Name, int Interval, IEnumerable<TagDto> Tags);
 
         public sealed record TagDto(Guid Id, string Name);
     }
@@ -39,15 +41,17 @@ public static class GetTags
 
         public async Task<ErrorOr<Response>> Handle(Request request, CancellationToken cancellationToken)
         {
-            _logger.LogDebug("Handling GetTags request");
+            _logger.LogDebug("Handling GetChores request");
 
-            var tags = await _db
-                .CurrentUserTags(false)
-                .Select(t => new Response.TagDto(t.Id, t.Name))
+            var chores = await _db
+                .CurrentUserChores(false)
+                .Select(c =>
+                    new Response.ChoreDto(c.Id, c.Name, c.Interval,
+                        c.Tags.Select(t => new Response.TagDto(t.Id, t.Name))))
                 .ToListAsync(cancellationToken);
             _logger.LogDebug("Fetched all tags from database as DTO");
 
-            return new Response(tags);
+            return new Response(chores);
         }
     }
 }

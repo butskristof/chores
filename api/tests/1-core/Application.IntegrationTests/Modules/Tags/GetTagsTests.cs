@@ -1,6 +1,6 @@
 using Chores.Application.IntegrationTests.Common;
+using Chores.Application.IntegrationTests.Common.Builders.Tags;
 using Chores.Application.Modules.Tags;
-using Chores.Domain.Models;
 
 namespace Chores.Application.IntegrationTests.Modules.Tags;
 
@@ -23,12 +23,12 @@ public sealed class GetTagsTests : ApplicationTestBase
     [Fact]
     public async Task ReturnsDtos()
     {
-        {
-            await Application.AddAsync(new Tag { Name = "tag 1" });
-            await Application.AddAsync(new Tag { Name = "tag 2" });
-        }
+        await Application.AddAsync(new TagBuilder().WithName("tag 1").Build());
+        await Application.AddAsync(new TagBuilder().WithName("tag 2").Build());
+
         var request = new GetTags.Request();
         var result = await Application.SendAsync(request);
+
         result.IsError.Should().BeFalse();
         result.Value.Tags
             .Should()
@@ -41,11 +41,11 @@ public sealed class GetTagsTests : ApplicationTestBase
     [Fact]
     public async Task ReturnsOnlyOwnedTags()
     {
-        await Application.AddAsync(new Tag { Name = "tag 1" });
-        await Application.AddAsync(new Tag { Name = "tag 2" });
+        await Application.AddAsync(new TagBuilder().WithName("tag 1").Build());
+        await Application.AddAsync(new TagBuilder().WithName("tag 2").Build());
         Application.SetUserId("other_user");
-        await Application.AddAsync(new Tag { Name = "tag 3" });
-        
+        await Application.AddAsync(new TagBuilder().WithName("tag 3").Build());
+
         var request = new GetTags.Request();
         var result = await Application.SendAsync(request);
         result.IsError.Should().BeFalse();

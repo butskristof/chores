@@ -1,6 +1,7 @@
 using Chores.Application.IntegrationTests.Common;
+using Chores.Application.IntegrationTests.Common.Builders.Tags;
 using Chores.Application.Modules.Tags;
-using Chores.Domain.Models;
+using Chores.Domain.Models.Tags;
 using ErrorOr;
 
 namespace Chores.Application.IntegrationTests.Modules.Tags;
@@ -44,10 +45,8 @@ public sealed class UpdateTagTests : ApplicationTestBase
     public async Task DuplicateName_ReturnsConflictError()
     {
         var id = new Guid("F9123C25-0597-481D-BA97-AA1B9BC884A4");
-        {
-            await Application.AddAsync(new Tag { Name = "some name" });
-            await Application.AddAsync(new Tag { Id = id, Name = "other name" });
-        }
+        await Application.AddAsync(new TagBuilder().WithName("some name").Build());
+        await Application.AddAsync(new TagBuilder().WithId(id).WithName("other name").Build());
 
         var request = new UpdateTag.Request(id, "some name");
         var result = await Application.SendAsync(request);
@@ -64,10 +63,8 @@ public sealed class UpdateTagTests : ApplicationTestBase
     {
         var id = new Guid("8DA0E36D-898E-4682-8084-099209EF1173");
         var created = new DateTimeOffset(2023, 12, 13, 14, 32, 0, TimeSpan.Zero);
-        {
-            Application.SetDateTime(created);
-            await Application.AddAsync(new Tag { Id = id, Name = "inaccessible" });
-        }
+        Application.SetDateTime(created);
+        await Application.AddAsync(new TagBuilder().WithId(id).WithName("inaccessible").Build());
 
         var modified = new DateTimeOffset(2023, 12, 13, 14, 32, 0, TimeSpan.Zero);
         Application.SetDateTime(modified);
@@ -75,7 +72,7 @@ public sealed class UpdateTagTests : ApplicationTestBase
         var request = new UpdateTag.Request(id, "valid name");
         var result = await Application.SendAsync(request);
 
-        result.IsError.Should().BeTrue("random ID should not be found");
+        result.IsError.Should().BeTrue("non-owned tag should not be accessible");
         var error = result.ErrorsOrEmptyList.SingleOrDefault();
         error.Should().NotBeNull("should contain exactly one error");
         error.Type.Should().Be(ErrorType.NotFound);
@@ -95,7 +92,7 @@ public sealed class UpdateTagTests : ApplicationTestBase
         var modified = new DateTimeOffset(2023, 12, 13, 13, 23, 34, TimeSpan.Zero);
         {
             Application.SetDateTime(created);
-            await Application.AddAsync(new Tag { Id = id, Name = "to update" });
+            await Application.AddAsync(new TagBuilder().WithId(id).Build());
         }
 
         Application.SetDateTime(modified);
@@ -121,10 +118,10 @@ public sealed class UpdateTagTests : ApplicationTestBase
     [Fact]
     public async Task DuplicateNameOfOtherUser_UpdatesTag()
     {
-        await Application.AddAsync(new Tag { Name = "desired name" });
+        await Application.AddAsync(new TagBuilder().WithName("desired name").Build());
         Application.SetUserId("other_user");
         var id = new Guid("449D9B52-5165-4692-8EDF-58BF9CC77969");
-        await Application.AddAsync(new Tag { Id = id, Name = "other name" });
+        await Application.AddAsync(new TagBuilder().WithId(id).Build());
 
         var request = new UpdateTag.Request(id, "desired name");
         var result = await Application.SendAsync(request);
