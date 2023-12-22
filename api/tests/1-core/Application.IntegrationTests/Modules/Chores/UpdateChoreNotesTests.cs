@@ -45,6 +45,11 @@ public sealed class UpdateChoreNotesTests : ApplicationTestBase
         error.Should().NotBeNull("should contain exactly one error");
         error.Type.Should().Be(ErrorType.NotFound);
         error.Code.Should().Be("ChoreId");
+
+        var chore = await Application.FindAsync<Chore>(id);
+        chore.Should().NotBeNull();
+        chore!.LastModifiedOn.Should().Be(created);
+        chore.LastModifiedBy.Should().Be(TestConstants.DefaultUserId);
     }
 
     [Theory]

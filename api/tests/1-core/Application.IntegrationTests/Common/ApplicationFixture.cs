@@ -106,6 +106,14 @@ public sealed class ApplicationFixture : IAsyncLifetime
         return await context.Set<TEntity>().CountAsync();
     }
 
+    public async Task<List<TEntity>> ToListAsync<TEntity>()
+        where TEntity : class
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        return await context.Set<TEntity>().ToListAsync();
+    }
+
     public void SetDateTime(DateTimeOffset dateTime)
         => _timeProvider.SetUtcNow(dateTime);
 
