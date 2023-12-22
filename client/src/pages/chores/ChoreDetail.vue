@@ -34,13 +34,11 @@
       </div>
     </div>
     <hr />
-    <div class="header">
-      <h2>Notes</h2>
-      <div class="actions">
-        <button type="button">edit</button>
-      </div>
-    </div>
+
+    <ChoreNotes :chore="chore" />
+
     <hr />
+
     <div class="header">
       <h2>Iterations</h2>
       <div class="actions">
@@ -68,6 +66,7 @@ import EditChore from '@/components/chores/common/EditChore.vue';
 import DeleteChore from '@/components/chores/detail/DeleteChore.vue';
 import { useRouter } from 'vue-router';
 import { routes } from '@/router/routes';
+import ChoreNotes from '@/components/chores/detail/ChoreNotes.vue';
 
 const choreId = useRouteParams('id');
 const choreQuery = useChoresApiChore(choreId);
