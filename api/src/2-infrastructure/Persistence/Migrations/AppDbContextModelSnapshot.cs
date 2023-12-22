@@ -58,7 +58,7 @@ namespace Chores.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Chores");
+                    b.ToTable("Chores", (string)null);
                 });
 
             modelBuilder.Entity("Chores.Domain.Models.Tags.Tag", b =>
@@ -93,7 +93,7 @@ namespace Chores.Persistence.Migrations
                     b.HasIndex("Name", "CreatedBy")
                         .IsUnique();
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
                 });
 #pragma warning restore 612, 618
         }

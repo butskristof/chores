@@ -55,8 +55,8 @@ public sealed class UpdateChoreTagsTests : ApplicationTestBase
         error.Type.Should().Be(ErrorType.NotFound);
         error.Code.Should().Be("ChoreId");
 
-        var choreTagsCount = await Application.CountAsync<ChoreTag>();
-        choreTagsCount.Should().Be(0);
+        var chore = await Application.FindAsync<Chore>(id);
+        chore!.Tags.Should().BeEmpty();
     }
 
     [Fact]
@@ -78,8 +78,8 @@ public sealed class UpdateChoreTagsTests : ApplicationTestBase
         error.Type.Should().Be(ErrorType.NotFound);
         error.Code.Should().Be("TagId[0]");
 
-        var choreTagsCount = await Application.CountAsync<ChoreTag>();
-        choreTagsCount.Should().Be(0);
+        var chore = await Application.FindAsync<Chore>(choreId);
+        chore!.Tags.Should().BeEmpty();
     }
 
     [Fact]
@@ -96,23 +96,22 @@ public sealed class UpdateChoreTagsTests : ApplicationTestBase
         result.IsError.Should().BeFalse("Tag should be added to Chore");
         result.Value.Should().Be(Result.Updated);
 
-        var choreTags = await Application.ToListAsync<ChoreTag>();
-        var choreTag = choreTags.SingleOrDefault();
-        choreTag.Should().NotBeNull();
-        choreTag!.ChoreId.Should().Be(choreId);
-        choreTag.TagId.Should().Be(tagId);
+        var chore = await Application.FindAsync<Chore>(choreId);
+        chore!.Tags.Should()
+            .HaveCount(1)
+            .And.ContainSingle(t => t.Id == tagId);
     }
 
     [Fact]
     public async Task ReplacesExistingTagId()
     {
         var tag1Id = new Guid("BC51CF95-93B8-43A6-BCE8-8B2C022E91BA");
-        await Application.AddAsync(new TagBuilder().WithId(tag1Id).Build());
+        var tag1 = new TagBuilder().WithId(tag1Id).Build();
+        await Application.AddAsync(tag1);
         var tag2Id = new Guid("6953DD2E-F562-44A6-BBD7-8FD971B4D3BD");
         await Application.AddAsync(new TagBuilder().WithId(tag2Id).Build());
         var choreId = new Guid("9EBC1BD0-DFB3-44DE-A6D9-D9CE6EB8B679");
-        await Application.AddAsync(new ChoreBuilder().WithId(choreId).Build());
-        await Application.AddAsync(new ChoreTag { ChoreId = choreId, TagId = tag1Id });
+        await Application.AddAsync(new ChoreBuilder().WithId(choreId).WithTags([tag1]).Build());
 
         var request = new UpdateChoreTags.Request(choreId, new[] { tag2Id });
         var result = await Application.SendAsync(request);
@@ -120,10 +119,9 @@ public sealed class UpdateChoreTagsTests : ApplicationTestBase
         result.IsError.Should().BeFalse("Tag should be added to Chore");
         result.Value.Should().Be(Result.Updated);
 
-        var choreTags = await Application.ToListAsync<ChoreTag>();
-        var choreTag = choreTags.SingleOrDefault();
-        choreTag.Should().NotBeNull();
-        choreTag!.ChoreId.Should().Be(choreId);
-        choreTag.TagId.Should().Be(tag2Id);
+        var chore = await Application.FindAsync<Chore>(choreId);
+        chore!.Tags.Should()
+            .HaveCount(1)
+            .And.ContainSingle(t => t.Id == tag2Id);
     }
 }

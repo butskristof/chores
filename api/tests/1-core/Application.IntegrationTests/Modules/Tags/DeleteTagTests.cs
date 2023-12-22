@@ -47,6 +47,32 @@ public sealed class DeleteTagTests : ApplicationTestBase
     }
 
     [Fact]
+    public async Task ChoresAttached_ReturnsErrorAndDoesNotDeleteTag()
+    {
+        var tagId = new Guid("FDEF93C4-D0D0-4647-ABF3-31EC846E2C66");
+        {
+            var tag = new TagBuilder().WithId(tagId).Build();
+            await Application.AddAsync(tag);
+            var choreId = new Guid("464B97F6-5C61-47E8-A279-4B10CD8990AA");
+            await Application.AddAsync(new ChoreBuilder().WithId(choreId).WithTags([tag]));
+        }
+
+        var request = new DeleteTag.Request(tagId);
+        var result = await Application.SendAsync(request);
+
+        result.IsError.Should().BeTrue("tag referenced by chore should not be deleted");
+        var error = result.ErrorsOrEmptyList.SingleOrDefault();
+        error.Should().NotBeNull("should contain exactly one error");
+        error.Type.Should().Be(ErrorType.Validation);
+        error.Code.Should().Be("Chores");
+
+        {
+            var tag = await Application.FindAsync<Tag>(tagId);
+            tag.Should().NotBeNull();
+        }
+    }
+
+    [Fact]
     public async Task DeletesTag()
     {
         var id = new Guid("5B6035C2-9FB6-433D-B315-C6AE1384274B");
@@ -61,6 +87,4 @@ public sealed class DeleteTagTests : ApplicationTestBase
             .Should()
             .BeNull();
     }
-    
-    // TODO verify prevent delete when chores attached
 }

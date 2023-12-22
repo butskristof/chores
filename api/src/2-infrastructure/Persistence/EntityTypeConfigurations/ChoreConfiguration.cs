@@ -10,5 +10,10 @@ internal sealed class ChoreConfiguration : AuditableEntityConfiguration<Chore>
         builder
             .Property(c => c.Notes)
             .HasMaxLength(-1);
+
+        builder
+            .HasMany(c => c.Tags)
+            .WithMany(t => t.Chores)
+            .UsingEntity<ChoreTag>();
     }
 }
