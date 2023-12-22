@@ -19,11 +19,18 @@ export const useChoresApiChores = () =>
     queryFn: choresApiService.getChores,
   });
 
-export const useChoresApiCreateChore = (queryClient) =>
+export const useChoresApiUpsertChore = (queryClient) =>
   useMutation({
-    mutationFn: (payload) => choresApiService.createChore(payload),
-    onSuccess: () => {
+    mutationFn: (payload) =>
+      payload.id ? choresApiService.updateChore(payload) : choresApiService.createChore(payload),
+    onSuccess: (payload) => {
       queryClient.invalidateQueries({ queryKey: CHORES_API_QUERY_KEYS.CHORES.GET });
+      if (payload.id != null) {
+        // was edit
+        queryClient.invalidateQueries({
+          queryKey: CHORES_API_QUERY_KEYS.CHORES.GET_BY_ID(payload.id),
+        });
+      }
     },
   });
 
@@ -31,6 +38,17 @@ export const useChoresApiChore = (id) =>
   useQuery({
     queryKey: CHORES_API_QUERY_KEYS.CHORES.GET_BY_ID(id),
     queryFn: () => choresApiService.getChore(id.value),
+  });
+
+export const useChoreApiDeleteChore = (queryClient) =>
+  useMutation({
+    mutationFn: (id) => choresApiService.deleteChore(id),
+    onSuccess: (payload) => {
+      queryClient.invalidateQueries({ queryKey: CHORES_API_QUERY_KEYS.CHORES.GET });
+      queryClient.invalidateQueries({
+        queryKey: CHORES_API_QUERY_KEYS.CHORES.GET_BY_ID(payload.id),
+      });
+    },
   });
 
 //#endregion
