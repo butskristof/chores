@@ -7,7 +7,7 @@
       v-if="mutation.isSuccess.value === true"
       class="success"
     >
-      <p>Tag was {{ isEdit ? 'updated' : 'created' }} successfully.</p>
+      <p>Chore was created successfully.</p>
       <div class="actions">
         <button
           type="button"
@@ -18,14 +18,18 @@
       </div>
     </div>
     <template v-else>
-      <DialogTitle>
-        {{ isEdit ? 'Edit tag' : 'Create new tag' }}
-      </DialogTitle>
+      <DialogTitle>Create new chore</DialogTitle>
       <form @submit="save">
         <TextInput
           label="Name"
           name="name"
           :disabled="formDisabled"
+        />
+
+        <TextInput
+          name="interval"
+          label="Interval"
+          type="number"
         />
 
         <div class="actions">
@@ -34,7 +38,6 @@
             :disabled="formDisabled"
           >
             <span v-if="mutation.isPending.value === true">Saving...</span>
-            <span v-else-if="isEdit">Save changes</span>
             <span v-else>Create</span>
           </button>
         </div>
@@ -45,24 +48,20 @@
 
 <script setup>
 import AppDialog from '@/components/common/dialogs/AppDialog.vue';
-import { useToast } from 'vue-toastification';
-import { useChoresApiUpsertTag } from '@/composables/queries/chores-api';
-import { useQueryClient } from '@tanstack/vue-query';
+import { DialogTitle } from '@headlessui/vue';
 import TextInput from '@/components/common/form/inputs/TextInput.vue';
 import { useForm } from 'vee-validate';
-import * as yup from 'yup';
 import { toTypedSchema } from '@vee-validate/yup';
-import { DialogTitle } from '@headlessui/vue';
+import * as yup from 'yup';
 import { computed } from 'vue';
+import { useQueryClient } from '@tanstack/vue-query';
+import { useChoresApiCreateChore } from '@/composables/queries/chores-api';
+import { useToast } from 'vue-toastification';
 
-const props = defineProps({
+defineProps({
   open: {
     type: Boolean,
     default: false,
-  },
-  tag: {
-    type: Object,
-    default: () => null,
   },
 });
 const emit = defineEmits(['close']);
@@ -70,46 +69,35 @@ const emit = defineEmits(['close']);
 const queryClient = useQueryClient();
 const toast = useToast();
 
-const isEdit = computed(() => props.tag != null);
-
 //#region form
 
 const { handleSubmit, meta } = useForm({
   validationSchema: toTypedSchema(
     yup.object({
       name: yup.string().required().label('Name'),
+      interval: yup.number().required().positive().integer().label('Interval'),
     }),
   ),
-  initialValues: {
-    name: props.tag?.name,
-  },
 });
-
 const formDisabled = computed(
   () => mutation.isPending.value === true || mutation.isSuccess.value === true,
 );
 
 //#endregion
 
-//#region create/update
+//#region create
 
-const mutation = useChoresApiUpsertTag(queryClient);
+const mutation = useChoresApiCreateChore(queryClient);
 
 const save = handleSubmit.withControlled(async (values) => {
   try {
-    const payload = {
-      name: values.name,
-    };
-    if (isEdit.value === true) payload.id = props.tag.id;
-    await mutation.mutateAsync(payload);
-    toast.success(isEdit.value === true ? 'Tag updated' : 'Tag created');
+    await mutation.mutateAsync(values);
+    toast.success('Chore created');
     tryClose(true);
   } catch (e) {
     console.error(e);
   }
 });
-
-//#endregion
 
 const tryClose = (force = false) => {
   let close = true;
@@ -117,6 +105,8 @@ const tryClose = (force = false) => {
     close = confirm('There may be unsaved changes, are you sure you want to stop editing?');
   if (close) emit('close');
 };
+
+//#endregion
 </script>
 
 <style scoped lang="scss">

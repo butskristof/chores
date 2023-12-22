@@ -14,11 +14,6 @@ const router = createRouter({
       },
     },
     {
-      name: routes.about.name,
-      path: routes.about.path,
-      component: () => import('@/pages/AboutView.vue'),
-    },
-    {
       name: routes.chores.name,
       path: routes.chores.path,
       redirect: {

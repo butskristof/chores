@@ -2,7 +2,7 @@
   <template v-if="chore">
     <div class="header">
       <div class="left">
-        <h1>{{ chore.title }}</h1>
+        <h1>{{ chore.name }}</h1>
         <p>Should happen every 10 days</p>
         <p>Happened last on November 28th, due again in {{ due }} days</p>
       </div>

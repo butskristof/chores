@@ -35,7 +35,8 @@ public sealed class GetTagsTests : ApplicationTestBase
             .NotBeEmpty()
             .And.HaveCount(2)
             .And.ContainSingle(t => t.Name == "tag 1")
-            .And.ContainSingle(t => t.Name == "tag 2");
+            .And.ContainSingle(t => t.Name == "tag 2")
+            .And.AllSatisfy(t => t.ChoresCount.Should().Be(0));
     }
 
     [Fact]
@@ -54,5 +55,19 @@ public sealed class GetTagsTests : ApplicationTestBase
             .NotBeEmpty()
             .And.HaveCount(1)
             .And.ContainSingle(t => t.Name == "tag 3");
+    }
+
+    [Fact]
+    public async Task ReturnsChoresCount()
+    {
+        var tagId = new Guid("6DD146A2-6D36-45C8-8ABA-2BB2CD8D924F");
+        await Application.AddAsync(new TagBuilder().WithId(tagId).Build());
+        await Application.AddAsync(new ChoreBuilder().WithTags([tagId]).Build());
+        
+        var request = new GetTags.Request();
+        var result = await Application.SendAsync(request);
+
+        var tag = result.Value.Tags.SingleOrDefault();
+        tag!.ChoresCount.Should().Be(1);
     }
 }

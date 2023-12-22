@@ -19,6 +19,14 @@ export const useChoresApiChores = () =>
     queryFn: choresApiService.getChores,
   });
 
+export const useChoresApiCreateChore = (queryClient) =>
+  useMutation({
+    mutationFn: (payload) => choresApiService.createChore(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: CHORES_API_QUERY_KEYS.CHORES.GET });
+    },
+  });
+
 export const useChoresApiChore = (id) =>
   useQuery({
     queryKey: CHORES_API_QUERY_KEYS.CHORES.GET_BY_ID(id),
