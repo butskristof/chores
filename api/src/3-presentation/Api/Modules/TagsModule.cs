@@ -51,15 +51,8 @@ internal static class TagsModule
     }
 
     private static async Task<IResult> UpdateTag([FromBody] UpdateTag.Request request, ISender sender)
-    {
-        var result = await sender.Send(request);
-        return result.MapToValueOrProblem(_ => TypedResults.NoContent());
-    }
+        => (await sender.Send(request)).MapToValueOrProblem(_ => TypedResults.NoContent());
 
     private static async Task<IResult> DeleteTag([FromRoute] Guid TagId, ISender sender)
-    {
-        var request = new DeleteTag.Request(TagId);
-        var result = await sender.Send(request);
-        return result.MapToValueOrProblem(_ => TypedResults.NoContent());
-    }
+        => (await sender.Send(new DeleteTag.Request(TagId))).MapToValueOrProblem(_ => TypedResults.NoContent());
 }
