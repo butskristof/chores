@@ -31,6 +31,7 @@ public static class DeleteTag
 
             var tag = await _db
                 .CurrentUserTags(true)
+                .Include(t => t.Chores)
                 .SingleOrDefaultAsync(t => t.Id == request.Id, cancellationToken);
             if (tag is null)
             {
@@ -38,8 +39,10 @@ public static class DeleteTag
                     request.Id);
                 return Error.NotFound(nameof(request.Id), $"Could not find Tag with id {request.Id}");
             }
-
             _logger.LogDebug("Fetched entity from database");
+
+            if (tag.Chores.Count != 0)
+                return Error.Validation("Chores");
 
             _db.Tags.Remove(tag);
             await _db.SaveChangesAsync(CancellationToken.None);

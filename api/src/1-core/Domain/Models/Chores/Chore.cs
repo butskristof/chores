@@ -10,5 +10,6 @@ public sealed class Chore : BaseAuditableEntity
 
     public string? Notes { get; set; }
 
-    public List<Tag> Tags { get; init; } = new(); // "skip navigation"
+    public List<Tag> Tags { get; set; } = new(); // "skip navigation"
+    public List<ChoreTag> ChoreTags { get; set; } = new();
 }

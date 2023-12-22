@@ -1,5 +1,4 @@
 using Chores.Domain.Models.Chores;
-using Chores.Domain.Models.Tags;
 
 namespace Chores.Application.IntegrationTests.Common.Builders.Tags;
 
@@ -9,7 +8,7 @@ internal sealed class ChoreBuilder
     private string _name = "some chore";
     private int _interval = 10;
     private string? _notes = null;
-    private List<Tag> _tags = new();
+    private List<Guid> _tags = [];
 
     internal ChoreBuilder WithId(Guid id)
     {
@@ -35,7 +34,7 @@ internal sealed class ChoreBuilder
         return this;
     }
 
-    internal ChoreBuilder WithTags(List<Tag> tags)
+    internal ChoreBuilder WithTags(List<Guid> tags)
     {
         _tags = tags;
         return this;
@@ -47,7 +46,7 @@ internal sealed class ChoreBuilder
         Name = _name,
         Interval = _interval,
         Notes = _notes,
-        Tags = _tags,
+        ChoreTags = _tags.Select(tagId => new ChoreTag { TagId = tagId }).ToList(),
     };
 
     public static implicit operator Chore(ChoreBuilder builder) => builder.Build();

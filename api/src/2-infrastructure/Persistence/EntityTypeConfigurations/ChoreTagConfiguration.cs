@@ -17,12 +17,12 @@ internal sealed class ChoreTagConfiguration : IEntityTypeConfiguration<ChoreTag>
 
         builder
             .HasOne<Chore>()
-            .WithMany()
+            .WithMany(c => c.ChoreTags)
             .HasForeignKey(ct => ct.ChoreId);
 
         builder
             .HasOne<Tag>()
-            .WithMany()
+            .WithMany(t => t.ChoreTags)
             .HasForeignKey(ct => ct.TagId)
             .OnDelete(DeleteBehavior.Restrict);
     }
