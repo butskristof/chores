@@ -3,11 +3,11 @@ import choresApiService from '@/services/chores-api.service';
 
 export const CHORES_API_QUERY_KEYS = {
   CHORES: {
-    GET: ['chores'],
-    GET_BY_ID: (id) => ['chores', id],
+    GET: ['chores', 'overview'],
+    GET_BY_ID: (id) => ['chores', 'detail', id],
   },
   TAGS: {
-    GET: ['tags'],
+    GET: ['tags', 'overview'],
   },
 };
 
@@ -23,12 +23,12 @@ export const useChoresApiUpsertChore = (queryClient) =>
   useMutation({
     mutationFn: (payload) =>
       payload.id ? choresApiService.updateChore(payload) : choresApiService.createChore(payload),
-    onSuccess: (payload) => {
+    onSuccess: (response, request) => {
       queryClient.invalidateQueries({ queryKey: CHORES_API_QUERY_KEYS.CHORES.GET });
-      if (payload.id != null) {
+      if (request.id != null) {
         // was edit
         queryClient.invalidateQueries({
-          queryKey: CHORES_API_QUERY_KEYS.CHORES.GET_BY_ID(payload.id),
+          queryKey: CHORES_API_QUERY_KEYS.CHORES.GET_BY_ID(request.id),
         });
       }
     },
@@ -40,13 +40,23 @@ export const useChoresApiChore = (id) =>
     queryFn: () => choresApiService.getChore(id.value),
   });
 
-export const useChoreApiDeleteChore = (queryClient) =>
+export const useChoresApiDeleteChore = (queryClient) =>
   useMutation({
     mutationFn: (id) => choresApiService.deleteChore(id),
-    onSuccess: (payload) => {
+    onSuccess: (response, request) => {
       queryClient.invalidateQueries({ queryKey: CHORES_API_QUERY_KEYS.CHORES.GET });
       queryClient.invalidateQueries({
-        queryKey: CHORES_API_QUERY_KEYS.CHORES.GET_BY_ID(payload.id),
+        queryKey: CHORES_API_QUERY_KEYS.CHORES.GET_BY_ID(request.id),
+      });
+    },
+  });
+
+export const useChoresApiUpdateChoreNotes = (queryClient) =>
+  useMutation({
+    mutationFn: (payload) => choresApiService.updateChoreNotes(payload),
+    onSuccess: (response, request) => {
+      queryClient.invalidateQueries({
+        queryKey: CHORES_API_QUERY_KEYS.CHORES.GET_BY_ID(request.choreId),
       });
     },
   });

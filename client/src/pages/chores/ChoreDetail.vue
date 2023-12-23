@@ -33,6 +33,7 @@
         />
       </div>
     </div>
+
     <hr />
 
     <ChoreNotes :chore="chore" />

@@ -65,7 +65,7 @@
 <script setup>
 import { useQueryClient } from '@tanstack/vue-query';
 import { useToast } from 'vue-toastification';
-import { useChoreApiDeleteChore } from '@/composables/queries/chores-api';
+import { useChoresApiDeleteChore } from '@/composables/queries/chores-api';
 import AppDialog from '@/components/common/dialogs/AppDialog.vue';
 import { DialogTitle } from '@headlessui/vue';
 
@@ -85,7 +85,7 @@ const queryClient = useQueryClient();
 const toast = useToast();
 
 //#region delete
-const mutation = useChoreApiDeleteChore(queryClient);
+const mutation = useChoresApiDeleteChore(queryClient);
 const deleteChore = async () => {
   try {
     await mutation.mutateAsync(props.chore.id);
