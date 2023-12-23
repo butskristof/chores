@@ -1,8 +1,6 @@
 name: client CI
 
 on:
-  push:
-    paths: ['client/**']
   pull_request:
     branches: ['main']
 
