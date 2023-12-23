@@ -9,8 +9,7 @@
     "lint:check": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --ignore-path .gitignore",
     "lint:fix": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "format:check": "prettier --check src/",
-    "format:fix": "prettier --write src/",
-    "api": "json-server --watch api/db.json"
+    "format:fix": "prettier --write src/"
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.16",
