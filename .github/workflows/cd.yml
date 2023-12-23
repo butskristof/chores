@@ -7,6 +7,9 @@ on:
 jobs:
   build-push:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image: ['api', 'client']
     steps:
     - uses: actions/checkout@v3
     - name: Set up Docker Buildx
@@ -19,6 +22,6 @@ jobs:
     - name: Build and push
       uses: docker/build-push-action@v5
       with:
-        context: api
+        context: ${{ matrix.image }}
         push: true
-        tags: ${{github.repository}}-api:latest
+        tags: ${{ github.repository }}-${{ matrix.image }}:latest
