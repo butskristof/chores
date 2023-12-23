@@ -78,4 +78,11 @@ public sealed class CreateChoreIterationTests : ApplicationTestBase
         iteration!.Date.Should().Be(new DateOnly(2023, 12, 17));
         iteration.Notes.Should().Be("some notes");
     }
+
+    [Fact]
+    public async Task RetainsExistingIterations()
+    {
+        await Task.Delay(1);
+        true.Should().BeFalse();
+    }
 }
