@@ -12,4 +12,6 @@ public sealed class Chore : BaseAuditableEntity
 
     public List<Tag> Tags { get; set; } = new(); // "skip navigation"
     public List<ChoreTag> ChoreTags { get; set; } = new();
+
+    public List<ChoreIteration> Iterations { get; set; } = new();
 }
