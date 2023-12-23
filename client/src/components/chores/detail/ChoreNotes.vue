@@ -74,7 +74,6 @@ const saveEdit = async () => {
       choreId: props.chore.id,
       notes: notes.value,
     };
-    console.log(payload);
     await mutation.mutateAsync(payload);
     toast.success('Chore notes updated');
     isEdit.value = false;

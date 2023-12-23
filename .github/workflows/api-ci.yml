@@ -1,8 +1,6 @@
 name: API CI
 
 on:
-  push:
-    paths: ['api/**']
   pull_request:
     branches: [ "main" ]
 

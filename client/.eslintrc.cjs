@@ -19,7 +19,12 @@ module.exports = {
         patterns: ['../*', '^lodash$'],
       },
     ],
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
+    'no-console': [
+      process.env.NODE_ENV === 'production' ? 'error' : 'warn',
+      {
+        allow: ['error'],
+      },
+    ],
     'sort-imports': 'off',
     'sort-keys': 'off',
     'no-magic-numbers': 'off',
