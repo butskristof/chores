@@ -2,7 +2,7 @@ name: CD
 
 on:
   push:
-    branches: [ "main", "kb/docker-push" ]
+    branches: [ "main" ]
 
 jobs:
   build-push:
