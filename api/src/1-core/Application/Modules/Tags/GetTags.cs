@@ -19,7 +19,7 @@ public static class GetTags
             Tags = tags;
         }
 
-        public sealed record TagDto(Guid Id, string Name);
+        public sealed record TagDto(Guid Id, string Name, int ChoresCount);
     }
 
     internal sealed class Handler : IRequestHandler<Request, ErrorOr<Response>>
@@ -43,7 +43,7 @@ public static class GetTags
 
             var tags = await _db
                 .CurrentUserTags(false)
-                .Select(t => new Response.TagDto(t.Id, t.Name))
+                .Select(t => new Response.TagDto(t.Id, t.Name, t.Chores.Count))
                 .ToListAsync(cancellationToken);
             _logger.LogDebug("Fetched all tags from database as DTO");
 

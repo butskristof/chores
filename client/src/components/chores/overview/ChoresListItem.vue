@@ -2,7 +2,7 @@
   <div class="chores-list-item">
     <div class="title">
       <router-link :to="{ name: routes.chores.children.detail.name, params: { id: chore.id } }">
-        {{ chore.title }}
+        {{ chore.name }}
       </router-link>
     </div>
     <div class="due">due in {{ due }} days</div>

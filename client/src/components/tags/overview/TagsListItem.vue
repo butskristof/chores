@@ -15,7 +15,7 @@
         edit
       </button>
       <Tippy
-        :content="canDelete ? null : 'Tags which are in use cannot be deleted'"
+        :content="canDelete ? null : 'Tags which are referenced by chores cannot be deleted'"
         placement="bottom-end"
       >
         <button

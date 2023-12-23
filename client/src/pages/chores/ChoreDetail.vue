@@ -2,23 +2,44 @@
   <template v-if="chore">
     <div class="header">
       <div class="left">
-        <h1>{{ chore.title }}</h1>
-        <p>Should happen every 10 days</p>
+        <h1>{{ chore.name }}</h1>
+        <p>Should happen every {{ chore.interval }} days</p>
         <p>Happened last on November 28th, due again in {{ due }} days</p>
       </div>
       <div class="actions">
-        <button type="button">edit</button>
-        <button type="button">delete</button>
+        <button
+          type="button"
+          @click="showEdit = true"
+        >
+          edit
+        </button>
+        <EditChore
+          v-if="showEdit"
+          :open="true"
+          :chore="chore"
+          @close="showEdit = false"
+        />
+        <button
+          type="button"
+          @click="showDelete = true"
+        >
+          delete
+        </button>
+        <DeleteChore
+          v-if="showDelete"
+          :open="true"
+          :chore="chore"
+          @close="closeDelete"
+        />
       </div>
     </div>
+
     <hr />
-    <div class="header">
-      <h2>Notes</h2>
-      <div class="actions">
-        <button type="button">edit</button>
-      </div>
-    </div>
+
+    <ChoreNotes :chore="chore" />
+
     <hr />
+
     <div class="header">
       <h2>Iterations</h2>
       <div class="actions">
@@ -40,14 +61,35 @@
 
 <script setup>
 import { useRouteParams } from '@vueuse/router';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useChoresApiChore } from '@/composables/queries/chores-api';
+import EditChore from '@/components/chores/common/EditChore.vue';
+import DeleteChore from '@/components/chores/detail/DeleteChore.vue';
+import { useRouter } from 'vue-router';
+import { routes } from '@/router/routes';
+import ChoreNotes from '@/components/chores/detail/ChoreNotes.vue';
 
 const choreId = useRouteParams('id');
 const choreQuery = useChoresApiChore(choreId);
 const chore = computed(() => choreQuery.data.value);
 
 const due = Math.floor(Math.random() * 10) - 1;
+
+const router = useRouter();
+
+//#region edit
+const showEdit = ref(false);
+//#endregion
+
+//#region delete
+const showDelete = ref(false);
+const closeDelete = (deleted) => {
+  showDelete.value = false;
+  if (deleted === true) {
+    router.push({ name: routes.chores.name });
+  }
+};
+//#endregion
 </script>
 
 <style scoped lang="scss">
