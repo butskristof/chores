@@ -73,16 +73,54 @@ public sealed class CreateChoreIterationTests : ApplicationTestBase
         result.Value.Should().Be(Result.Created);
 
         var chore = await Application.FindAsync<Chore>(c => c.Id == id, c => c.Iterations);
-        var iteration = chore!.Iterations.SingleOrDefault();
-        iteration.Should().NotBeNull("Iteration should be added to Chore");
-        iteration!.Date.Should().Be(new DateOnly(2023, 12, 17));
-        iteration.Notes.Should().Be("some notes");
+        chore!.Iterations
+            .Should()
+            .ContainSingle()
+            .Which
+            .Should()
+            .BeEquivalentTo(new
+            {
+                Date = new DateOnly(2023, 12, 17),
+                Notes = "some notes"
+            });
     }
 
     [Fact]
     public async Task RetainsExistingIterations()
     {
-        await Task.Delay(1);
-        true.Should().BeFalse();
+        Application.SetDateTime(new DateTimeOffset(2023, 12, 23, 18, 47, 44, TimeSpan.Zero));
+        var id = new Guid("F115BDBB-A2AB-4DEE-8D3F-07803AEDF2D3");
+        await Application.AddAsync(new ChoreBuilder()
+            .WithId(id)
+            .WithIterations([
+                new ChoreIterationBuilder()
+                    .WithDate(new DateOnly(2023, 12, 12))
+                    .WithNotes("first iteration notes")
+                    .Build()
+            ])
+            .Build());
+
+        var request = new CreateChoreIteration.Request(id, new DateOnly(2023, 12, 23), "second iteration notes");
+        await Application.SendAsync(request);
+
+        var chore = await Application.FindAsync<Chore>(c => c.Id == id, c => c.Iterations);
+        chore!.Iterations
+            .Should().HaveCount(2)
+            .And
+            .Satisfy(
+                i => i.Date == new DateOnly(2023, 12, 12) && i.Notes == "first iteration notes",
+                i => i.Date == new DateOnly(2023, 12, 23) && i.Notes == "second iteration notes"
+            );
+        // .SatisfyRespectively(
+        //     i => i.Should().BeEquivalentTo(new
+        //     {
+        //         Date = new DateOnly(2023, 12, 12),
+        //         Notes = "first iteration notes"
+        //     }),
+        //     i => i.Should().BeEquivalentTo(new
+        //     {
+        //         Date = new DateOnly(2023, 12, 23),
+        //         Notes = "second iteration notes"
+        //     }));
     }
 }
