@@ -40,12 +40,6 @@
         <div class="actions">
           <button
             type="button"
-            @click="openEditDialog(iteration.id)"
-          >
-            edit
-          </button>
-          <button
-            type="button"
             @click="setIterationForDelete(iteration.id)"
           >
             delete

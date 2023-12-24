@@ -70,7 +70,7 @@ public sealed class CreateChoreIterationTests : ApplicationTestBase
         var result = await Application.SendAsync(request);
 
         result.IsError.Should().BeFalse();
-        result.Value.Should().Be(Result.Created);
+        result.Value.Should().NotBe(Guid.Empty);
 
         var chore = await Application.FindAsync<Chore>(c => c.Id == id, c => c.Iterations);
         chore!.Iterations
@@ -80,6 +80,7 @@ public sealed class CreateChoreIterationTests : ApplicationTestBase
             .Should()
             .BeEquivalentTo(new
             {
+                Id = result.Value.Id,
                 Date = new DateOnly(2023, 12, 17),
                 Notes = "some notes"
             });

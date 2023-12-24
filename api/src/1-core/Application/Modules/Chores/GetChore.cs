@@ -58,7 +58,9 @@ public static class GetChore
 
             var dto = new Response(chore.Id, chore.Name, chore.Interval, chore.Notes,
                 chore.Tags.Select(t => new TagDto(t.Id, t.Name)),
-                chore.Iterations.Select(i => new IterationDto(i.Id, i.Date, i.Notes)));
+                chore.Iterations
+                    .OrderByDescending(i => i.Date)
+                    .Select(i => new IterationDto(i.Id, i.Date, i.Notes)));
             _logger.LogDebug("Mapped entity to DTO");
 
             return dto;

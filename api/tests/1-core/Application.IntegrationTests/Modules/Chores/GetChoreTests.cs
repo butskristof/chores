@@ -109,4 +109,29 @@ public sealed class GetChoreTests : ApplicationTestBase
         iterationDto.Should()
             .BeEquivalentTo(new GetChore.IterationDto(iterationId, new DateOnly(2023, 12, 24), "some notes"));
     }
+
+    [Fact]
+    public async Task ReturnsDtoWithIterationsInDescendingOrder()
+    {
+        Application.SetDateTime(new DateTimeOffset(2023, 12, 24, 14,55,54, TimeSpan.Zero));
+        var choreId = new Guid("C83647F8-18AD-4EA5-8191-924EE4306ECE");
+        await Application.AddAsync(new ChoreBuilder()
+            .WithId(choreId)
+            .WithIterations([
+                new ChoreIterationBuilder()
+                    .WithDate(new DateOnly(2023, 12, 24)),
+                new ChoreIterationBuilder()
+                    .WithDate(new DateOnly(2023, 12, 23)),
+                new ChoreIterationBuilder()
+                    .WithDate(new DateOnly(2023, 11, 23))
+            ])
+            .Build());
+
+        var request = new GetChore.Request(choreId);
+        var result = await Application.SendAsync(request);
+
+        result.Value.Iterations
+            .Should()
+            .BeInDescendingOrder(i => i.Date);
+    }
 }
