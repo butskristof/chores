@@ -19,7 +19,12 @@ public static class GetChores
 
         public IEnumerable<ChoreDto> Chores { get; }
 
-        public sealed record ChoreDto(Guid Id, string Name, int Interval, IEnumerable<TagDto> Tags);
+        public sealed record ChoreDto(
+            Guid Id,
+            string Name,
+            int Interval,
+            IEnumerable<TagDto> Tags,
+            DateOnly? LastIteration);
 
         public sealed record TagDto(Guid Id, string Name);
     }
@@ -47,7 +52,8 @@ public static class GetChores
                 .CurrentUserChores(false)
                 .Select(c =>
                     new Response.ChoreDto(c.Id, c.Name, c.Interval,
-                        c.Tags.Select(t => new Response.TagDto(t.Id, t.Name))))
+                        c.Tags.Select(t => new Response.TagDto(t.Id, t.Name)),
+                        c.Iterations.Max(i => i.Date)))
                 .ToListAsync(cancellationToken);
             _logger.LogDebug("Fetched all tags from database as DTO");
 

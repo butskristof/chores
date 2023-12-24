@@ -15,9 +15,13 @@ public static class GetChore
         string Name,
         int Interval,
         string? Notes,
-        IEnumerable<TagDto> Tags);
+        IEnumerable<TagDto> Tags,
+        IEnumerable<IterationDto> Iterations
+    );
 
     public sealed record TagDto(Guid Id, string Name);
+
+    public sealed record IterationDto(Guid Id, DateOnly Date, string? Notes);
 
     internal class Handler : IRequestHandler<Request, ErrorOr<Response>>
     {
@@ -41,6 +45,7 @@ public static class GetChore
             var chore = await _db
                 .CurrentUserChores(false)
                 .Include(c => c.Tags)
+                .Include(c => c.Iterations)
                 .SingleOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
             if (chore is null)
             {
@@ -52,7 +57,10 @@ public static class GetChore
             _logger.LogDebug("Fetched entity from database");
 
             var dto = new Response(chore.Id, chore.Name, chore.Interval, chore.Notes,
-                chore.Tags.Select(t => new TagDto(t.Id, t.Name)));
+                chore.Tags.Select(t => new TagDto(t.Id, t.Name)),
+                chore.Iterations
+                    .OrderByDescending(i => i.Date)
+                    .Select(i => new IterationDto(i.Id, i.Date, i.Notes)));
             _logger.LogDebug("Mapped entity to DTO");
 
             return dto;

@@ -61,6 +61,30 @@ export const useChoresApiUpdateChoreNotes = (queryClient) =>
     },
   });
 
+export const useChoresApiUpsertChoreIteration = (queryClient) =>
+  useMutation({
+    mutationFn: (payload) =>
+      payload.iterationId
+        ? choresApiService.updateChoreIteration(payload)
+        : choresApiService.createChoreIteration(payload),
+    onSuccess: (response, request) => {
+      queryClient.invalidateQueries({ queryKey: CHORES_API_QUERY_KEYS.CHORES.GET });
+      queryClient.invalidateQueries({
+        queryKey: CHORES_API_QUERY_KEYS.CHORES.GET_BY_ID(request.choreId),
+      });
+    },
+  });
+
+export const useChoresApiDeleteChoreIteration = (queryClient) =>
+  useMutation({
+    mutationFn: choresApiService.deleteChoreIteration,
+    onSuccess: (response, request) => {
+      queryClient.invalidateQueries({ queryKey: CHORES_API_QUERY_KEYS.CHORES.GET });
+      queryClient.invalidateQueries({
+        queryKey: CHORES_API_QUERY_KEYS.CHORES.GET_BY_ID(request.choreId),
+      });
+    },
+  });
 //#endregion
 
 //#region tags

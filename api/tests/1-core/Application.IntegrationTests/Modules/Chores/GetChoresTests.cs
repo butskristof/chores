@@ -24,8 +24,8 @@ public sealed class GetChoresTests : ApplicationTestBase
     [Fact]
     public async Task ReturnsDtos()
     {
-        await Application.AddAsync(new ChoreBuilder().WithName("chore 1").Build());
-        await Application.AddAsync(new ChoreBuilder().WithName("chore 2").Build());
+        await Application.AddAsync(new ChoreBuilder().WithName("chore 1").WithInterval(1).Build());
+        await Application.AddAsync(new ChoreBuilder().WithName("chore 2").WithInterval(2).Build());
 
         var request = new GetChores.Request();
         var result = await Application.SendAsync(request);
@@ -33,10 +33,12 @@ public sealed class GetChoresTests : ApplicationTestBase
         result.IsError.Should().BeFalse();
         result.Value.Chores
             .Should()
-            .NotBeEmpty()
-            .And.HaveCount(2)
-            .And.ContainSingle(c => c.Name == "chore 1")
-            .And.ContainSingle(c => c.Name == "chore 2");
+            .HaveCount(2)
+            .And
+            .SatisfyRespectively(
+                c => c.Should().BeEquivalentTo(new { Name = "chore 1", Interval = 1 }),
+                c => c.Should().BeEquivalentTo(new { Name = "chore 2", Interval = 2 })
+            );
     }
 
     [Fact]
@@ -71,5 +73,43 @@ public sealed class GetChoresTests : ApplicationTestBase
             .Should()
             .HaveCount(1)
             .And.ContainSingle(c => c.Name == "visible");
+    }
+
+    [Fact]
+    public async Task ReturnsNullIfNoIterations()
+    {
+        var choreId = new Guid("19E758A9-3DA9-444A-BC7B-D00E675749BA");
+        await Application.AddAsync(new ChoreBuilder().WithId(choreId).Build());
+
+        var request = new GetChores.Request();
+        var result = await Application.SendAsync(request);
+
+        result.IsError.Should().BeFalse();
+        var chore = result.Value.Chores.SingleOrDefault();
+        chore.Should().NotBeNull();
+        chore!.LastIteration.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task ReturnsLastIteration()
+    {
+        Application.SetDateTime(new DateTimeOffset(2023, 12, 24, 15, 2, 33, TimeSpan.Zero));
+        var choreId = new Guid("19E758A9-3DA9-444A-BC7B-D00E675749BA");
+        await Application.AddAsync(new ChoreBuilder()
+            .WithId(choreId)
+            .WithIterations([
+                new ChoreIterationBuilder().WithDate(new DateOnly(2023, 12, 15)),
+                new ChoreIterationBuilder().WithDate(new DateOnly(2023, 12, 24)),
+                new ChoreIterationBuilder().WithDate(new DateOnly(2023, 11, 24)),
+            ])
+            .Build());
+
+        var request = new GetChores.Request();
+        var result = await Application.SendAsync(request);
+
+        result.IsError.Should().BeFalse();
+        var chore = result.Value.Chores.SingleOrDefault();
+        chore.Should().NotBeNull();
+        chore!.LastIteration.Should().Be(new DateOnly(2023, 12, 24));
     }
 }

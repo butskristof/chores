@@ -5,13 +5,13 @@
     @close="emit('close')"
   >
     <div v-if="mutation.isPending.value === true">
-      <p>Chore deletion was requested, waiting for confirmation...</p>
+      <p>Iteration deletion was requested, waiting for confirmation...</p>
     </div>
     <div
       v-else-if="mutation.isSuccess.value === true"
       class="success"
     >
-      <p>Chore was deleted successfully.</p>
+      <p>Iteration was deleted successfully.</p>
       <div class="actions">
         <button
           type="button"
@@ -26,7 +26,8 @@
       class="error"
     >
       <p>
-        Something went wrong while trying to delete the chore, please reload the page and try again.
+        Something went wrong while trying to delete the iteration, please reload the page and try
+        again.
       </p>
       <pre>{{ mutation.error.value }}</pre>
       <div class="actions">
@@ -40,7 +41,7 @@
     </div>
     <template v-else>
       <DialogTitle>
-        Delete chore <em>"{{ chore.name }}"</em>?
+        Delete iteration <em>"{{ iteration.date }}"</em>?
       </DialogTitle>
 
       <div class="actions">
@@ -48,12 +49,12 @@
           type="button"
           @click="emit('close')"
         >
-          No, keep chore
+          No, keep iteration
         </button>
         <button
           type="button"
           class="btn-delete"
-          @click="deleteChore"
+          @click="deleteIteration"
         >
           Yes, delete
         </button>
@@ -65,7 +66,7 @@
 <script setup>
 import { useQueryClient } from '@tanstack/vue-query';
 import { useToast } from 'vue-toastification';
-import { useChoresApiDeleteChore } from '@/composables/queries/chores-api';
+import { useChoresApiDeleteChoreIteration } from '@/composables/queries/chores-api';
 import AppDialog from '@/components/common/dialogs/AppDialog.vue';
 import { DialogTitle } from '@headlessui/vue';
 
@@ -74,7 +75,11 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  chore: {
+  choreId: {
+    type: String,
+    required: true,
+  },
+  iteration: {
     type: Object,
     required: true,
   },
@@ -86,11 +91,11 @@ const toast = useToast();
 
 //#region delete
 
-const mutation = useChoresApiDeleteChore(queryClient);
-const deleteChore = async () => {
+const mutation = useChoresApiDeleteChoreIteration(queryClient);
+const deleteIteration = async () => {
   try {
-    await mutation.mutateAsync(props.chore.id);
-    toast.success('Chore deleted');
+    await mutation.mutateAsync({ choreId: props.choreId, iterationId: props.iteration.id });
+    toast.success('Iteration deleted');
     emit('close', true);
   } catch (e) {
     console.error(e);

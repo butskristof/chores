@@ -9,6 +9,7 @@ internal sealed class ChoreBuilder
     private int _interval = 10;
     private string? _notes = null;
     private List<Guid> _tags = [];
+    private List<ChoreIteration> _iterations = [];
 
     internal ChoreBuilder WithId(Guid id)
     {
@@ -40,6 +41,12 @@ internal sealed class ChoreBuilder
         return this;
     }
 
+    internal ChoreBuilder WithIterations(List<ChoreIteration> iterations)
+    {
+        _iterations = iterations;
+        return this;
+    }
+
     internal Chore Build() => new()
     {
         Id = _id,
@@ -47,6 +54,7 @@ internal sealed class ChoreBuilder
         Interval = _interval,
         Notes = _notes,
         ChoreTags = _tags.Select(tagId => new ChoreTag { TagId = tagId }).ToList(),
+        Iterations = _iterations,
     };
 
     public static implicit operator Chore(ChoreBuilder builder) => builder.Build();
