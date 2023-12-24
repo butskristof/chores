@@ -56,6 +56,7 @@ public static class CreateChoreIteration
                     request.ChoreId);
                 return Error.NotFound(nameof(request.ChoreId), $"Could not find Chore with id {request.ChoreId}");
             }
+            _logger.LogDebug("Fetched chore with iterations from database");
 
             var iteration = new ChoreIteration
             {

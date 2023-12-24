@@ -79,7 +79,7 @@ public sealed class DeleteChoreIterationTests : ApplicationTestBase
         var error = result.ErrorsOrEmptyList.SingleOrDefault();
         error.Should().NotBeNull("should contain exactly one error");
         error.Type.Should().Be(ErrorType.NotFound);
-        error.Code.Should().Be("IterationId");
+        error.Code.Should().Be("ChoreId");
     }
 
     [Fact]
@@ -93,8 +93,7 @@ public sealed class DeleteChoreIterationTests : ApplicationTestBase
                 .WithIterations([new ChoreIterationBuilder().WithId(iterationId)])
                 .Build()
         );
-        Application.SetUserId("other_user");
-        var chore2Id = new Guid("AA34B4DE-8E45-4D2A-9D84-35C25A3F9464");
+        var chore2Id = new Guid("70292690-4826-4298-A31A-19CD107A7F5C");
         await Application.AddAsync(new ChoreBuilder().WithId(chore2Id).Build());
 
         var request = new DeleteChoreIteration.Request(chore2Id, iterationId);
