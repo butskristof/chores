@@ -53,7 +53,7 @@ public sealed class CreateChoreIterationTests : ApplicationTestBase
         var request = new CreateChoreIteration.Request(id, new DateOnly(2023, 12, 17), null);
         var result = await Application.SendAsync(request);
 
-        result.IsError.Should().BeTrue("non-existing ID should result in error");
+        result.IsError.Should().BeTrue("inaccessible ID should result in error");
         var error = result.ErrorsOrEmptyList.SingleOrDefault();
         error.Should().NotBeNull("should contain exactly one error");
         error.Type.Should().Be(ErrorType.NotFound);
