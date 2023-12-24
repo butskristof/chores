@@ -3,6 +3,7 @@
     <h2>Notes</h2>
     <div class="actions">
       <button
+        v-if="!isEdit"
         type="button"
         @click="showEdit"
       >

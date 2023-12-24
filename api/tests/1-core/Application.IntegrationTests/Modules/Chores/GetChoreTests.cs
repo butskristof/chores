@@ -82,4 +82,31 @@ public sealed class GetChoreTests : ApplicationTestBase
         tagDto!.Id.Should().Be(tagId);
         tagDto.Name.Should().Be("this tag");
     }
+
+    [Fact]
+    public async Task ReturnsDtoWithIterationDtos()
+    {
+        Application.SetDateTime(new DateTimeOffset(2023, 12, 24, 11, 40, 23, TimeSpan.Zero));
+        var choreId = new Guid("322482D7-B0D9-4B16-BB61-8F790F784099");
+        var iterationId = new Guid("A60498A5-5279-442E-AE53-209F389C7441");
+        await Application.AddAsync(new ChoreBuilder()
+            .WithId(choreId)
+            .WithIterations([
+                new ChoreIterationBuilder()
+                    .WithId(iterationId)
+                    .WithNotes("some notes")
+                    .WithDate(new DateOnly(2023, 12, 24))
+                    .Build()
+            ])
+            .Build());
+
+        var request = new GetChore.Request(choreId);
+        var result = await Application.SendAsync(request);
+
+        result.IsError.Should().BeFalse();
+        var iterationDto = result.Value.Iterations.SingleOrDefault();
+        iterationDto.Should().NotBeNull();
+        iterationDto.Should()
+            .BeEquivalentTo(new GetChore.IterationDto(iterationId, new DateOnly(2023, 12, 24), "some notes"));
+    }
 }

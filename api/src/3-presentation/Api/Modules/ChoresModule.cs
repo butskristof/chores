@@ -1,5 +1,6 @@
 using Chores.Api.Extensions;
 using Chores.Application.Modules.Chores;
+using Chores.Application.Modules.Chores.Iterations;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -56,6 +57,19 @@ internal static class ChoresModule
             .ProducesNoContent()
             .ProducesNotFound();
 
+        group
+            .MapPost("{ChoreId:guid}/Iterations", CreateChoreIteration)
+            .WithName(nameof(CreateChoreIteration))
+            .ProducesCreated<CreateChoreIteration.Response>()
+            .ProducesValidationProblem()
+            .ProducesNotFound();
+
+        group
+            .MapDelete("{ChoreId:guid}/Iterations/{IterationId:guid}", DeleteChoreIteration)
+            .WithName(nameof(DeleteChoreIteration))
+            .ProducesNoContent()
+            .ProducesNotFound();
+
         return endpoints;
     }
 
@@ -82,4 +96,16 @@ internal static class ChoresModule
 
     private static async Task<IResult> UpdateChoreTags([FromBody] UpdateChoreTags.Request request, ISender sender)
         => (await sender.Send(request)).MapToValueOrProblem(_ => TypedResults.NoContent());
+
+    private static async Task<IResult> CreateChoreIteration([FromBody] CreateChoreIteration.Request request,
+        ISender sender)
+    {
+        var result = await sender.Send(request);
+        return result.MapToValueOrProblem(response => TypedResults.Created($"/Chores/{request.ChoreId}", response));
+    }
+
+    private static async Task<IResult> DeleteChoreIteration([FromRoute] Guid ChoreId, [FromRoute] Guid IterationId,
+        ISender sender)
+        => (await sender.Send(new DeleteChoreIteration.Request(ChoreId, IterationId))).MapToValueOrProblem(_ =>
+            TypedResults.NoContent());
 }

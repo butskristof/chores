@@ -15,7 +15,9 @@ public static class CreateChoreIteration
         Guid ChoreId,
         DateOnly Date,
         string? Notes
-    ) : IRequest<ErrorOr<Created>>;
+    ) : IRequest<ErrorOr<Response>>;
+
+    public sealed record Response(Guid Id);
 
     internal sealed class Validator : AbstractValidator<Request>
     {
@@ -27,7 +29,7 @@ public static class CreateChoreIteration
         }
     }
 
-    internal class Handler : IRequestHandler<Request, ErrorOr<Created>>
+    internal class Handler : IRequestHandler<Request, ErrorOr<Response>>
     {
         #region construction
 
@@ -42,7 +44,7 @@ public static class CreateChoreIteration
 
         #endregion
 
-        public async Task<ErrorOr<Created>> Handle(Request request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Response>> Handle(Request request, CancellationToken cancellationToken)
         {
             _logger.LogDebug("Handling CreateChoreIteration request");
 
@@ -70,7 +72,7 @@ public static class CreateChoreIteration
             await _db.SaveChangesAsync(CancellationToken.None);
             _logger.LogDebug("Persisted new entity to database");
 
-            return Result.Created;
+            return new Response(iteration.Id);
         }
     }
 }
