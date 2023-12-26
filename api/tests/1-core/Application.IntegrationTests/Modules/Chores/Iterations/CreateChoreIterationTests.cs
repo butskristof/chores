@@ -84,7 +84,7 @@ public sealed class CreateChoreIterationTests : ApplicationTestBase
             .BeEquivalentTo(new
             {
                 Id = result.Value.Id,
-                Date = new DateOnly(2023, 12, 17),
+                Date = new DateTimeOffset(2023, 12, 17, 0, 0, 0, TimeSpan.Zero),
                 Notes = "some notes"
             });
     }

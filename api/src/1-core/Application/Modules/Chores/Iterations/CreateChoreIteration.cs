@@ -23,9 +23,9 @@ public static class CreateChoreIteration
     {
         public Validator(TimeProvider timeProvider)
         {
-            // RuleFor(r => r.Date)
-            //     .LessThanOrEqualTo(_ => DateOnly.FromDateTime(timeProvider.GetUtcNow().UtcDateTime))
-            //     .WithMessage(ErrorCodes.Invalid);
+            RuleFor(r => r.Date)
+                .Must(input => input.UtcDateTime.Date <= timeProvider.GetUtcNow().Date)
+                .WithMessage(ErrorCodes.Invalid);
         }
     }
 
@@ -58,6 +58,7 @@ public static class CreateChoreIteration
                     request.ChoreId);
                 return Error.NotFound(nameof(request.ChoreId), $"Could not find Chore with id {request.ChoreId}");
             }
+
             _logger.LogDebug("Fetched chore with iterations from database");
 
             var iteration = new ChoreIteration
@@ -67,7 +68,7 @@ public static class CreateChoreIteration
                 Notes = request.Notes,
             };
             _logger.LogDebug("Mapped request to entity");
-            
+
             chore.Iterations.Add(iteration);
             await _db.SaveChangesAsync(CancellationToken.None);
             _logger.LogDebug("Persisted new entity to database");

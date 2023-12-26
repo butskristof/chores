@@ -35,9 +35,9 @@ public sealed class GetChoresTests : ApplicationTestBase
             .Should()
             .HaveCount(2)
             .And
-            .SatisfyRespectively(
-                c => c.Should().BeEquivalentTo(new { Name = "chore 1", Interval = 1 }),
-                c => c.Should().BeEquivalentTo(new { Name = "chore 2", Interval = 2 })
+            .Satisfy(
+                c => c.Name == "chore 1" && c.Interval == 1,
+                c => c.Name == "chore 2" && c.Interval == 2
             );
     }
 
