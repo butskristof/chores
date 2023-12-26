@@ -3,10 +3,9 @@
     <div class="header">
       <div class="left">
         <h1>{{ chore.name }}</h1>
-        <p>Should happen every {{ chore.interval }} days</p>
-        <ChoreLastIteration :chore="chore" />
       </div>
       <div class="actions">
+        <button type="button">edit tags</button>
         <button
           type="button"
           @click="showEdit = true"
@@ -33,6 +32,9 @@
         />
       </div>
     </div>
+    <p>Should happen every {{ chore.interval }} days</p>
+    <ChoreLastIteration :chore="chore" />
+    <p>Tags: {{ chore.tags }}</p>
 
     <hr />
 
@@ -82,12 +84,15 @@ const closeDelete = (deleted) => {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap-reverse;
 
   .actions {
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
     align-items: flex-start;
+    margin-left: auto;
   }
 }
 
