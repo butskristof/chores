@@ -16,6 +16,8 @@ class ChoresApiService extends AuthenticatedApiService {
   deleteChore = (id) => this.delete(`/chores/${id}`).then((r) => r.data);
   updateChoreNotes = (payload) =>
     this.put(`/chores/${payload.choreId}/notes`, payload).then((r) => r.data);
+  updateChoreTags = (payload) =>
+    this.put(`/chores/${payload.choreId}/tags`, payload).then((r) => r.data);
   createChoreIteration = (payload) =>
     this.post(`/chores/${payload.choreId}/iterations`, payload).then((r) => r.data);
   updateChoreIteration = (payload) =>

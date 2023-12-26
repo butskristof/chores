@@ -48,4 +48,8 @@ app
 
 //#endregion
 
+//#region multiselect
+import 'vue-multiselect/dist/vue-multiselect.css';
+//#endregion
+
 app.mount('#app');

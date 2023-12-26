@@ -53,10 +53,26 @@ export const useChoresApiDeleteChore = (queryClient) =>
 
 export const useChoresApiUpdateChoreNotes = (queryClient) =>
   useMutation({
-    mutationFn: (payload) => choresApiService.updateChoreNotes(payload),
+    mutationFn: choresApiService.updateChoreNotes,
     onSuccess: (response, request) => {
       queryClient.invalidateQueries({
         queryKey: CHORES_API_QUERY_KEYS.CHORES.GET_BY_ID(request.choreId),
+      });
+    },
+  });
+
+export const useChoresApiUpdateChoreTags = (queryClient) =>
+  useMutation({
+    mutationFn: (payload) => choresApiService.updateChoreTags(payload),
+    onSuccess: (response, request) => {
+      queryClient.invalidateQueries({
+        queryKey: CHORES_API_QUERY_KEYS.CHORES.GET_BY_ID(request.choreId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: CHORES_API_QUERY_KEYS.CHORES.GET,
+      });
+      queryClient.invalidateQueries({
+        queryKey: CHORES_API_QUERY_KEYS.TAGS.GET,
       });
     },
   });

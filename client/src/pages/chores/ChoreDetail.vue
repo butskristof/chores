@@ -3,10 +3,20 @@
     <div class="header">
       <div class="left">
         <h1>{{ chore.name }}</h1>
-        <p>Should happen every {{ chore.interval }} days</p>
-        <ChoreLastIteration :chore="chore" />
       </div>
       <div class="actions">
+        <button
+          type="button"
+          @click="showEditTags = true"
+        >
+          edit tags
+        </button>
+        <EditChoreTags
+          v-if="showEditTags"
+          :open="true"
+          :chore="chore"
+          @close="showEditTags = false"
+        />
         <button
           type="button"
           @click="showEdit = true"
@@ -33,6 +43,9 @@
         />
       </div>
     </div>
+    <p>Should happen every {{ chore.interval }} days</p>
+    <ChoreLastIteration :chore="chore" />
+    <p>Tags: {{ chore.tags.map((t) => t.name) }}</p>
 
     <hr />
 
@@ -55,12 +68,17 @@ import { routes } from '@/router/routes';
 import ChoreNotes from '@/components/chores/detail/ChoreNotes.vue';
 import ChoreIterations from '@/components/chores/detail/ChoreIterations.vue';
 import ChoreLastIteration from '@/components/chores/common/ChoreLastIteration.vue';
+import EditChoreTags from '@/components/chores/detail/EditChoreTags.vue';
 
 const choreId = useRouteParams('id');
 const choreQuery = useChoresApiChore(choreId);
 const chore = computed(() => choreQuery.data.value);
 
 const router = useRouter();
+
+//#region edit tags
+const showEditTags = ref(false);
+//#endregion
 
 //#region edit
 const showEdit = ref(false);
@@ -82,12 +100,15 @@ const closeDelete = (deleted) => {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap-reverse;
 
   .actions {
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
     align-items: flex-start;
+    margin-left: auto;
   }
 }
 
