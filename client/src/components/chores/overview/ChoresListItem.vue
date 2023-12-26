@@ -1,9 +1,14 @@
 <template>
   <div class="chores-list-item">
-    <div class="title">
-      <router-link :to="{ name: routes.chores.children.detail.name, params: { id: chore.id } }">
-        {{ chore.name }}
-      </router-link>
+    <div class="row">
+      <div class="title">
+        <router-link :to="{ name: routes.chores.children.detail.name, params: { id: chore.id } }">
+          {{ chore.name }}
+        </router-link>
+      </div>
+      <div class="tags">
+        {{ chore.tags.map((t) => t.name).join(', ') }}
+      </div>
     </div>
     <ChoreLastIteration :chore="chore" />
   </div>
@@ -25,6 +30,12 @@ defineProps({
 .chores-list-item {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
 
   &:nth-of-type(even) {
     background-color: rgb(248, 248, 248);

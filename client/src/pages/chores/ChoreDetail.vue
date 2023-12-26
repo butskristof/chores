@@ -5,7 +5,18 @@
         <h1>{{ chore.name }}</h1>
       </div>
       <div class="actions">
-        <button type="button">edit tags</button>
+        <button
+          type="button"
+          @click="showEditTags = true"
+        >
+          edit tags
+        </button>
+        <EditChoreTags
+          v-if="showEditTags"
+          :open="true"
+          :chore="chore"
+          @close="showEditTags = false"
+        />
         <button
           type="button"
           @click="showEdit = true"
@@ -34,7 +45,7 @@
     </div>
     <p>Should happen every {{ chore.interval }} days</p>
     <ChoreLastIteration :chore="chore" />
-    <p>Tags: {{ chore.tags }}</p>
+    <p>Tags: {{ chore.tags.map((t) => t.name) }}</p>
 
     <hr />
 
@@ -57,12 +68,17 @@ import { routes } from '@/router/routes';
 import ChoreNotes from '@/components/chores/detail/ChoreNotes.vue';
 import ChoreIterations from '@/components/chores/detail/ChoreIterations.vue';
 import ChoreLastIteration from '@/components/chores/common/ChoreLastIteration.vue';
+import EditChoreTags from '@/components/chores/detail/EditChoreTags.vue';
 
 const choreId = useRouteParams('id');
 const choreQuery = useChoresApiChore(choreId);
 const chore = computed(() => choreQuery.data.value);
 
 const router = useRouter();
+
+//#region edit tags
+const showEditTags = ref(false);
+//#endregion
 
 //#region edit
 const showEdit = ref(false);
