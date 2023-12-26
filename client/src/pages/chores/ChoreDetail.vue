@@ -4,6 +4,7 @@
       <div class="left">
         <h1>{{ chore.name }}</h1>
         <p>Should happen every {{ chore.interval }} days</p>
+        <ChoreLastIteration :chore="chore" />
       </div>
       <div class="actions">
         <button
@@ -53,6 +54,7 @@ import { useRouter } from 'vue-router';
 import { routes } from '@/router/routes';
 import ChoreNotes from '@/components/chores/detail/ChoreNotes.vue';
 import ChoreIterations from '@/components/chores/detail/ChoreIterations.vue';
+import ChoreLastIteration from '@/components/chores/common/ChoreLastIteration.vue';
 
 const choreId = useRouteParams('id');
 const choreQuery = useChoresApiChore(choreId);
