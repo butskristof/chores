@@ -5,12 +5,21 @@
         {{ chore.name }}
       </router-link>
     </div>
-    <div class="due">due in {{ due }} days</div>
+    <div
+      v-if="chore.lastIteration"
+      class="iterations"
+    >
+      Happened last {{ formatDate(chore.lastIteration) }} - due again
+      <span v-if="chore.due === 0">today</span>
+      <span v-else-if="chore.due > 0"> in {{ chore.due }} days</span>
+      <span v-else-if="chore.due < 0">{{ chore.due * -1 }} days ago</span>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { routes } from '@/router/routes';
+import { formatDate } from '@/utilities/datetime.js';
 
 defineProps({
   chore: {
@@ -18,7 +27,6 @@ defineProps({
     required: true,
   },
 });
-const due = Math.floor(Math.random() * 10) - 1;
 </script>
 
 <style scoped lang="scss">
