@@ -13,7 +13,7 @@ public static class CreateChoreIteration
 {
     public sealed record Request(
         Guid ChoreId,
-        DateOnly Date,
+        DateTimeOffset Date,
         string? Notes
     ) : IRequest<ErrorOr<Response>>;
 
@@ -23,9 +23,9 @@ public static class CreateChoreIteration
     {
         public Validator(TimeProvider timeProvider)
         {
-            RuleFor(r => r.Date)
-                .LessThanOrEqualTo(_ => DateOnly.FromDateTime(timeProvider.GetUtcNow().UtcDateTime))
-                .WithMessage(ErrorCodes.Invalid);
+            // RuleFor(r => r.Date)
+            //     .LessThanOrEqualTo(_ => DateOnly.FromDateTime(timeProvider.GetUtcNow().UtcDateTime))
+            //     .WithMessage(ErrorCodes.Invalid);
         }
     }
 

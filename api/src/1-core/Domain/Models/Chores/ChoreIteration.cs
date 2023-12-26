@@ -6,6 +6,6 @@ public sealed class ChoreIteration : BaseAuditableEntity
 {
     public Guid ChoreId { get; set; }
     
-    public DateOnly Date { get; set; }
+    public DateTimeOffset Date { get; set; }
     public string? Notes { get; set; }
 }

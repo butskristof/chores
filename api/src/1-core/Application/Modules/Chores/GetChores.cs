@@ -24,7 +24,7 @@ public static class GetChores
             string Name,
             int Interval,
             IEnumerable<TagDto> Tags,
-            DateOnly? LastIteration);
+            DateTimeOffset? LastIteration);
 
         public sealed record TagDto(Guid Id, string Name);
     }
