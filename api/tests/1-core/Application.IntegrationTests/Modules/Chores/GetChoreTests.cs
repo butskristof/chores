@@ -95,7 +95,7 @@ public sealed class GetChoreTests : ApplicationTestBase
                 new ChoreIterationBuilder()
                     .WithId(iterationId)
                     .WithNotes("some notes")
-                    .WithDate(new DateOnly(2023, 12, 24))
+                    .WithDate(new DateTimeOffset(2023, 12, 24, 0, 0, 0, TimeSpan.Zero))
                     .Build()
             ])
             .Build());
@@ -107,23 +107,24 @@ public sealed class GetChoreTests : ApplicationTestBase
         var iterationDto = result.Value.Iterations.SingleOrDefault();
         iterationDto.Should().NotBeNull();
         iterationDto.Should()
-            .BeEquivalentTo(new GetChore.IterationDto(iterationId, new DateOnly(2023, 12, 24), "some notes"));
+            .BeEquivalentTo(new GetChore.IterationDto(iterationId,
+                new DateTimeOffset(2023, 12, 24, 0, 0, 0, TimeSpan.Zero), "some notes"));
     }
 
     [Fact]
     public async Task ReturnsDtoWithIterationsInDescendingOrder()
     {
-        Application.SetDateTime(new DateTimeOffset(2023, 12, 24, 14,55,54, TimeSpan.Zero));
+        Application.SetDateTime(new DateTimeOffset(2023, 12, 24, 14, 55, 54, TimeSpan.Zero));
         var choreId = new Guid("C83647F8-18AD-4EA5-8191-924EE4306ECE");
         await Application.AddAsync(new ChoreBuilder()
             .WithId(choreId)
             .WithIterations([
                 new ChoreIterationBuilder()
-                    .WithDate(new DateOnly(2023, 12, 24)),
+                    .WithDate(new DateTimeOffset(2023, 12, 24, 0, 0, 0, TimeSpan.Zero)),
                 new ChoreIterationBuilder()
-                    .WithDate(new DateOnly(2023, 12, 23)),
+                    .WithDate(new DateTimeOffset(2023, 12, 23, 0, 0, 0, TimeSpan.Zero)),
                 new ChoreIterationBuilder()
-                    .WithDate(new DateOnly(2023, 11, 23))
+                    .WithDate(new DateTimeOffset(2023, 11, 23, 0, 0, 0, TimeSpan.Zero))
             ])
             .Build());
 

@@ -4,7 +4,7 @@
       <div class="left">
         <h1>{{ chore.name }}</h1>
         <p>Should happen every {{ chore.interval }} days</p>
-        <p>Happened last on {{ formattedLastIteration }}, due again in {{ due }}</p>
+        <ChoreLastIteration :chore="chore" />
       </div>
       <div class="actions">
         <button
@@ -54,29 +54,11 @@ import { useRouter } from 'vue-router';
 import { routes } from '@/router/routes';
 import ChoreNotes from '@/components/chores/detail/ChoreNotes.vue';
 import ChoreIterations from '@/components/chores/detail/ChoreIterations.vue';
-import { addDays, format, formatDistance } from 'date-fns';
+import ChoreLastIteration from '@/components/chores/common/ChoreLastIteration.vue';
 
 const choreId = useRouteParams('id');
 const choreQuery = useChoresApiChore(choreId);
 const chore = computed(() => choreQuery.data.value);
-
-const lastIteration = computed(() => {
-  if (chore.value.iterations.length === 0) return null;
-  const last = chore.value.iterations.reduce(
-    (max, current) => (new Date(max.date) > new Date(current.date) ? max : current),
-    chore.value.iterations[0],
-  );
-  return new Date(last.date);
-});
-const formattedLastIteration = computed(() => {
-  if (lastIteration.value == null) return null;
-  return format(lastIteration.value, 'LLLL do');
-});
-const due = computed(() => {
-  if (lastIteration.value == null) return 0;
-  const expectedNextIteration = addDays(lastIteration.value, chore.value.interval);
-  return formatDistance(lastIteration.value, expectedNextIteration);
-});
 
 const router = useRouter();
 

@@ -35,9 +35,9 @@ public sealed class GetChoresTests : ApplicationTestBase
             .Should()
             .HaveCount(2)
             .And
-            .SatisfyRespectively(
-                c => c.Should().BeEquivalentTo(new { Name = "chore 1", Interval = 1 }),
-                c => c.Should().BeEquivalentTo(new { Name = "chore 2", Interval = 2 })
+            .Satisfy(
+                c => c.Name == "chore 1" && c.Interval == 1,
+                c => c.Name == "chore 2" && c.Interval == 2
             );
     }
 
@@ -98,9 +98,9 @@ public sealed class GetChoresTests : ApplicationTestBase
         await Application.AddAsync(new ChoreBuilder()
             .WithId(choreId)
             .WithIterations([
-                new ChoreIterationBuilder().WithDate(new DateOnly(2023, 12, 15)),
-                new ChoreIterationBuilder().WithDate(new DateOnly(2023, 12, 24)),
-                new ChoreIterationBuilder().WithDate(new DateOnly(2023, 11, 24)),
+                new ChoreIterationBuilder().WithDate(new DateTimeOffset(2023, 12, 15, 0, 0, 0, TimeSpan.Zero)),
+                new ChoreIterationBuilder().WithDate(new DateTimeOffset(2023, 12, 24, 0, 0, 0, TimeSpan.Zero)),
+                new ChoreIterationBuilder().WithDate(new DateTimeOffset(2023, 11, 24, 0, 0, 0, TimeSpan.Zero)),
             ])
             .Build());
 
@@ -110,6 +110,6 @@ public sealed class GetChoresTests : ApplicationTestBase
         result.IsError.Should().BeFalse();
         var chore = result.Value.Chores.SingleOrDefault();
         chore.Should().NotBeNull();
-        chore!.LastIteration.Should().Be(new DateOnly(2023, 12, 24));
+        chore!.LastIteration.Should().Be(new DateTimeOffset(2023, 12, 24, 0, 0, 0, TimeSpan.Zero));
     }
 }

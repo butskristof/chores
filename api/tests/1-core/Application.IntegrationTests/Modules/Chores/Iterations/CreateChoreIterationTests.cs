@@ -17,7 +17,8 @@ public sealed class CreateChoreIterationTests : ApplicationTestBase
     public async Task InvalidRequest_ReturnsValidationError()
     {
         Application.SetDateTime(new DateTimeOffset(2023, 12, 23, 17, 11, 10, TimeSpan.Zero));
-        var request = new CreateChoreIteration.Request(Guid.Empty, new DateOnly(2023, 12, 31), null);
+        var request = new CreateChoreIteration.Request(Guid.Empty,
+            new DateTimeOffset(2023, 12, 31, 0, 0, 0, TimeSpan.Zero), null);
         var result = await Application.SendAsync(request);
 
         result.IsError.Should().BeTrue("date in the future should not be allowed");
@@ -33,7 +34,7 @@ public sealed class CreateChoreIterationTests : ApplicationTestBase
     {
         Application.SetDateTime(new DateTimeOffset(2023, 12, 23, 17, 14, 32, TimeSpan.Zero));
         var request = new CreateChoreIteration.Request(new Guid("96E2F704-B5CA-4323-954E-31BB4B0A562A"),
-            new DateOnly(2023, 12, 17), null);
+            new DateTimeOffset(2023, 12, 17, 0, 0, 0, TimeSpan.Zero), null);
         var result = await Application.SendAsync(request);
 
         result.IsError.Should().BeTrue("non-existing ID should result in error");
@@ -50,7 +51,8 @@ public sealed class CreateChoreIterationTests : ApplicationTestBase
         await Application.AddAsync(new ChoreBuilder().WithId(id).Build());
         Application.SetUserId("other_user");
         Application.SetDateTime(new DateTimeOffset(2023, 12, 23, 17, 14, 32, TimeSpan.Zero));
-        var request = new CreateChoreIteration.Request(id, new DateOnly(2023, 12, 17), null);
+        var request =
+            new CreateChoreIteration.Request(id, new DateTimeOffset(2023, 12, 17, 0, 0, 0, TimeSpan.Zero), null);
         var result = await Application.SendAsync(request);
 
         result.IsError.Should().BeTrue("inaccessible ID should result in error");
@@ -66,7 +68,8 @@ public sealed class CreateChoreIterationTests : ApplicationTestBase
         var id = new Guid("0B60F96F-14FF-4128-B717-ADFDD9E92445");
         await Application.AddAsync(new ChoreBuilder().WithId(id).Build());
         Application.SetDateTime(new DateTimeOffset(2023, 12, 23, 17, 17, 17, TimeSpan.Zero));
-        var request = new CreateChoreIteration.Request(id, new DateOnly(2023, 12, 17), "some notes");
+        var request = new CreateChoreIteration.Request(id, new DateTimeOffset(2023, 12, 17, 0, 0, 0, TimeSpan.Zero),
+            "some notes");
         var result = await Application.SendAsync(request);
 
         result.IsError.Should().BeFalse();
@@ -81,7 +84,7 @@ public sealed class CreateChoreIterationTests : ApplicationTestBase
             .BeEquivalentTo(new
             {
                 Id = result.Value.Id,
-                Date = new DateOnly(2023, 12, 17),
+                Date = new DateTimeOffset(2023, 12, 17, 0, 0, 0, TimeSpan.Zero),
                 Notes = "some notes"
             });
     }
@@ -95,13 +98,14 @@ public sealed class CreateChoreIterationTests : ApplicationTestBase
             .WithId(id)
             .WithIterations([
                 new ChoreIterationBuilder()
-                    .WithDate(new DateOnly(2023, 12, 12))
+                    .WithDate(new DateTimeOffset(2023, 12, 12, 0, 0, 0, TimeSpan.Zero))
                     .WithNotes("first iteration notes")
                     .Build()
             ])
             .Build());
 
-        var request = new CreateChoreIteration.Request(id, new DateOnly(2023, 12, 23), "second iteration notes");
+        var request = new CreateChoreIteration.Request(id, new DateTimeOffset(2023, 12, 23, 0, 0, 0, TimeSpan.Zero),
+            "second iteration notes");
         await Application.SendAsync(request);
 
         var chore = await Application.FindAsync<Chore>(c => c.Id == id, c => c.Iterations);
@@ -109,8 +113,10 @@ public sealed class CreateChoreIterationTests : ApplicationTestBase
             .Should().HaveCount(2)
             .And
             .Satisfy(
-                i => i.Date == new DateOnly(2023, 12, 12) && i.Notes == "first iteration notes",
-                i => i.Date == new DateOnly(2023, 12, 23) && i.Notes == "second iteration notes"
+                i => i.Date == new DateTimeOffset(2023, 12, 12, 0, 0, 0, TimeSpan.Zero) &&
+                     i.Notes == "first iteration notes",
+                i => i.Date == new DateTimeOffset(2023, 12, 23, 0, 0, 0, TimeSpan.Zero) &&
+                     i.Notes == "second iteration notes"
             );
         // .SatisfyRespectively(
         //     i => i.Should().BeEquivalentTo(new

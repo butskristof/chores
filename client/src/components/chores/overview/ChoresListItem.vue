@@ -5,12 +5,13 @@
         {{ chore.name }}
       </router-link>
     </div>
-    <div class="due">due in {{ due }} days</div>
+    <ChoreLastIteration :chore="chore" />
   </div>
 </template>
 
 <script setup>
 import { routes } from '@/router/routes';
+import ChoreLastIteration from '@/components/chores/common/ChoreLastIteration.vue';
 
 defineProps({
   chore: {
@@ -18,7 +19,6 @@ defineProps({
     required: true,
   },
 });
-const due = Math.floor(Math.random() * 10) - 1;
 </script>
 
 <style scoped lang="scss">
