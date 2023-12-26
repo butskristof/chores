@@ -3,7 +3,7 @@ import { addDays, differenceInCalendarDays } from 'date-fns';
 export const getLastIteration = (chore) => {
   const value =
     chore.lastIteration ??
-    chore.iterations.reduce(
+    chore.iterations?.reduce(
       (max, current) =>
         // eslint-disable-next-line no-nested-ternary
         max == null ? current : new Date(current.date) > new Date(max.date) ? current : max,
