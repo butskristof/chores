@@ -4,17 +4,24 @@
       <RouterLink to="/">Home</RouterLink>
       <RouterLink :to="{ name: routes.tags.name }">Tags</RouterLink>
     </nav>
-    <HeaderAuth />
+    <div class="right">
+      <ColorSchemePicker />
+      <HeaderAuth />
+    </div>
   </header>
 
   <RouterView />
 </template>
+
 <script setup>
 import HeaderAuth from '@/components/header/HeaderAuth.vue';
 import { routes } from '@/router/routes';
+import ColorSchemePicker from '@/components/header/ColorSchemePicker.vue';
 </script>
 
 <style scoped lang="scss">
+@import '@/styles/utilities.scss';
+
 header {
   display: flex;
   flex-direction: row;
@@ -26,6 +33,12 @@ header {
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
+  }
+
+  .right {
+    @include flex-row;
+    align-items: center;
+    gap: var(--size-2);
   }
 }
 </style>

@@ -2,6 +2,8 @@ import { createApp } from 'vue';
 import App from './App.vue';
 const app = createApp(App);
 
+import '@/styles/reset.css';
+import '@/styles/open-props.css';
 import '@/styles/app.scss';
 
 //#region router
