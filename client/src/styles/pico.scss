@@ -1,1 +1,55 @@
 @import '@picocss/pico/scss/pico';
+
+button {
+  width: auto;
+
+  &[role='link'] {
+    border: none;
+    &:hover {
+      background-color: initial;
+      color: var(--primary-hover);
+    }
+    &:focus {
+      background-color: var(--primary-focus);
+    }
+  }
+}
+
+details[role='list'] summary + ul,
+li[role='list'] > ul {
+  li {
+    [role='link'] {
+      border-radius: 0;
+      display: block;
+      margin: calc(var(--form-element-spacing-vertical) * -0.5)
+        calc(var(--form-element-spacing-horizontal) * -1);
+      padding: calc(var(--form-element-spacing-vertical) * 0.5)
+        var(--form-element-spacing-horizontal);
+      overflow: hidden;
+      color: var(--dropdown-color);
+      text-decoration: none;
+      text-overflow: ellipsis;
+
+      text-align: left;
+      width: calc(100% + (var(--form-element-spacing-horizontal) * 2));
+
+      &:hover {
+        background-color: var(--dropdown-hover-background-color);
+      }
+
+      &:focus {
+        box-shadow: none;
+      }
+
+      &:active {
+        background-color: var(--primary-focus);
+      }
+    }
+
+    a {
+      &:active {
+        background-color: var(--primary-focus);
+      }
+    }
+  }
+}
