@@ -1,44 +1,18 @@
 <template>
-  <header>
-    <nav>
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink :to="{ name: routes.tags.name }">Tags</RouterLink>
-    </nav>
-    <div class="right">
-      <ColorSchemePicker />
-      <HeaderAuth />
+  <AppHeader />
+
+  <div class="test-content">
+    <div
+      v-for="i in new Array(500).keys()"
+      :key="i"
+    >
+      hey {{ i }}
     </div>
-  </header>
+  </div>
 
   <RouterView />
 </template>
 
 <script setup>
-import HeaderAuth from '@/components/header/HeaderAuth.vue';
-import { routes } from '@/router/routes';
-import ColorSchemePicker from '@/components/header/ColorSchemePicker.vue';
+import AppHeader from '@/components/header/AppHeader.vue';
 </script>
-
-<style scoped lang="scss">
-@import '@/styles/utilities.scss';
-
-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-
-  margin-bottom: 1rem;
-
-  nav {
-    display: flex;
-    flex-direction: row;
-    gap: 0.5rem;
-  }
-
-  .right {
-    @include flex-row;
-    align-items: center;
-    gap: var(--size-2);
-  }
-}
-</style>

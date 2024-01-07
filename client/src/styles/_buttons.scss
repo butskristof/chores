@@ -1,0 +1,20 @@
+button {
+  background-color: var(--gray-3);
+  padding-inline: var(--size-3);
+  padding-block: var(--size-1);
+  box-shadow: var(--shadow-1);
+  font-weight: var(--font-weight-5);
+
+  border: 0;
+  border-radius: var(--radius-2);
+
+  &:hover {
+    background-color: var(--gray-4);
+    box-shadow: var(--shadow-2);
+  }
+
+  &:active {
+    background-color: var(--gray-5);
+    box-shadow: var(--shadow-3);
+  }
+}

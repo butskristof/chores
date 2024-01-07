@@ -1,6 +1,6 @@
 /* the props */
-@import 'open-props/style';
+@import 'open-props/open-props.min.css';
 
 /* optional imports that use the props */
-/*@import 'open-props/normalize';*/
-/*@import 'open-props/buttons';*/
+/*@import 'open-props/normalize.min.css';*/
+/*@import 'open-props/buttons.min.css';*/
