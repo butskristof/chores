@@ -4,15 +4,7 @@
       <li>&lt; back</li>
     </ul>
     <ul>
-      <li>
-        <button
-          type="button"
-          role="link"
-        >
-          Log in
-        </button>
-      </li>
-      <li>
+      <li v-if="authStore.isAuthenticated">
         <details
           role="list"
           dir="rtl"
@@ -39,6 +31,14 @@
           </ul>
         </details>
       </li>
+      <li v-else>
+        <button
+          type="button"
+          role="link"
+        >
+          Log in
+        </button>
+      </li>
     </ul>
   </nav>
 </template>
@@ -46,6 +46,8 @@
 <script setup>
 import { routes } from '@/router/routes.js';
 import authService from '@/services/auth/auth.service.js';
+import { useAuthStore } from '@/stores/auth.js';
+const authStore = useAuthStore();
 </script>
 
 <style scoped lang="scss"></style>

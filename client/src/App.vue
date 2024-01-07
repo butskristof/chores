@@ -1,14 +1,8 @@
 <template>
   <AppHeader />
-  <div class="filler">
-    <div
-      v-for="i in new Array(500).keys()"
-      :key="i"
-    >
-      hey {{ i }}
-    </div>
+  <div class="container">
+    <RouterView />
   </div>
-  <RouterView />
 </template>
 
 <script setup>

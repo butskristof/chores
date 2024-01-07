@@ -1,7 +1,13 @@
 @import '@picocss/pico/scss/pico';
 
+:root {
+  --form-element-spacing-vertical: 0.25rem;
+  --form-element-spacing-horizontal: 0.5rem;
+}
+
 button {
   width: auto;
+  margin-bottom: initial;
 
   &[role='link'] {
     border: none;
@@ -52,4 +58,13 @@ li[role='list'] > ul {
       }
     }
   }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-block: initial;
 }
