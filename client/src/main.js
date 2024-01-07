@@ -2,7 +2,11 @@ import { createApp } from 'vue';
 import App from './App.vue';
 const app = createApp(App);
 
+//#region styles
+import '@/styles/reset.css';
+import '@/styles/pico.scss';
 import '@/styles/app.scss';
+//#endregion
 
 //#region router
 
