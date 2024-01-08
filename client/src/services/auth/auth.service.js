@@ -3,8 +3,6 @@ import { OIDC_AUTHORITY, OIDC_CLIENT_ID, OIDC_LOGGING } from '@/utilities/env';
 import { Log, UserManager, WebStorageStateStore } from 'oidc-client-ts';
 import { stringIsNullOrWhitespace } from '@/utilities/string';
 import { useAuthStore } from '@/stores/auth';
-import router from '@/router';
-import { routes } from '@/router/routes';
 
 if (OIDC_LOGGING) {
   Log.setLogger(console);
@@ -19,12 +17,8 @@ class AuthService {
   }
 
   #createUserManager = () => {
-    const redirectUri =
-      window.location.origin +
-      router.resolve({ name: routes.auth.children.oidc.children.signIn.name }).fullPath;
-    const silentRedirectUri =
-      window.location.origin +
-      router.resolve({ name: routes.auth.children.oidc.children.silentRenew.name }).fullPath;
+    const redirectUri = `${window.location.origin}/auth/oidc/sign-in`;
+    const silentRedirectUri = `${window.location.origin}/auth/oidc/silent-renew`;
 
     const settings = {
       authority: OIDC_AUTHORITY,
