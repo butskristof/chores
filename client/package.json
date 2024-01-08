@@ -19,6 +19,7 @@
     "@vee-validate/yup": "^4.12.4",
     "@vueuse/router": "^10.7.1",
     "axios": "^1.6.5",
+    "bulma": "^0.9.4",
     "date-fns": "^3.1.0",
     "oidc-client-ts": "^3.0.0-beta.0",
     "pinia": "^2.1.7",

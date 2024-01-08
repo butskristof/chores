@@ -3,6 +3,7 @@ import App from './App.vue';
 const app = createApp(App);
 
 import '@/styles/reset.css';
+import '@/styles/bulma.scss';
 import '@/styles/app.scss';
 
 //#region router
