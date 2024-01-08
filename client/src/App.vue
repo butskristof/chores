@@ -1,8 +1,6 @@
 <template>
   <AppHeader />
-  <div v-show="false">
-    <RouterView />
-  </div>
+  <RouterView />
 </template>
 
 <script setup>

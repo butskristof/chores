@@ -1,42 +1,45 @@
 <template>
-  <div class="header">
-    <div class="title">
-      <h2>Tags</h2>
+  <div class="container">
+    <div class="header">
+      <div class="title">
+        <h2>Tags</h2>
+      </div>
+      <div class="actions">
+        <button
+          type="button"
+          class="button is-primary"
+          @click="openEditDialog"
+        >
+          Create new
+        </button>
+      </div>
     </div>
-    <div class="actions">
-      <button
-        type="button"
-        @click="openEditDialog"
-      >
-        create new
-      </button>
-    </div>
-  </div>
 
-  <EditTag
-    v-if="showEditDialog"
-    :open="true"
-    :tag="tagForEdit"
-    @close="closeEditDialog"
-  />
-
-  <DeleteTag
-    v-if="tagForDelete != null"
-    :open="true"
-    :tag="tagForDelete"
-    @close="setTagForDelete(null)"
-  />
-
-  <QueryData
-    v-slot="{ data }"
-    :query="tagsQuery"
-  >
-    <TagsList
-      :tags="data.value.tags"
-      @edit="openEditDialog"
-      @delete="setTagForDelete"
+    <EditTag
+      v-if="showEditDialog"
+      :open="true"
+      :tag="tagForEdit"
+      @close="closeEditDialog"
     />
-  </QueryData>
+
+    <DeleteTag
+      v-if="tagForDelete != null"
+      :open="true"
+      :tag="tagForDelete"
+      @close="setTagForDelete(null)"
+    />
+
+    <QueryData
+      v-slot="{ data }"
+      :query="tagsQuery"
+    >
+      <TagsList
+        :tags="data.value.tags"
+        @edit="openEditDialog"
+        @delete="setTagForDelete"
+      />
+    </QueryData>
+  </div>
 </template>
 
 <script setup>

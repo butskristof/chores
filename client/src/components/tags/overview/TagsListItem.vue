@@ -1,7 +1,7 @@
 <template>
   <div class="tags-list-item">
     <div class="left">
-      <div class="name">{{ tag.name }}</div>
+      <div class="name tag">{{ tag.name }}</div>
       <div class="usage">
         Used by
         <router-link to="#"> {{ tag.choresCount }} chores </router-link>
@@ -10,9 +10,10 @@
     <div class="right">
       <button
         type="button"
+        class="button is-primary"
         @click="emit('edit')"
       >
-        edit
+        Edit
       </button>
       <Tippy
         :content="canDelete ? null : 'Tags which are referenced by chores cannot be deleted'"
@@ -20,10 +21,11 @@
       >
         <button
           type="button"
+          class="button is-danger"
           :disabled="!canDelete"
           @click="emit('delete')"
         >
-          delete
+          Delete
         </button>
       </Tippy>
     </div>
