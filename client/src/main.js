@@ -2,7 +2,8 @@ import { createApp } from 'vue';
 import App from './App.vue';
 const app = createApp(App);
 
-import '@/styles/reset.css';
+// import '@/styles/reset.css';
+import '@/styles/spruce/_index.scss';
 import '@/styles/spruce.scss';
 import '@/styles/app.scss';
 

@@ -1,2 +1,140 @@
-@use 'sprucecss/scss/spruce';
-@include spruce.generate-styles;
+@use 'sprucecss/scss/spruce' as *;
+//@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap');
+//@forward 'spruce/config';
+
+//@include generate-styles;
+
+.container {
+  --inline-size: #{config('container-inline-size', $layout, false)};
+  --gap: #{spacer-clamp('m', 'l')};
+
+  @include layout-center(var(--gap), var(--inline-size));
+
+  &--wide {
+    --inline-size: 100%;
+  }
+
+  &--narrow {
+    --inline-size: 50rem;
+  }
+}
+
+.site-navigation {
+  --inset-block-start: 6rem;
+  font-family: config('font-family-heading', $typography);
+
+  &__btn {
+    @include breakpoint('md') {
+      display: none;
+    }
+
+    &[aria-expanded='true'] + ul {
+      display: flex;
+    }
+  }
+
+  ul {
+    background-color: color('background');
+    display: none;
+    flex-direction: column;
+    gap: spacer('s');
+    inset: var(--inset-block-start) 0 auto 0;
+    list-style: none;
+    margin: 0;
+    padding-block: spacer('m');
+    padding-inline: spacer-clamp('m', 'l');
+    position: absolute;
+
+    @include breakpoint('md') {
+      align-items: center;
+      background-color: transparent;
+      display: flex !important;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: spacer('m');
+      inset: auto;
+      padding: 0;
+      position: relative;
+    }
+
+    @include breakpoint('lg') {
+      gap: spacer('l');
+    }
+  }
+
+  li {
+    margin-block: 0;
+  }
+
+  a {
+    color: color('heading');
+    text-decoration: none;
+
+    &:hover {
+      color: color('primary');
+    }
+
+    &[aria-current='page'] {
+      font-weight: 700;
+    }
+  }
+}
+
+.site-header {
+  position: relative;
+
+  &__inner {
+    --block-size: 6rem;
+    align-items: center;
+    block-size: var(--block-size);
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacer-clamp('s', 'l');
+    justify-content: space-between;
+  }
+
+  &__column {
+    align-items: center;
+    display: flex;
+    flex-grow: 1;
+    gap: spacer-clamp('s', 'l');
+  }
+
+  &__actions {
+    align-items: center;
+    display: flex;
+    gap: spacer-clamp('s', 'l');
+  }
+
+  &__logo {
+    --dimension: 2rem;
+    block-size: var(--dimension);
+    display: inline-flex;
+    inline-size: var(--dimension);
+  }
+
+  &__email {
+    display: none;
+    text-decoration: none;
+
+    @include breakpoint('sm') {
+      display: inline-block;
+    }
+  }
+
+  &__navigation {
+    margin-inline-start: auto;
+
+    @include breakpoint('md') {
+      margin-inline-start: 0;
+    }
+
+    ul {
+      border-block-start: 1px solid color('border');
+
+      @include breakpoint('sm') {
+        border-block: none;
+      }
+    }
+  }
+}
