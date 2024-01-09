@@ -35,18 +35,18 @@ import 'primevue/resources/themes/lara-light-green/theme.css';
 
 //#region components
 
-import Menubar from 'primevue/menubar';
-// eslint-disable-next-line vue/multi-word-component-names
-app.component('Menubar', Menubar);
-import Avatar from 'primevue/avatar';
-// eslint-disable-next-line vue/multi-word-component-names
-app.component('Avatar', Avatar);
-import Menu from 'primevue/menu';
-// eslint-disable-next-line vue/multi-word-component-names,vue/no-reserved-component-names
-app.component('Menu', Menu);
-import Button from 'primevue/button';
-// eslint-disable-next-line vue/multi-word-component-names,vue/no-reserved-component-names
-app.component('Button', Button);
+// import Menubar from 'primevue/menubar';
+// // eslint-disable-next-line vue/multi-word-component-names
+// app.component('Menubar', Menubar);
+// import Avatar from 'primevue/avatar';
+// // eslint-disable-next-line vue/multi-word-component-names
+// app.component('Avatar', Avatar);
+// import Menu from 'primevue/menu';
+// // eslint-disable-next-line vue/multi-word-component-names,vue/no-reserved-component-names
+// app.component('Menu', Menu);
+// import Button from 'primevue/button';
+// // eslint-disable-next-line vue/multi-word-component-names,vue/no-reserved-component-names
+// app.component('Button', Button);
 
 //#endregion
 
