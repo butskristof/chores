@@ -22,6 +22,8 @@
     "date-fns": "^3.1.0",
     "oidc-client-ts": "^3.0.0-beta.0",
     "pinia": "^2.1.7",
+    "primeicons": "^6.0.1",
+    "primevue": "^3.46.0",
     "vee-validate": "^4.12.4",
     "vue": "^3.4.6",
     "vue-multiselect": "^3.0.0-beta.3",

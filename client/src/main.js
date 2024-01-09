@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import App from './App.vue';
 const app = createApp(App);
 
+import '@/styles/reset.css';
 import '@/styles/app.scss';
 
 //#region router
@@ -23,20 +24,14 @@ import { VueQueryPlugin } from '@tanstack/vue-query';
 app.use(VueQueryPlugin);
 //#endregion
 
-//#region tippy
-// import VueTippy from 'vue-tippy';
-import 'tippy.js/dist/tippy.css';
-// app.use(VueTippy, {
-//   component: 'tippy',
-// });
-//#endregion
-
-//#region toast
-import 'vue-toastification/dist/index.css';
-import Toast, { POSITION } from 'vue-toastification';
-app.use(Toast, {
-  position: POSITION.BOTTOM_RIGHT,
+//#region primevue
+import PrimeVue from 'primevue/config';
+app.use(PrimeVue, {
+  ripple: true,
 });
+
+import 'primeicons/primeicons.css';
+import 'primevue/resources/themes/lara-light-green/theme.css';
 //#endregion
 
 //#region uid
@@ -46,10 +41,6 @@ app
   // .use(UidPlugin)
   .directive('uid', Uid);
 
-//#endregion
-
-//#region multiselect
-import 'vue-multiselect/dist/vue-multiselect.css';
 //#endregion
 
 app.mount('#app');
