@@ -8,13 +8,10 @@
       <AppSidebar />
     </div>
     <div class="layout-main-container">
-      <div
-        v-show="false"
-        class="layout-main"
-      >
+      <div class="layout-main">
         <router-view></router-view>
       </div>
-      <AppFooter />
+      <AppFooter v-if="false" />
     </div>
     <AppConfig />
     <div class="layout-mask"></div>
