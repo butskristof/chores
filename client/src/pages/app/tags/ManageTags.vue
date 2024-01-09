@@ -41,7 +41,7 @@
 
 <script setup>
 import TagsList from '@/components/tags/overview/TagsList.vue';
-import { useChoresApiTags } from '@/composables/queries/chores-api';
+import { useChoresApiTags } from '@/composables/queries/chores-api.js';
 import QueryData from '@/components/common/QueryData.vue';
 import { ref } from 'vue';
 import DeleteTag from '@/components/tags/overview/DeleteTag.vue';

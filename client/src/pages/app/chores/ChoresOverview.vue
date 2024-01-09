@@ -27,7 +27,7 @@
 
 <script setup>
 import ChoresList from '@/components/chores/overview/ChoresList.vue';
-import { useChoresApiChores } from '@/composables/queries/chores-api';
+import { useChoresApiChores } from '@/composables/queries/chores-api.js';
 import QueryData from '@/components/common/QueryData.vue';
 import { ref } from 'vue';
 import EditChore from '@/components/chores/common/EditChore.vue';

@@ -5,7 +5,7 @@ import InputSwitch from 'primevue/inputswitch';
 import Sidebar from 'primevue/sidebar';
 
 import { ref } from 'vue';
-import { useLayout } from '@/layout/composables/layout';
+import { useLayout } from '@/layout/app/composables/layout.js';
 
 defineProps({
   simple: {

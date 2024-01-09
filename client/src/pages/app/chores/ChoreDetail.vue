@@ -60,11 +60,11 @@
 <script setup>
 import { useRouteParams } from '@vueuse/router';
 import { computed, ref } from 'vue';
-import { useChoresApiChore } from '@/composables/queries/chores-api';
+import { useChoresApiChore } from '@/composables/queries/chores-api.js';
 import EditChore from '@/components/chores/common/EditChore.vue';
 import DeleteChore from '@/components/chores/detail/DeleteChore.vue';
 import { useRouter } from 'vue-router';
-import { routes } from '@/router/routes';
+import { routes } from '@/router/routes.js';
 import ChoreNotes from '@/components/chores/detail/ChoreNotes.vue';
 import ChoreIterations from '@/components/chores/detail/ChoreIterations.vue';
 import ChoreLastIteration from '@/components/chores/common/ChoreLastIteration.vue';
@@ -115,12 +115,5 @@ const closeDelete = (deleted) => {
 hr {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
-}
-
-ul {
-  list-style: circle;
-  li {
-    //display: block;
-  }
 }
 </style>
