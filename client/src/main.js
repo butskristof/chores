@@ -2,9 +2,6 @@ import { createApp } from 'vue';
 import App from './App.vue';
 const app = createApp(App);
 
-import '@/styles/reset.css';
-import '@/styles/app.scss';
-
 //#region router
 
 import router from './router';
@@ -27,11 +24,24 @@ app.use(VueQueryPlugin);
 //#region primevue
 import PrimeVue from 'primevue/config';
 app.use(PrimeVue, {
-  ripple: true,
+  // ripple: true,
 });
 
 import 'primeicons/primeicons.css';
 import 'primevue/resources/themes/lara-light-green/theme.css';
+
+import Menubar from 'primevue/menubar';
+// eslint-disable-next-line vue/multi-word-component-names
+app.component('Menubar', Menubar);
+import Avatar from 'primevue/avatar';
+// eslint-disable-next-line vue/multi-word-component-names
+app.component('Avatar', Avatar);
+import Menu from 'primevue/menu';
+// eslint-disable-next-line vue/multi-word-component-names,vue/no-reserved-component-names
+app.component('Menu', Menu);
+import Button from 'primevue/button';
+// eslint-disable-next-line vue/multi-word-component-names,vue/no-reserved-component-names
+app.component('Button', Button);
 //#endregion
 
 //#region uid
