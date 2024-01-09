@@ -72,7 +72,10 @@ class AuthService {
   logout = (silent = false) =>
     silent ? this.#userManager.removeUser() : this.#userManager.signoutRedirect();
 
-  getUser = () => this.#userManager.getUser();
+  getUser = async () => {
+    const user = await this.#userManager.getUser();
+    return user != null && user.expired !== true ? user : null;
+  };
 }
 
 export default new AuthService();

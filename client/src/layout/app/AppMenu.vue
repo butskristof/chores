@@ -4,11 +4,11 @@
       v-for="(item, i) in menuItems"
       :key="item"
     >
-      <app-menu-item
+      <AppMenuItem
         v-if="!item.separator"
         :item="item"
         :index="i"
-      ></app-menu-item>
+      />
       <li
         v-if="item.separator"
         class="menu-separator"
@@ -27,7 +27,7 @@ const menuItems = ref([
     items: [
       {
         label: 'Chores',
-        icon: 'pi pi-check',
+        icon: 'pi pi-check-square',
         to: '/chores',
       },
       {

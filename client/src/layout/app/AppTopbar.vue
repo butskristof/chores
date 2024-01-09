@@ -2,7 +2,7 @@
   <div class="layout-topbar">
     <button
       class="p-link layout-menu-button layout-topbar-button"
-      @click="onMenuToggle()"
+      @click="onMenuToggle"
     >
       <i class="pi pi-bars"></i>
     </button>
@@ -20,7 +20,7 @@
 
     <button
       class="p-link layout-topbar-menu-button layout-topbar-button"
-      @click="onTopBarMenuButton()"
+      @click="onTopBarMenuButton"
     >
       <i class="pi pi-ellipsis-v"></i>
     </button>
@@ -59,7 +59,7 @@ onBeforeUnmount(() => {
 });
 
 const logoUrl = computed(() => {
-  return `layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
+  return `layout/images/${layoutConfig.darkTheme.value ? 'chores-white' : 'chores-dark'}.svg`;
 });
 
 const onTopBarMenuButton = () => {

@@ -26,12 +26,18 @@ app.use(VueQueryPlugin);
 //#region primevue
 
 import PrimeVue from 'primevue/config';
+import ToastService from 'primevue/toastservice';
+import DialogService from 'primevue/dialogservice';
+import ConfirmationService from 'primevue/confirmationservice';
+
 app.use(PrimeVue, {
   // ripple: true,
 });
+app.use(ToastService);
+app.use(DialogService);
+app.use(ConfirmationService);
 
 import '@/styles/prime.scss';
-import 'primevue/resources/themes/lara-light-green/theme.css';
 
 //#region components
 

@@ -3,9 +3,9 @@
     class="layout-wrapper"
     :class="containerClass"
   >
-    <app-topbar></app-topbar>
+    <AppTopbar />
     <div class="layout-sidebar">
-      <app-sidebar></app-sidebar>
+      <AppSidebar />
     </div>
     <div class="layout-main-container">
       <div
@@ -14,9 +14,9 @@
       >
         <router-view></router-view>
       </div>
-      <app-footer></app-footer>
+      <AppFooter />
     </div>
-    <app-config></app-config>
+    <AppConfig />
     <div class="layout-mask"></div>
   </div>
 </template>
