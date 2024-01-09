@@ -27,8 +27,9 @@ app.use(PrimeVue, {
   // ripple: true,
 });
 
-import 'primeicons/primeicons.css';
+// import 'primeicons/primeicons.css';
 import 'primevue/resources/themes/lara-light-green/theme.css';
+import '@/styles/styles.scss';
 
 import Menubar from 'primevue/menubar';
 // eslint-disable-next-line vue/multi-word-component-names
