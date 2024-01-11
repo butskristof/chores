@@ -2,6 +2,7 @@
   <Dialog
     :visible="true"
     modal
+    :draggable="false"
     :header="isEdit ? 'Edit tag' : 'Create new tag'"
     :style="{ width: '50rem' }"
     :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
@@ -29,7 +30,7 @@
           <InlineMessage
             v-if="mutation.isSuccess.value === true"
             severity="success"
-            >Tag was saved successfully</InlineMessage
+            >Tag saved</InlineMessage
           >
         </div>
         <div class="actions">

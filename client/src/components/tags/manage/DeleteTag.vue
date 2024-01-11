@@ -1,16 +1,58 @@
 <template>
-  <Toast />
-  <ConfirmDialog />
+  <Dialog
+    :visible="true"
+    modal
+    :draggable="false"
+    :style="{ width: '50rem' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+    :closable="false"
+    @update:visible="updateVisible"
+  >
+    <div
+      v-if="mutation.isSuccess.value === true"
+      class="success"
+    >
+      <InlineMessage severity="success">Tag deleted</InlineMessage>
+    </div>
+    <p v-else>
+      Delete tag
+      <strong>{{ tag.name }}</strong>
+      ?
+    </p>
+    <template
+      v-if="mutation.isSuccess.value !== true"
+      #footer
+    >
+      <div class="actions">
+        <Button
+          type="button"
+          label="No, keep tag"
+          icon="pi pi-times"
+          class="p-button-text"
+          :disabled="mutation.isPending.value === true"
+          @click="emit('close')"
+        />
+        <Button
+          type="button"
+          :label="mutation.isPending.value === true ? 'Deleting...' : 'Yes, delete'"
+          icon="pi pi-trash"
+          severity="danger"
+          :loading="mutation.isPending.value === true"
+          :disabled="mutation.isPending.value === true"
+          @click="deleteTag"
+        />
+      </div>
+    </template>
+  </Dialog>
 </template>
 
 <script setup>
-import Toast from 'primevue/toast';
-import ConfirmDialog from 'primevue/confirmdialog';
 import { useQueryClient } from '@tanstack/vue-query';
 import { useChoreApiDeleteTag } from '@/composables/queries/chores-api.js';
-import { useConfirm } from 'primevue/useconfirm';
-import { onMounted } from 'vue';
 import { useToast } from 'vue-toastification';
+import Dialog from 'primevue/dialog';
+import Button from 'primevue/button';
+import InlineMessage from 'primevue/inlinemessage';
 
 const props = defineProps({
   tag: {
@@ -20,7 +62,6 @@ const props = defineProps({
 });
 const emit = defineEmits(['close']);
 
-const confirm = useConfirm();
 const queryClient = useQueryClient();
 const toast = useToast();
 
@@ -36,16 +77,24 @@ const deleteTag = async () => {
   }
 };
 
-onMounted(() => {
-  confirm.require({
-    header: 'Delete tag?',
-    icon: 'pi pi-danger',
-    rejectClass: 'p-button-text p-button-text',
-    acceptClass: 'p-button-danger p-button-text',
-    accept: deleteTag,
-    reject: () => emit('close'),
-  });
-});
+const updateVisible = (value) => {
+  if (value === false) emit('close');
+};
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+p {
+  text-align: center;
+  font-size: 1.25rem;
+}
+.actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.success {
+  display: flex;
+  justify-content: center;
+}
+</style>

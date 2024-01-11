@@ -1,84 +1,129 @@
 <template>
-  <div class="header">
-    <div class="title">
-      <h2>Tags</h2>
-    </div>
-    <div class="actions">
-      <button
-        type="button"
-        @click="openEditDialog"
-      >
-        create new
-      </button>
-    </div>
-  </div>
+  <div class="card">
+    <Toolbar class="header">
+      <template #start>
+        <h1>Manage tags</h1>
+      </template>
+      <template #end>
+        <Button
+          label="New"
+          icon="pi pi-plus"
+          class="p-button-success"
+          @click="openEditDialog"
+        />
+      </template>
+    </Toolbar>
 
-  <EditTag
-    v-if="showEditDialog"
-    :open="true"
-    :tag="tagForEdit"
-    @close="closeEditDialog"
-  />
+    <DataTable
+      striped-rows
+      removable-sort
+      :value="tags"
+      :loading="tagsQuery.isLoading.value"
+    >
+      <Column
+        field="name"
+        header="Name"
+        :sortable="true"
+      />
+      <Column
+        field="choresCount"
+        header="Used by # chores"
+        :sortable="true"
+      />
+      <Column header-style="min-width: 2rem;">
+        <template #body="slotProps">
+          <div class="row-actions">
+            <Button
+              icon="pi pi-pencil"
+              class="p-button-rounded p-button-success"
+              @click="openEditDialog(slotProps.data.id)"
+            />
+            <Tippy
+              :content="
+                slotProps.data.choresCount > 0
+                  ? 'Tags which are referenced by chores cannot be deleted'
+                  : null
+              "
+              placement="auto-end"
+            >
+              <Button
+                icon="pi pi-trash"
+                class="p-button-rounded p-button-danger"
+                :disabled="slotProps.data.choresCount > 0"
+                @click="setTagForDelete(slotProps.data.id)"
+              />
+            </Tippy>
+          </div>
+        </template>
+      </Column>
+    </DataTable>
 
-  <DeleteTag
-    v-if="tagForDelete != null"
-    :open="true"
-    :tag="tagForDelete"
-    @close="setTagForDelete(null)"
-  />
-
-  <QueryData
-    v-slot="{ data }"
-    :query="tagsQuery"
-  >
-    <TagsList
-      :tags="data.value.tags"
-      @edit="openEditDialog"
-      @delete="setTagForDelete"
+    <EditTag
+      v-if="showEditDialog"
+      :tag="tagForEdit"
+      @close="closeEditDialog"
     />
-  </QueryData>
+
+    <DeleteTag
+      v-if="tagForDelete != null"
+      :tag="tagForDelete"
+      @close="setTagForDelete(null)"
+    />
+  </div>
 </template>
 
 <script setup>
-import TagsList from '@/components/tags/overview/TagsList.vue';
+import Toolbar from 'primevue/toolbar';
+import Button from 'primevue/button';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
 import { useChoresApiTags } from '@/composables/queries/chores-api.js';
-import QueryData from '@/components/common/QueryData.vue';
-import { ref } from 'vue';
-import DeleteTag from '@/components/tags/overview/DeleteTag.vue';
-import EditTag from '@/components/tags/overview/EditTag.vue';
+import { computed, ref } from 'vue';
+import EditTag from '@/components/tags/manage/EditTag.vue';
+import DeleteTag from '@/components/tags/manage/DeleteTag.vue';
+import { Tippy } from 'vue-tippy';
 
 const tagsQuery = useChoresApiTags();
+const tags = computed(() => tagsQuery.data.value?.tags ?? []);
 
 //#region edit
+
 const showEditDialog = ref(false);
 const tagForEdit = ref(null);
 const openEditDialog = (id = null) => {
-  tagForEdit.value = id == null ? null : tagsQuery.data.value.tags?.find((t) => t.id === id);
+  tagForEdit.value = id == null ? null : tags.value.find((t) => t.id === id);
   showEditDialog.value = true;
 };
 const closeEditDialog = () => {
   showEditDialog.value = false;
   tagForEdit.value = null;
 };
+
 //#endregion
 
 //#region delete
 
 const tagForDelete = ref(null);
-const setTagForDelete = (id) => {
-  tagForDelete.value = id == null ? null : tagsQuery.data.value.tags?.find((t) => t.id === id);
-};
+const setTagForDelete = (id) =>
+  (tagForDelete.value = id == null ? null : tags.value.find((t) => t.id === id));
 
 //#endregion
 </script>
 
 <style scoped lang="scss">
 .header {
+  margin-bottom: 2rem;
+
+  h1 {
+    font-size: 1.75rem;
+    margin-block: 0;
+  }
+}
+
+.row-actions {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-
-  margin-bottom: 1rem;
+  justify-content: flex-end;
+  gap: 0.5rem;
 }
 </style>

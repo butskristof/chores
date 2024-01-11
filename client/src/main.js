@@ -26,14 +26,12 @@ app.use(VueQueryPlugin);
 //#region primevue
 
 import PrimeVue from 'primevue/config';
-import ToastService from 'primevue/toastservice';
 import DialogService from 'primevue/dialogservice';
 import ConfirmationService from 'primevue/confirmationservice';
 
 app.use(PrimeVue, {
   // ripple: true,
 });
-app.use(ToastService);
 app.use(DialogService);
 app.use(ConfirmationService);
 
@@ -59,11 +57,21 @@ import '@/styles/prime.scss';
 //#endregion
 
 //#region toast
+
 import 'vue-toastification/dist/index.css';
 import Toast, { POSITION } from 'vue-toastification';
 app.use(Toast, {
   position: POSITION.BOTTOM_RIGHT,
 });
+
+//#endregion
+
+//#region tippy
+// import VueTippy from 'vue-tippy';
+import 'tippy.js/dist/tippy.css';
+// app.use(VueTippy, {
+//   component: 'tippy',
+// });
 //#endregion
 
 //#region uid

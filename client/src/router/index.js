@@ -40,7 +40,7 @@ const router = createRouter({
         {
           name: routes.tags.name,
           path: routes.tags.path,
-          component: () => import('@/pages/app/tags/ManageTags2.vue'),
+          component: () => import('@/pages/app/tags/ManageTags.vue'),
         },
       ],
     },
