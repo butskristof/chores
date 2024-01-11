@@ -1,6 +1,6 @@
 <template>
   <div class="chores-list">
-    <ChoresListItem
+    <ChoreCard
       v-for="chore in sorted"
       :key="chore.id"
       :chore="chore"
@@ -9,9 +9,9 @@
 </template>
 
 <script setup>
-import ChoresListItem from '@/components/chores/overview/ChoresListItem.vue';
 import { getDueDays } from '@/utilities/chores.js';
 import { computed } from 'vue';
+import ChoreCard from '@/components/chores/overview/ChoreCard.vue';
 
 const props = defineProps({
   chores: {
@@ -23,4 +23,12 @@ const props = defineProps({
 const sorted = computed(() => props.chores.toSorted((a, b) => getDueDays(a) - getDueDays(b)));
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.chores-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: flex-start;
+}
+</style>

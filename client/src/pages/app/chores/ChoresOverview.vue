@@ -1,14 +1,20 @@
 <template>
-  <div class="header">
-    <h2>Chores</h2>
-    <div class="actions">
-      <button
-        type="button"
-        @click="showCreateDialog = true"
-      >
-        create new
-      </button>
-    </div>
+  <div class="card">
+    <Toolbar class="header">
+      <template #start>
+        <h1>Chores</h1>
+      </template>
+      <template #end>
+        <Button
+          label="New"
+          icon="pi pi-plus"
+          class="p-button-success"
+          @click="showCreateDialog = true"
+        />
+      </template>
+    </Toolbar>
+
+    <ChoresList :chores="chores" />
   </div>
 
   <EditChore
@@ -16,36 +22,33 @@
     :open="true"
     @close="showCreateDialog = false"
   />
-
-  <QueryData
-    v-slot="{ data }"
-    :query="choresQuery"
-  >
-    <ChoresList :chores="data.value.chores" />
-  </QueryData>
 </template>
 
 <script setup>
 import ChoresList from '@/components/chores/overview/ChoresList.vue';
 import { useChoresApiChores } from '@/composables/queries/chores-api.js';
-import QueryData from '@/components/common/QueryData.vue';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import EditChore from '@/components/chores/common/EditChore.vue';
+import Toolbar from 'primevue/toolbar';
+import Button from 'primevue/button';
 
 const choresQuery = useChoresApiChores();
+const chores = computed(() => choresQuery.data.value?.chores ?? []);
 
 //#region create
+
 const showCreateDialog = ref(false);
+
 //#endregion
 </script>
 
 <style scoped lang="scss">
 .header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  margin-bottom: 2rem;
 
-  margin-bottom: 1rem;
+  h1 {
+    font-size: 1.75rem;
+    margin-block: 0;
+  }
 }
 </style>
