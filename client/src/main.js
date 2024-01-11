@@ -58,6 +58,14 @@ import '@/styles/prime.scss';
 
 //#endregion
 
+//#region toast
+import 'vue-toastification/dist/index.css';
+import Toast, { POSITION } from 'vue-toastification';
+app.use(Toast, {
+  position: POSITION.BOTTOM_RIGHT,
+});
+//#endregion
+
 //#region uid
 
 import { Uid } from '@shimyshack/uid';

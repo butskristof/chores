@@ -2,7 +2,7 @@
   <div class="card">
     <Toolbar class="header">
       <template #start>
-        <h3>Manage tags</h3>
+        <h1>Manage tags</h1>
       </template>
       <template #end>
         <Button
@@ -31,22 +31,34 @@
         :sortable="true"
       />
       <Column header-style="min-width: 10rem;">
-        <template #body>
+        <template #body="slotProps">
           <div class="row-actions">
             <Button
               icon="pi pi-pencil"
               class="p-button-rounded p-button-success"
+              @click="openEditDialog(slotProps.data.id)"
             />
             <Button
               icon="pi pi-trash"
               class="p-button-rounded p-button-danger"
+              @click="setTagForDelete(slotProps.data.id)"
             />
           </div>
         </template>
       </Column>
     </DataTable>
 
-    <EditTag v-model:visible="showEditDialog" />
+    <EditTag
+      v-if="showEditDialog"
+      :tag="tagForEdit"
+      @close="closeEditDialog"
+    />
+
+    <DeleteTag
+      v-if="tagForDelete != null"
+      :tag="tagForDelete"
+      @close="setTagForDelete(null)"
+    />
   </div>
 </template>
 
@@ -58,22 +70,31 @@ import Column from 'primevue/column';
 import { useChoresApiTags } from '@/composables/queries/chores-api.js';
 import { computed, ref } from 'vue';
 import EditTag from '@/components/tags/manage/EditTag.vue';
+import DeleteTag from '@/components/tags/manage/DeleteTag.vue';
 
 const tagsQuery = useChoresApiTags();
 const tags = computed(() => tagsQuery.data.value?.tags ?? []);
 
 //#region edit
 
-const showEditDialog = ref(true);
+const showEditDialog = ref(false);
 const tagForEdit = ref(null);
 const openEditDialog = (id = null) => {
   tagForEdit.value = id == null ? null : tags.value.find((t) => t.id === id);
   showEditDialog.value = true;
 };
-// const closeEditDialog = () => {
-//   showEditDialog.value = false;
-//   tagForEdit.value = null;
-// };
+const closeEditDialog = () => {
+  showEditDialog.value = false;
+  tagForEdit.value = null;
+};
+
+//#endregion
+
+//#region delete
+
+const tagForDelete = ref(null);
+const setTagForDelete = (id) =>
+  (tagForDelete.value = id == null ? null : tags.value.find((t) => t.id === id));
 
 //#endregion
 </script>
@@ -82,7 +103,8 @@ const openEditDialog = (id = null) => {
 .header {
   margin-bottom: 2rem;
 
-  h3 {
+  h1 {
+    font-size: 1.75rem;
     margin-block: 0;
   }
 }

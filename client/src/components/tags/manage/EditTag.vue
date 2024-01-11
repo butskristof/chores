@@ -1,8 +1,10 @@
 <template>
   <Dialog
-    :visible="visible"
+    :visible="true"
     modal
     :header="isEdit ? 'Edit tag' : 'Create new tag'"
+    :style="{ width: '50rem' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
     @update:visible="updateVisible"
   >
     <form @submit="save">
@@ -10,19 +12,35 @@
         <label for="name">Name</label>
         <InputText
           id="name"
-          v-model="name.value.value"
+          v-model.trim="name.value.value"
+          autofocus
           type="text"
-          :disabled="formDisabled"
+          :disabled="isFormDisabled"
+          :class="{ 'p-invalid': name.errorMessage.value }"
         />
+        <small
+          v-if="name.errorMessage"
+          class="p-error"
+          >{{ name.errorMessage }}</small
+        >
       </div>
-      <div class="actions">
-        <Button
-          type="submit"
-          :label="isEdit ? 'Create' : 'Save changes'"
-          icon="pi pi-save"
-          :disabled="formDisabled"
-          :loading="mutation.isPending.value"
-        />
+      <div class="footer">
+        <div class="result">
+          <InlineMessage
+            v-if="mutation.isSuccess.value === true"
+            severity="success"
+            >Tag was saved successfully</InlineMessage
+          >
+        </div>
+        <div class="actions">
+          <Button
+            type="submit"
+            label="Save"
+            icon="pi pi-save"
+            :disabled="isFormDisabled"
+            :loading="mutation.isPending.value"
+          />
+        </div>
       </div>
     </form>
   </Dialog>
@@ -38,6 +56,7 @@ import * as yup from 'yup';
 import { useChoresApiUpsertTag } from '@/composables/queries/chores-api.js';
 import { useQueryClient } from '@tanstack/vue-query';
 import InputText from 'primevue/inputtext';
+import InlineMessage from 'primevue/inlinemessage';
 
 const props = defineProps({
   tag: {
@@ -45,7 +64,7 @@ const props = defineProps({
     default: () => null,
   },
 });
-const visible = defineModel('visible', { type: Boolean });
+const emit = defineEmits(['close']);
 const isEdit = computed(() => props.tag != null);
 
 const queryClient = useQueryClient();
@@ -63,7 +82,7 @@ const { handleSubmit, meta } = useForm({
   },
 });
 
-const formDisabled = computed(
+const isFormDisabled = computed(
   () => mutation.isPending.value === true || mutation.isSuccess.value === true,
 );
 
@@ -82,8 +101,6 @@ const save = handleSubmit.withControlled(async (values) => {
     };
     if (isEdit.value === true) payload.id = props.tag.id;
     await mutation.mutateAsync(payload);
-    // toast.success(isEdit.value === true ? 'Tag updated' : 'Tag created');
-    // tryClose(true);
   } catch (e) {
     console.error(e);
   }
@@ -92,28 +109,41 @@ const save = handleSubmit.withControlled(async (values) => {
 //#endregion
 
 const updateVisible = (value) => {
-  if (value === true) visible.value = true;
-  else tryClose();
+  if (value === false) tryClose();
 };
 const tryClose = (force = false) => {
   let close = true;
-  if (!force && meta.value.dirty)
+  if (!force && meta.value.dirty && mutation.isSuccess.value !== true)
     close = confirm('There may be unsaved changes, are you sure you want to stop editing?');
-  if (close) visible.value = false;
+  if (close) emit('close');
 };
 </script>
 
 <style scoped lang="scss">
 form {
   .field {
+    margin-bottom: 1rem;
+
     label {
       display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    :deep(input) {
+      width: 100%;
     }
   }
-  .actions {
+
+  .footer {
     display: flex;
     flex-direction: row;
-    justify-content: flex-end;
+    justify-content: space-between;
+
+    .actions {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+    }
   }
 }
 </style>
