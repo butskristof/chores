@@ -1,59 +1,61 @@
 <template>
   <template v-if="chore">
-    <div class="header">
-      <div class="left">
-        <h1>{{ chore.name }}</h1>
-      </div>
-      <div class="actions">
-        <button
-          type="button"
-          @click="showEditTags = true"
-        >
-          edit tags
-        </button>
-        <EditChoreTags
-          v-if="showEditTags"
-          :open="true"
-          :chore="chore"
-          @close="showEditTags = false"
-        />
-        <button
-          type="button"
-          @click="showEdit = true"
-        >
-          edit
-        </button>
-        <EditChore
-          v-if="showEdit"
-          :open="true"
-          :chore="chore"
-          @close="showEdit = false"
-        />
-        <button
-          type="button"
-          @click="showDelete = true"
-        >
-          delete
-        </button>
-        <DeleteChore
-          v-if="showDelete"
-          :open="true"
-          :chore="chore"
-          @close="closeDelete"
-        />
-      </div>
+    <div class="card">
+      <Toolbar class="header">
+        <template #start>
+          <h1>{{ chore.name }}</h1>
+        </template>
+        <template #end>
+          <Button
+            type="button"
+            @click="showEditTags = true"
+          >
+            edit tags
+          </Button>
+          <Button
+            type="button"
+            @click="showEdit = true"
+          >
+            edit
+          </Button>
+          <Button
+            type="button"
+            @click="showDelete = true"
+          >
+            delete
+          </Button>
+          <EditChoreTags
+            v-if="showEditTags"
+            :open="true"
+            :chore="chore"
+            @close="showEditTags = false"
+          />
+          <EditChore
+            v-if="showEdit"
+            :open="true"
+            :chore="chore"
+            @close="showEdit = false"
+          />
+          <DeleteChore
+            v-if="showDelete"
+            :open="true"
+            :chore="chore"
+            @close="closeDelete"
+          />
+        </template>
+      </Toolbar>
+      <p>Should happen every {{ chore.interval }} days</p>
+      <ChoreLastIteration :chore="chore" />
+      <p>Tags: {{ chore.tags.map((t) => t.name) }}</p>
     </div>
-    <p>Should happen every {{ chore.interval }} days</p>
-    <ChoreLastIteration :chore="chore" />
-    <p>Tags: {{ chore.tags.map((t) => t.name) }}</p>
 
-    <hr />
+    <div class="card">
+      <ChoreNotes :chore="chore" />
+    </div>
 
-    <ChoreNotes :chore="chore" />
-
-    <hr />
-
-    <ChoreIterations :chore="chore" />
+    <div class="card">
+      <ChoreIterations :chore="chore" />
+    </div>
   </template>
 </template>
 
@@ -69,6 +71,8 @@ import ChoreNotes from '@/components/chores/detail/ChoreNotes.vue';
 import ChoreIterations from '@/components/chores/detail/ChoreIterations.vue';
 import ChoreLastIteration from '@/components/chores/common/ChoreLastIteration.vue';
 import EditChoreTags from '@/components/chores/detail/EditChoreTags.vue';
+import Toolbar from 'primevue/toolbar';
+import Button from 'primevue/button';
 
 const choreId = useRouteParams('id');
 const choreQuery = useChoresApiChore(choreId);
@@ -97,18 +101,11 @@ const closeDelete = (deleted) => {
 
 <style scoped lang="scss">
 .header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap-reverse;
+  margin-bottom: 2rem;
 
-  .actions {
-    display: flex;
-    flex-direction: row;
-    gap: 0.5rem;
-    align-items: flex-start;
-    margin-left: auto;
+  h1 {
+    font-size: 1.75rem;
+    margin-block: 0;
   }
 }
 

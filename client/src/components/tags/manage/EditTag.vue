@@ -25,6 +25,7 @@
           >{{ name.errorMessage }}</small
         >
       </div>
+
       <div class="footer">
         <div class="result">
           <InlineMessage
