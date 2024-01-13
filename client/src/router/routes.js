@@ -1,11 +1,11 @@
 export const routes = {
   home: {
     name: 'home',
-    path: '/',
+    path: '',
   },
   chores: {
     name: 'chores',
-    path: '/chores',
+    path: 'chores',
     children: {
       overview: {
         name: 'chores.overview',
@@ -19,7 +19,7 @@ export const routes = {
   },
   tags: {
     name: 'tags',
-    path: '/tags',
+    path: 'tags',
   },
   auth: {
     name: 'auth',

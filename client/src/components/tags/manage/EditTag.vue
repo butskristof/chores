@@ -3,43 +3,26 @@
     :visible="true"
     modal
     :draggable="false"
-    :header="isEdit ? 'Edit chore' : 'Create new chore'"
+    :header="isEdit ? 'Edit tag' : 'Create new tag'"
     :style="{ width: '50rem' }"
     :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
     @update:visible="updateVisible"
   >
     <form @submit="save">
       <div class="field">
-        <label for="date">Date</label>
-        <Calendar
-          id="date"
-          v-model="date.value.value"
-          autofocus
-          date-format="dd/mm/yy"
-          :disabled="isFormDisabled"
-          :class="{ 'p-invalid': date.errorMessage.value }"
-        />
-        <small
-          v-if="date.errorMessage"
-          class="p-error"
-          >{{ date.errorMessage }}</small
-        >
-      </div>
-
-      <div class="field">
-        <label for="notes">Notes</label>
+        <label for="name">Name</label>
         <InputText
-          id="notes"
-          v-model.trim="notes.value.value"
+          id="name"
+          v-model.trim="name.value.value"
           autofocus
           type="text"
           :disabled="isFormDisabled"
-          :class="{ 'p-invalid': notes.errorMessage.value }"
+          :class="{ 'p-invalid': name.errorMessage.value }"
         />
         <small
-          v-if="notes.errorMessage"
+          v-if="name.errorMessage"
           class="p-error"
-          >{{ notes.errorMessage }}</small
+          >{{ name.errorMessage }}</small
         >
       </div>
 
@@ -48,7 +31,7 @@
           <InlineMessage
             v-if="mutation.isSuccess.value === true"
             severity="success"
-            >Iteration saved</InlineMessage
+            >Tag saved</InlineMessage
           >
         </div>
         <div class="actions">
@@ -66,47 +49,38 @@
 </template>
 
 <script setup>
-import { useQueryClient } from '@tanstack/vue-query';
-import { useToast } from 'vue-toastification';
-import { computed } from 'vue';
-import { useForm, useField } from 'vee-validate';
-import { toTypedSchema } from '@vee-validate/yup';
-import * as yup from 'yup';
-import { useChoresApiUpsertChoreIteration } from '@/composables/queries/chores-api';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
+import { computed } from 'vue';
+import { useField, useForm } from 'vee-validate';
+import { toTypedSchema } from '@vee-validate/yup';
+import * as yup from 'yup';
+import { useChoresApiUpsertTag } from '@/composables/queries/chores-api.js';
+import { useQueryClient } from '@tanstack/vue-query';
 import InputText from 'primevue/inputtext';
 import InlineMessage from 'primevue/inlinemessage';
-import Calendar from 'primevue/calendar';
 
 const props = defineProps({
-  choreId: {
-    type: String,
-    required: true,
-  },
-  iteration: {
+  tag: {
     type: Object,
     default: () => null,
   },
 });
 const emit = defineEmits(['close']);
-const isEdit = computed(() => props.iteration != null);
+const isEdit = computed(() => props.tag != null);
 
 const queryClient = useQueryClient();
-const toast = useToast();
 
 //#region form
 
 const { handleSubmit, meta } = useForm({
   validationSchema: toTypedSchema(
     yup.object({
-      date: yup.string().required().label('Date'),
-      notes: yup.string().label('Notes'),
+      name: yup.string().required().label('Name'),
     }),
   ),
   initialValues: {
-    date: props.iteration?.date,
-    notes: props.iteration?.notes,
+    name: props.tag?.name,
   },
 });
 
@@ -114,26 +88,21 @@ const isFormDisabled = computed(
   () => mutation.isPending.value === true || mutation.isSuccess.value === true,
 );
 
-const date = useField('date');
-const notes = useField('notes');
+const name = useField('name');
 
 //#endregion
 
 //#region create/update
 
-const mutation = useChoresApiUpsertChoreIteration(queryClient);
+const mutation = useChoresApiUpsertTag(queryClient);
 
 const save = handleSubmit.withControlled(async (values) => {
   try {
     const payload = {
-      choreId: props.choreId,
-      date: new Date(values.date).toISOString(),
-      notes: values.notes,
+      name: values.name,
     };
-    if (isEdit.value === true) payload.iterationId = props.iteration.id;
+    if (isEdit.value === true) payload.id = props.tag.id;
     await mutation.mutateAsync(payload);
-    toast.success(isEdit.value === true ? 'Iteration updated' : 'Iteration created');
-    tryClose(true);
   } catch (e) {
     console.error(e);
   }

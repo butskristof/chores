@@ -1,9 +1,12 @@
 <template>
   <div v-if="lastIteration">
-    Happened last {{ formatDate(lastIteration) }} - due again
-    <span v-if="due === 0">today</span>
-    <span v-else-if="due > 0"> in {{ due }} days</span>
-    <span v-else-if="due < 0">{{ due * -1 }} days ago</span>
+    <div>happened last {{ formatDate(lastIteration) }}</div>
+    <div>
+      due again
+      <span v-if="due === 0">today</span>
+      <span v-else-if="due > 0"> in {{ due }} days</span>
+      <span v-else-if="due < 0">{{ due * -1 }} days ago</span>
+    </div>
   </div>
 </template>
 

@@ -1,19 +1,23 @@
 <template>
-  <div class="header">
-    <h2>Iterations</h2>
-    <div class="actions">
-      <button
-        type="button"
-        @click="openEditDialog"
-      >
-        add
-      </button>
-    </div>
-  </div>
+  <Toolbar class="header">
+    <template #start>
+      <h2>Iterations</h2>
+    </template>
+
+    <template #end>
+      <div class="actions">
+        <Button
+          type="button"
+          label="Add"
+          icon="pi pi-plus"
+          @click="openEditDialog"
+        />
+      </div>
+    </template>
+  </Toolbar>
 
   <EditChoreIteration
     v-if="showEditDialog"
-    :open="true"
     :chore-id="chore.id"
     :iteration="iterationForEdit"
     @close="closeEditDialog"
@@ -21,7 +25,6 @@
 
   <DeleteChoreIteration
     v-if="iterationForDelete != null"
-    :open="true"
     :iteration="iterationForDelete"
     :chore-id="chore.id"
     @close="setIterationForDelete(null)"
@@ -38,12 +41,13 @@
           <div v-if="!stringIsNullOrWhitespace(iteration.notes)">{{ iteration.notes }}</div>
         </div>
         <div class="actions">
-          <button
+          <Button
             type="button"
+            label="Delete"
+            icon="pi pi-trash"
+            severity="danger"
             @click="setIterationForDelete(iteration.id)"
-          >
-            delete
-          </button>
+          />
         </div>
       </div>
     </li>
@@ -51,10 +55,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import EditChoreIteration from '@/components/chores/detail/EditChoreIteration.vue';
 import { stringIsNullOrWhitespace } from '@/utilities/string';
 import DeleteChoreIteration from '@/components/chores/detail/DeleteChoreIteration.vue';
+import Toolbar from 'primevue/toolbar';
+import Button from 'primevue/button';
 
 const props = defineProps({
   chore: {
@@ -63,11 +69,13 @@ const props = defineProps({
   },
 });
 
+const iterations = computed(() => props.chore.iterations ?? []);
+
 //#region edit
 const showEditDialog = ref(false);
 const iterationForEdit = ref(null);
 const openEditDialog = (id = null) => {
-  iterationForEdit.value = id == null ? null : props.chore.iterations.find((i) => i.id === id);
+  iterationForEdit.value = id == null ? null : iterations.value.find((i) => i.id === id);
   showEditDialog.value = true;
 };
 const closeEditDialog = () => {
@@ -80,29 +88,26 @@ const closeEditDialog = () => {
 
 const iterationForDelete = ref(null);
 const setIterationForDelete = (id) =>
-  (iterationForDelete.value = id == null ? null : props.chore.iterations.find((i) => i.id === id));
+  (iterationForDelete.value = id == null ? null : iterations.value.find((i) => i.id === id));
 
 //#endregion
 </script>
 
 <style scoped lang="scss">
 .header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  margin-bottom: 1rem;
 
-  .actions {
-    display: flex;
-    flex-direction: row;
-    gap: 0.5rem;
-    align-items: flex-start;
+  h2 {
+    //font-size: 1.75rem;
+    margin-block: 0;
   }
 }
-
 .iteration {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
+  margin-bottom: 1rem;
 
   .actions {
     display: flex;

@@ -2,8 +2,6 @@ import { createApp } from 'vue';
 import App from './App.vue';
 const app = createApp(App);
 
-import '@/styles/app.scss';
-
 //#region router
 
 import router from './router';
@@ -19,8 +17,53 @@ app.use(createPinia());
 //#endregion
 
 //#region tanstack query
+
 import { VueQueryPlugin } from '@tanstack/vue-query';
 app.use(VueQueryPlugin);
+
+//#endregion
+
+//#region primevue
+
+import PrimeVue from 'primevue/config';
+import DialogService from 'primevue/dialogservice';
+import ConfirmationService from 'primevue/confirmationservice';
+
+app.use(PrimeVue, {
+  // ripple: true,
+});
+app.use(DialogService);
+app.use(ConfirmationService);
+
+import '@/styles/prime.scss';
+
+//#region components
+
+// import Menubar from 'primevue/menubar';
+// // eslint-disable-next-line vue/multi-word-component-names
+// app.component('Menubar', Menubar);
+// import Avatar from 'primevue/avatar';
+// // eslint-disable-next-line vue/multi-word-component-names
+// app.component('Avatar', Avatar);
+// import Menu from 'primevue/menu';
+// // eslint-disable-next-line vue/multi-word-component-names,vue/no-reserved-component-names
+// app.component('Menu', Menu);
+// import Button from 'primevue/button';
+// // eslint-disable-next-line vue/multi-word-component-names,vue/no-reserved-component-names
+// app.component('Button', Button);
+
+//#endregion
+
+//#endregion
+
+//#region toast
+
+import 'vue-toastification/dist/index.css';
+import Toast, { POSITION } from 'vue-toastification';
+app.use(Toast, {
+  position: POSITION.BOTTOM_RIGHT,
+});
+
 //#endregion
 
 //#region tippy
@@ -31,12 +74,8 @@ import 'tippy.js/dist/tippy.css';
 // });
 //#endregion
 
-//#region toast
-import 'vue-toastification/dist/index.css';
-import Toast, { POSITION } from 'vue-toastification';
-app.use(Toast, {
-  position: POSITION.BOTTOM_RIGHT,
-});
+//#region multiselect
+import 'vue-multiselect/dist/vue-multiselect.css';
 //#endregion
 
 //#region uid
@@ -46,10 +85,6 @@ app
   // .use(UidPlugin)
   .directive('uid', Uid);
 
-//#endregion
-
-//#region multiselect
-import 'vue-multiselect/dist/vue-multiselect.css';
 //#endregion
 
 app.mount('#app');

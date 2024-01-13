@@ -12,11 +12,11 @@
       v-if="mutation.isSuccess.value === true"
       class="success"
     >
-      <InlineMessage severity="success">Iteration deleted</InlineMessage>
+      <InlineMessage severity="success">Tag deleted</InlineMessage>
     </div>
     <p v-else>
-      Delete iteration
-      <strong>{{ iteration.date }}</strong>
+      Delete tag
+      <strong>{{ tag.name }}</strong>
       ?
     </p>
     <template
@@ -39,7 +39,7 @@
           severity="danger"
           :loading="mutation.isPending.value === true"
           :disabled="mutation.isPending.value === true"
-          @click="deleteIteration"
+          @click="deleteTag"
         />
       </div>
     </template>
@@ -48,20 +48,16 @@
 
 <script setup>
 import { useQueryClient } from '@tanstack/vue-query';
+import { useChoreApiDeleteTag } from '@/composables/queries/chores-api.js';
 import { useToast } from 'vue-toastification';
-import { useChoresApiDeleteChoreIteration } from '@/composables/queries/chores-api';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 import InlineMessage from 'primevue/inlinemessage';
 
 const props = defineProps({
-  choreId: {
-    type: String,
-    required: true,
-  },
-  iteration: {
+  tag: {
     type: Object,
-    required: true,
+    default: () => null,
   },
 });
 const emit = defineEmits(['close']);
@@ -69,21 +65,17 @@ const emit = defineEmits(['close']);
 const queryClient = useQueryClient();
 const toast = useToast();
 
-//#region delete
+const mutation = useChoreApiDeleteTag(queryClient);
 
-const mutation = useChoresApiDeleteChoreIteration(queryClient);
-
-const deleteIteration = async () => {
+const deleteTag = async () => {
   try {
-    await mutation.mutateAsync({ choreId: props.choreId, iterationId: props.iteration.id });
-    toast.success('Iteration deleted');
-    emit('close', true);
+    await mutation.mutateAsync(props.tag.id);
+    toast.success('Tag deleted');
+    emit('close');
   } catch (e) {
     console.error(e);
   }
 };
-
-//#endregion
 
 const updateVisible = (value) => {
   if (value === false) emit('close');

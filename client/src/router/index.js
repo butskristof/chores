@@ -2,40 +2,47 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { routes } from '@/router/routes';
 import authService from '@/services/auth/auth.service';
 import { useAuthStore } from '@/stores/auth';
+import AppLayout from '@/layout/app/AppLayout.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      name: routes.home.name,
-      path: routes.home.path,
-      redirect: {
-        name: routes.chores.name,
-      },
-    },
-    {
-      name: routes.chores.name,
-      path: routes.chores.path,
-      redirect: {
-        name: routes.chores.children.overview.name,
-      },
+      path: '/',
+      component: AppLayout,
       children: [
         {
-          name: routes.chores.children.overview.name,
-          path: routes.chores.children.overview.path,
-          component: () => import('@/pages/chores/ChoresOverview.vue'),
+          name: routes.home.name,
+          path: routes.home.path,
+          redirect: {
+            name: routes.chores.name,
+          },
         },
         {
-          name: routes.chores.children.detail.name,
-          path: routes.chores.children.detail.path,
-          component: () => import('@/pages/chores/ChoreDetail.vue'),
+          name: routes.chores.name,
+          path: routes.chores.path,
+          redirect: {
+            name: routes.chores.children.overview.name,
+          },
+          children: [
+            {
+              name: routes.chores.children.overview.name,
+              path: routes.chores.children.overview.path,
+              component: () => import('@/pages/app/chores/ChoresOverview.vue'),
+            },
+            {
+              name: routes.chores.children.detail.name,
+              path: routes.chores.children.detail.path,
+              component: () => import('@/pages/app/chores/ChoreDetail.vue'),
+            },
+          ],
+        },
+        {
+          name: routes.tags.name,
+          path: routes.tags.path,
+          component: () => import('@/pages/app/tags/ManageTags.vue'),
         },
       ],
-    },
-    {
-      name: routes.tags.name,
-      path: routes.tags.path,
-      component: () => import('@/pages/tags/ManageTags.vue'),
     },
     {
       name: routes.auth.name,
