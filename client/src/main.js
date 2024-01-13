@@ -41,11 +41,13 @@ app.use(Toast, {
 //#endregion
 
 //#region tippy
+
 // import VueTippy from 'vue-tippy';
 import 'tippy.js/dist/tippy.css';
 // app.use(VueTippy, {
 //   component: 'tippy',
 // });
+
 //#endregion
 
 //#region multiselect

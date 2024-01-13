@@ -1,7 +1,7 @@
 import { addDays, differenceInCalendarDays } from 'date-fns';
 
 export const getLastIteration = (chore) => {
-  const value =
+  const mostRecent =
     chore.lastIteration ??
     chore.iterations?.reduce(
       (max, current) =>
@@ -9,7 +9,7 @@ export const getLastIteration = (chore) => {
         max == null ? current : new Date(current.date) > new Date(max.date) ? current : max,
       null,
     )?.date;
-  return value == null ? null : new Date(value);
+  return mostRecent == null ? null : new Date(mostRecent);
 };
 
 export const getDueDays = (chore, lastIteration = null) => {
