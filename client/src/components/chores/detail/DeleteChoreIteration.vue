@@ -1,80 +1,60 @@
 <template>
-  <AppDialog
-    :open="open"
-    :alert="true"
-    @close="emit('close')"
+  <Dialog
+    :visible="true"
+    modal
+    :draggable="false"
+    :style="{ width: '50rem' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+    :closable="false"
+    @update:visible="updateVisible"
   >
-    <div v-if="mutation.isPending.value === true">
-      <p>Iteration deletion was requested, waiting for confirmation...</p>
-    </div>
     <div
-      v-else-if="mutation.isSuccess.value === true"
+      v-if="mutation.isSuccess.value === true"
       class="success"
     >
-      <p>Iteration was deleted successfully.</p>
-      <div class="actions">
-        <button
-          type="button"
-          @click="emit('close')"
-        >
-          Close
-        </button>
-      </div>
+      <InlineMessage severity="success">Iteration deleted</InlineMessage>
     </div>
-    <div
-      v-else-if="mutation.isError.value === true"
-      class="error"
+    <p v-else>
+      Delete iteration
+      <strong>{{ iteration.date }}</strong>
+      ?
+    </p>
+    <template
+      v-if="mutation.isSuccess.value !== true"
+      #footer
     >
-      <p>
-        Something went wrong while trying to delete the iteration, please reload the page and try
-        again.
-      </p>
-      <pre>{{ mutation.error.value }}</pre>
       <div class="actions">
-        <button
+        <Button
           type="button"
+          label="No, keep tag"
+          icon="pi pi-times"
+          class="p-button-text"
+          :disabled="mutation.isPending.value === true"
           @click="emit('close')"
-        >
-          Close
-        </button>
-      </div>
-    </div>
-    <template v-else>
-      <DialogTitle>
-        Delete iteration <em>"{{ iteration.date }}"</em>?
-      </DialogTitle>
-
-      <div class="actions">
-        <button
+        />
+        <Button
           type="button"
-          @click="emit('close')"
-        >
-          No, keep iteration
-        </button>
-        <button
-          type="button"
-          class="btn-delete"
+          :label="mutation.isPending.value === true ? 'Deleting...' : 'Yes, delete'"
+          icon="pi pi-trash"
+          severity="danger"
+          :loading="mutation.isPending.value === true"
+          :disabled="mutation.isPending.value === true"
           @click="deleteIteration"
-        >
-          Yes, delete
-        </button>
+        />
       </div>
     </template>
-  </AppDialog>
+  </Dialog>
 </template>
 
 <script setup>
 import { useQueryClient } from '@tanstack/vue-query';
 import { useToast } from 'vue-toastification';
 import { useChoresApiDeleteChoreIteration } from '@/composables/queries/chores-api';
-import AppDialog from '@/components/common/dialogs/AppDialog.vue';
-import { DialogTitle } from '@headlessui/vue';
+import Dialog from 'primevue/dialog';
+import Button from 'primevue/button';
+import InlineMessage from 'primevue/inlinemessage';
 
 const props = defineProps({
-  open: {
-    type: Boolean,
-    default: false,
-  },
   choreId: {
     type: String,
     required: true,
@@ -92,6 +72,7 @@ const toast = useToast();
 //#region delete
 
 const mutation = useChoresApiDeleteChoreIteration(queryClient);
+
 const deleteIteration = async () => {
   try {
     await mutation.mutateAsync({ choreId: props.choreId, iterationId: props.iteration.id });
@@ -103,24 +84,26 @@ const deleteIteration = async () => {
 };
 
 //#endregion
+
+const updateVisible = (value) => {
+  if (value === false) emit('close');
+};
 </script>
 
 <style scoped lang="scss">
-.error {
-  pre {
-    display: block;
-    overflow-x: auto;
-    width: 100%;
-  }
+p {
+  text-align: center;
+  font-size: 1.25rem;
 }
+
 .actions {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
-  gap: 0.5rem;
+  justify-content: space-between;
+}
 
-  .btn-delete {
-    background-color: red;
-  }
+.success {
+  display: flex;
+  justify-content: center;
 }
 </style>

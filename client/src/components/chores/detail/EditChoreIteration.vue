@@ -1,71 +1,85 @@
 <template>
-  <AppDialog
-    :open="open"
-    @close="tryClose"
+  <Dialog
+    :visible="true"
+    modal
+    :draggable="false"
+    :header="isEdit ? 'Edit chore' : 'Create new chore'"
+    :style="{ width: '50rem' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+    @update:visible="updateVisible"
   >
-    <div
-      v-if="mutation.isSuccess.value === true"
-      class="success"
-    >
-      <p>Iteration was {{ isEdit ? 'updated' : 'created' }} successfully.</p>
-      <div class="actions">
-        <button
-          type="button"
-          @click="tryClose(true)"
+    <form @submit="save">
+      <div class="field">
+        <label for="date">Date</label>
+        <Calendar
+          id="date"
+          v-model="date.value.value"
+          autofocus
+          date-format="dd/mm/yy"
+          :disabled="isFormDisabled"
+          :class="{ 'p-invalid': date.errorMessage.value }"
+        />
+        <small
+          v-if="date.errorMessage"
+          class="p-error"
+          >{{ date.errorMessage }}</small
         >
-          Close
-        </button>
       </div>
-    </div>
-    <template v-else>
-      <DialogTitle>
-        {{ isEdit ? 'Edit iteration' : 'Create new iteration' }}
-      </DialogTitle>
-      <form @submit="save">
-        <TextInput
-          label="Date"
-          name="date"
-          :disabled="formDisabled"
-        />
 
-        <TextInput
-          label="Notes"
-          name="notes"
-          :disabled="formDisabled"
+      <div class="field">
+        <label for="notes">Notes</label>
+        <InputText
+          id="notes"
+          v-model.trim="notes.value.value"
+          autofocus
+          type="text"
+          :disabled="isFormDisabled"
+          :class="{ 'p-invalid': notes.errorMessage.value }"
         />
+        <small
+          v-if="notes.errorMessage"
+          class="p-error"
+          >{{ notes.errorMessage }}</small
+        >
+      </div>
 
-        <div class="actions">
-          <button
-            type="submit"
-            :disabled="formDisabled"
+      <div class="footer">
+        <div class="result">
+          <InlineMessage
+            v-if="mutation.isSuccess.value === true"
+            severity="success"
+            >Iteration saved</InlineMessage
           >
-            <span v-if="mutation.isPending.value === true">Saving...</span>
-            <span v-else-if="isEdit">Save changes</span>
-            <span v-else>Create</span>
-          </button>
         </div>
-      </form>
-    </template>
-  </AppDialog>
+        <div class="actions">
+          <Button
+            type="submit"
+            label="Save"
+            icon="pi pi-save"
+            :disabled="isFormDisabled"
+            :loading="mutation.isPending.value"
+          />
+        </div>
+      </div>
+    </form>
+  </Dialog>
 </template>
 
 <script setup>
-import AppDialog from '@/components/common/dialogs/AppDialog.vue';
-import { DialogTitle } from '@headlessui/vue';
 import { useQueryClient } from '@tanstack/vue-query';
 import { useToast } from 'vue-toastification';
 import { computed } from 'vue';
-import { useForm } from 'vee-validate';
+import { useForm, useField } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/yup';
 import * as yup from 'yup';
 import { useChoresApiUpsertChoreIteration } from '@/composables/queries/chores-api';
-import TextInput from '@/components/common/form/inputs/TextInput.vue';
+import Dialog from 'primevue/dialog';
+import Button from 'primevue/button';
+import InputText from 'primevue/inputtext';
+import InlineMessage from 'primevue/inlinemessage';
+import Calendar from 'primevue/calendar';
 
 const props = defineProps({
-  open: {
-    type: Boolean,
-    default: false,
-  },
   choreId: {
     type: String,
     required: true,
@@ -76,11 +90,10 @@ const props = defineProps({
   },
 });
 const emit = defineEmits(['close']);
+const isEdit = computed(() => props.iteration != null);
 
 const queryClient = useQueryClient();
 const toast = useToast();
-
-const isEdit = computed(() => props.iteration != null);
 
 //#region form
 
@@ -97,9 +110,12 @@ const { handleSubmit, meta } = useForm({
   },
 });
 
-const formDisabled = computed(
+const isFormDisabled = computed(
   () => mutation.isPending.value === true || mutation.isSuccess.value === true,
 );
+
+const date = useField('date');
+const notes = useField('notes');
 
 //#endregion
 
@@ -111,7 +127,7 @@ const save = handleSubmit.withControlled(async (values) => {
   try {
     const payload = {
       choreId: props.choreId,
-      date: values.date,
+      date: new Date(values.date).toISOString(),
       notes: values.notes,
     };
     if (isEdit.value === true) payload.iterationId = props.iteration.id;
@@ -125,18 +141,42 @@ const save = handleSubmit.withControlled(async (values) => {
 
 //#endregion
 
+const updateVisible = (value) => {
+  if (value === false) tryClose();
+};
 const tryClose = (force = false) => {
   let close = true;
-  if (!force && meta.value.dirty)
+  if (!force && meta.value.dirty && mutation.isSuccess.value !== true)
     close = confirm('There may be unsaved changes, are you sure you want to stop editing?');
   if (close) emit('close');
 };
 </script>
 
 <style scoped lang="scss">
-.actions {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
+form {
+  .field {
+    margin-bottom: 1rem;
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    :deep(input) {
+      width: 100%;
+    }
+  }
+
+  .footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .actions {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+    }
+  }
 }
 </style>

@@ -19,7 +19,6 @@
 
   <EditChore
     v-if="showCreateDialog"
-    :open="true"
     @close="showCreateDialog = false"
   />
 </template>

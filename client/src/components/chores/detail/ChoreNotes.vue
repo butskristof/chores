@@ -1,36 +1,48 @@
 <template>
-  <div class="header">
-    <h2>Notes</h2>
-    <div class="actions">
-      <button
-        v-if="!isEdit"
-        type="button"
-        @click="showEdit"
-      >
-        edit
-      </button>
-    </div>
-  </div>
+  <Toolbar class="header">
+    <template #start>
+      <h2>Notes</h2>
+    </template>
+    <template #end>
+      <div class="actions">
+        <Button
+          v-if="!isEdit"
+          type="button"
+          label="Edit"
+          icon="pi pi-pencil"
+          @click="showEdit"
+        />
+      </div>
+    </template>
+  </Toolbar>
+
   <div
     v-if="isEdit"
     class="edit"
   >
-    <textarea v-model.trim="notes" />
+    <Textarea
+      v-model.trim="notes"
+      auto-resize
+      class="input"
+    />
+
     <div class="actions">
-      <button
+      <Button
         type="button"
+        label="Cancel"
+        icon="pi pi-times"
+        class="p-button-text"
         @click="cancelEdit"
-      >
-        cancel
-      </button>
-      <button
+      />
+      <Button
         type="button"
+        label="Save"
+        icon="pi pi-save"
         @click="saveEdit"
-      >
-        save
-      </button>
+      />
     </div>
   </div>
+
   <div
     v-else
     class="view"
@@ -38,6 +50,7 @@
     <div v-if="stringIsNullOrWhitespace(chore.notes)">
       <em>No notes have been added</em>
     </div>
+
     <div v-else>{{ chore.notes }}</div>
   </div>
 </template>
@@ -48,6 +61,9 @@ import { ref } from 'vue';
 import { useChoresApiUpdateChoreNotes } from '@/composables/queries/chores-api';
 import { useQueryClient } from '@tanstack/vue-query';
 import { useToast } from 'vue-toastification';
+import Button from 'primevue/button';
+import Toolbar from 'primevue/toolbar';
+import Textarea from 'primevue/textarea';
 
 const props = defineProps({
   chore: {
@@ -95,12 +111,21 @@ const cancelEdit = () => {
 
 <style scoped lang="scss">
 .header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  margin-bottom: 1rem;
+
+  h2 {
+    //font-size: 1.75rem;
+    margin-block: 0;
+  }
 }
 
 .edit {
+  .input {
+    width: 100%;
+    margin-bottom: 1rem;
+    min-height: 10rem;
+  }
+
   .actions {
     display: flex;
     flex-direction: row;

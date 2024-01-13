@@ -87,6 +87,7 @@ p {
   text-align: center;
   font-size: 1.25rem;
 }
+
 .actions {
   display: flex;
   flex-direction: row;

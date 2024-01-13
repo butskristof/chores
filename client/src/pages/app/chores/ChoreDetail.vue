@@ -6,47 +6,60 @@
           <h1>{{ chore.name }}</h1>
         </template>
         <template #end>
-          <Button
-            type="button"
-            @click="showEditTags = true"
-          >
-            edit tags
-          </Button>
-          <Button
-            type="button"
-            @click="showEdit = true"
-          >
-            edit
-          </Button>
-          <Button
-            type="button"
-            @click="showDelete = true"
-          >
-            delete
-          </Button>
+          <div class="actions">
+            <Button
+              type="button"
+              label="Edit tags"
+              icon="pi pi-tags"
+              @click="showEditTags = true"
+            />
+
+            <Button
+              type="button"
+              label="Edit"
+              icon="pi pi-pencil"
+              @click="showEdit = true"
+            />
+
+            <Button
+              type="button"
+              label="Delete"
+              icon="pi pi-trash"
+              severity="danger"
+              @click="showDelete = true"
+            />
+          </div>
+
           <EditChoreTags
             v-if="showEditTags"
-            :open="true"
             :chore="chore"
             @close="showEditTags = false"
           />
+
           <EditChore
             v-if="showEdit"
-            :open="true"
             :chore="chore"
             @close="showEdit = false"
           />
+
           <DeleteChore
             v-if="showDelete"
-            :open="true"
             :chore="chore"
             @close="closeDelete"
           />
         </template>
       </Toolbar>
+
       <p>Should happen every {{ chore.interval }} days</p>
       <ChoreLastIteration :chore="chore" />
-      <p>Tags: {{ chore.tags.map((t) => t.name) }}</p>
+
+      <div class="tags">
+        <Tag
+          v-for="tag in chore.tags"
+          :key="tag.id"
+          :value="tag.name"
+        />
+      </div>
     </div>
 
     <div class="card">
@@ -73,6 +86,7 @@ import ChoreLastIteration from '@/components/chores/common/ChoreLastIteration.vu
 import EditChoreTags from '@/components/chores/detail/EditChoreTags.vue';
 import Toolbar from 'primevue/toolbar';
 import Button from 'primevue/button';
+import Tag from 'primevue/tag';
 
 const choreId = useRouteParams('id');
 const choreQuery = useChoresApiChore(choreId);
@@ -89,6 +103,7 @@ const showEdit = ref(false);
 //#endregion
 
 //#region delete
+
 const showDelete = ref(false);
 const closeDelete = (deleted) => {
   showDelete.value = false;
@@ -96,17 +111,39 @@ const closeDelete = (deleted) => {
     router.push({ name: routes.chores.name });
   }
 };
+
 //#endregion
 </script>
 
 <style scoped lang="scss">
 .header {
   margin-bottom: 2rem;
+  gap: 1rem;
+
+  :deep(.p-toolbar-group-right) {
+    margin-left: auto;
+  }
 
   h1 {
-    font-size: 1.75rem;
+    //font-size: 1.75rem;
     margin-block: 0;
   }
+
+  .actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: flex-end;
+  }
+}
+
+.tags {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 hr {

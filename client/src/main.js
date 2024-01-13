@@ -74,6 +74,10 @@ import 'tippy.js/dist/tippy.css';
 // });
 //#endregion
 
+//#region multiselect
+import 'vue-multiselect/dist/vue-multiselect.css';
+//#endregion
+
 //#region uid
 
 import { Uid } from '@shimyshack/uid';
