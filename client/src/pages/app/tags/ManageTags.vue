@@ -8,7 +8,6 @@
         <Button
           label="New"
           icon="pi pi-plus"
-          class="p-button-success"
           @click="openEditDialog"
         />
       </template>
@@ -35,7 +34,7 @@
           <div class="row-actions">
             <Button
               icon="pi pi-pencil"
-              class="p-button-rounded p-button-success"
+              class="p-button-rounded"
               @click="openEditDialog(slotProps.data.id)"
             />
             <Tippy

@@ -14,7 +14,7 @@
   @include flex-row-justify-between;
   flex-wrap: wrap;
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 
   :slotted(h1) {
     font-size: 2rem;
