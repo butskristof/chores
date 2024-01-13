@@ -142,9 +142,4 @@ const closeDelete = (deleted) => {
   flex-wrap: wrap;
   gap: 0.5rem;
 }
-
-hr {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
 </style>
