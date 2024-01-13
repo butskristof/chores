@@ -59,7 +59,7 @@ onBeforeUnmount(() => {
 });
 
 const logoUrl = computed(() => {
-  return `layout/images/${layoutConfig.darkTheme.value ? 'chores-white' : 'chores-dark'}.svg`;
+  return `/layout/images/${layoutConfig.darkTheme.value ? 'chores-white' : 'chores-dark'}.svg`;
 });
 
 const onTopBarMenuButton = () => {

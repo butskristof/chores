@@ -13,7 +13,6 @@
     "format:fix": "prettier --write src/"
   },
   "dependencies": {
-    "@headlessui/vue": "^1.7.17",
     "@shimyshack/uid": "^0.1.9",
     "@tanstack/vue-query": "^5.17.9",
     "@vee-validate/yup": "^4.12.4",
