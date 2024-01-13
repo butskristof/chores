@@ -28,8 +28,6 @@ import ChoresList from '@/components/chores/overview/ChoresList.vue';
 import { useChoresApiChores } from '@/composables/queries/chores-api.js';
 import { computed, ref } from 'vue';
 import EditChore from '@/components/chores/common/EditChore.vue';
-import Toolbar from 'primevue/toolbar';
-import Button from 'primevue/button';
 
 const choresQuery = useChoresApiChores();
 const chores = computed(() => choresQuery.data.value?.chores ?? []);

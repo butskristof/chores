@@ -34,8 +34,6 @@ import { useChoresApiTags, useChoresApiUpdateChoreTags } from '@/composables/que
 import { computed, ref } from 'vue';
 import { useQueryClient } from '@tanstack/vue-query';
 import { useToast } from 'vue-toastification';
-import Dialog from 'primevue/dialog';
-import Button from 'primevue/button';
 import Multiselect from 'vue-multiselect';
 
 const props = defineProps({

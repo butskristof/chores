@@ -73,10 +73,6 @@
 </template>
 
 <script setup>
-import Toolbar from 'primevue/toolbar';
-import Button from 'primevue/button';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
 import { useChoresApiTags } from '@/composables/queries/chores-api.js';
 import { computed, ref } from 'vue';
 import EditTag from '@/components/tags/manage/EditTag.vue';

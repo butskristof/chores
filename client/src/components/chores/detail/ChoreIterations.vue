@@ -59,8 +59,6 @@ import { computed, ref } from 'vue';
 import EditChoreIteration from '@/components/chores/detail/EditChoreIteration.vue';
 import { stringIsNullOrWhitespace } from '@/utilities/string';
 import DeleteChoreIteration from '@/components/chores/detail/DeleteChoreIteration.vue';
-import Toolbar from 'primevue/toolbar';
-import Button from 'primevue/button';
 
 const props = defineProps({
   chore: {

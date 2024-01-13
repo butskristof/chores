@@ -120,11 +120,6 @@
 </template>
 
 <script setup>
-import RadioButton from 'primevue/radiobutton';
-import Button from 'primevue/button';
-import InputSwitch from 'primevue/inputswitch';
-import Sidebar from 'primevue/sidebar';
-
 import { ref } from 'vue';
 import { useLayout } from '@/layout/app/composables/layout.js';
 
