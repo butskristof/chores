@@ -34,9 +34,10 @@ try
     app.UseAuthorization();
     app.UseCors(ApplicationConstants.CorsPolicy);
 
-// add endpoint to retrieve OpenAPI definition
+    app.MapHealthChecks(ApplicationConstants.HealthCheckPattern);
+    // add endpoint to retrieve OpenAPI definition
     app.MapSwagger();
-// add API endpoints
+    // add API endpoints
     app
         .MapTagsEndpoints()
         .MapChoresEndpoints();
