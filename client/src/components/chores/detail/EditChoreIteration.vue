@@ -73,11 +73,6 @@ import { useForm, useField } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/yup';
 import * as yup from 'yup';
 import { useChoresApiUpsertChoreIteration } from '@/composables/queries/chores-api';
-import Dialog from 'primevue/dialog';
-import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
-import InlineMessage from 'primevue/inlinemessage';
-import Calendar from 'primevue/calendar';
 
 const props = defineProps({
   choreId: {

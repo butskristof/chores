@@ -61,9 +61,6 @@ import { ref } from 'vue';
 import { useChoresApiUpdateChoreNotes } from '@/composables/queries/chores-api';
 import { useQueryClient } from '@tanstack/vue-query';
 import { useToast } from 'vue-toastification';
-import Button from 'primevue/button';
-import Toolbar from 'primevue/toolbar';
-import Textarea from 'primevue/textarea';
 
 const props = defineProps({
   chore: {

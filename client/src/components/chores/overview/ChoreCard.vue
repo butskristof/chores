@@ -27,11 +27,8 @@
 </template>
 
 <script setup>
-import Card from 'primevue/card';
-import Tag from 'primevue/tag';
 import ChoreLastIteration from '@/components/chores/common/ChoreLastIteration.vue';
 import { routes } from '@/router/routes.js';
-import Button from 'primevue/button';
 
 defineProps({
   chore: {

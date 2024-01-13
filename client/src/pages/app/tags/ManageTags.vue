@@ -8,7 +8,6 @@
         <Button
           label="New"
           icon="pi pi-plus"
-          class="p-button-success"
           @click="openEditDialog"
         />
       </template>
@@ -35,7 +34,7 @@
           <div class="row-actions">
             <Button
               icon="pi pi-pencil"
-              class="p-button-rounded p-button-success"
+              class="p-button-rounded"
               @click="openEditDialog(slotProps.data.id)"
             />
             <Tippy
@@ -73,10 +72,6 @@
 </template>
 
 <script setup>
-import Toolbar from 'primevue/toolbar';
-import Button from 'primevue/button';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
 import { useChoresApiTags } from '@/composables/queries/chores-api.js';
 import { computed, ref } from 'vue';
 import EditTag from '@/components/tags/manage/EditTag.vue';

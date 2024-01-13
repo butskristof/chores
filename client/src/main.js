@@ -25,34 +25,8 @@ app.use(VueQueryPlugin);
 
 //#region primevue
 
-import PrimeVue from 'primevue/config';
-import DialogService from 'primevue/dialogservice';
-import ConfirmationService from 'primevue/confirmationservice';
-
-app.use(PrimeVue, {
-  // ripple: true,
-});
-app.use(DialogService);
-app.use(ConfirmationService);
-
 import '@/styles/prime.scss';
-
-//#region components
-
-// import Menubar from 'primevue/menubar';
-// // eslint-disable-next-line vue/multi-word-component-names
-// app.component('Menubar', Menubar);
-// import Avatar from 'primevue/avatar';
-// // eslint-disable-next-line vue/multi-word-component-names
-// app.component('Avatar', Avatar);
-// import Menu from 'primevue/menu';
-// // eslint-disable-next-line vue/multi-word-component-names,vue/no-reserved-component-names
-// app.component('Menu', Menu);
-// import Button from 'primevue/button';
-// // eslint-disable-next-line vue/multi-word-component-names,vue/no-reserved-component-names
-// app.component('Button', Button);
-
-//#endregion
+setupPrimeVue(app);
 
 //#endregion
 
@@ -67,20 +41,25 @@ app.use(Toast, {
 //#endregion
 
 //#region tippy
+
 // import VueTippy from 'vue-tippy';
 import 'tippy.js/dist/tippy.css';
 // app.use(VueTippy, {
 //   component: 'tippy',
 // });
+
 //#endregion
 
 //#region multiselect
+
 import 'vue-multiselect/dist/vue-multiselect.css';
+
 //#endregion
 
 //#region uid
 
 import { Uid } from '@shimyshack/uid';
+import { setupPrimeVue } from '@/utilities/prime.js';
 app
   // .use(UidPlugin)
   .directive('uid', Uid);

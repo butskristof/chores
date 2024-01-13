@@ -66,16 +66,12 @@
 </template>
 
 <script setup>
-import Dialog from 'primevue/dialog';
-import Button from 'primevue/button';
 import { computed } from 'vue';
 import { useField, useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/yup';
 import * as yup from 'yup';
 import { useChoresApiUpsertChore } from '@/composables/queries/chores-api';
 import { useQueryClient } from '@tanstack/vue-query';
-import InputText from 'primevue/inputtext';
-import InlineMessage from 'primevue/inlinemessage';
 
 const props = defineProps({
   chore: {

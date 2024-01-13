@@ -50,9 +50,6 @@
 import { useQueryClient } from '@tanstack/vue-query';
 import { useToast } from 'vue-toastification';
 import { useChoresApiDeleteChore } from '@/composables/queries/chores-api';
-import Dialog from 'primevue/dialog';
-import InlineMessage from 'primevue/inlinemessage';
-import Button from 'primevue/button';
 
 const props = defineProps({
   chore: {

@@ -84,9 +84,6 @@ import ChoreNotes from '@/components/chores/detail/ChoreNotes.vue';
 import ChoreIterations from '@/components/chores/detail/ChoreIterations.vue';
 import ChoreLastIteration from '@/components/chores/common/ChoreLastIteration.vue';
 import EditChoreTags from '@/components/chores/detail/EditChoreTags.vue';
-import Toolbar from 'primevue/toolbar';
-import Button from 'primevue/button';
-import Tag from 'primevue/tag';
 
 const choreId = useRouteParams('id');
 const choreQuery = useChoresApiChore(choreId);
@@ -144,10 +141,5 @@ const closeDelete = (deleted) => {
   flex-direction: row;
   flex-wrap: wrap;
   gap: 0.5rem;
-}
-
-hr {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
 }
 </style>
