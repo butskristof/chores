@@ -10,11 +10,24 @@ namespace Chores.Api;
 
 internal static class DependencyInjection
 {
-    internal static IServiceCollection AddConfiguration(this IServiceCollection services, IConfiguration configuration)
+    internal static IServiceCollection AddConfiguration(this IServiceCollection services)
     {
         services
-            .Configure<AuthenticationSettings>(configuration.GetSection(ConfigurationConstants.Authentication))
-            .Configure<ClientSettings>(configuration.GetSection(ConfigurationConstants.Clients));
+            .AddValidatedSettings<AuthenticationSettings>(ConfigurationConstants.Authentication)
+            .AddValidatedSettings<ClientSettings>(ConfigurationConstants.Clients);
+
+        return services;
+    }
+
+    private static IServiceCollection AddValidatedSettings<TOptions>(this IServiceCollection services,
+        string sectionName)
+        where TOptions : class
+    {
+        services
+            .AddOptions<TOptions>()
+            .BindConfiguration(sectionName)
+            .FluentValidateOptions()
+            .ValidateOnStart();
 
         return services;
     }
@@ -75,22 +88,22 @@ internal static class DependencyInjection
 
         return services;
     }
-    
-	private static IServiceCollection AddCorsPolicy(this IServiceCollection services)
-	{
-		using var serviceProvider = services.BuildServiceProvider();
-		var configuration = serviceProvider.GetRequiredService<IOptions<ClientSettings>>().Value;
 
-		services
-			.AddCors(options => options
-				.AddPolicy(ApplicationConstants.CorsPolicy,
-					builder =>
-					{
-						builder.WithOrigins(configuration.ClientUrls);
-						builder.AllowAnyMethod();
-						builder.AllowAnyHeader();
-					}));
+    private static IServiceCollection AddCorsPolicy(this IServiceCollection services)
+    {
+        using var serviceProvider = services.BuildServiceProvider();
+        var configuration = serviceProvider.GetRequiredService<IOptions<ClientSettings>>().Value;
 
-		return services;
-	}
+        services
+            .AddCors(options => options
+                .AddPolicy(ApplicationConstants.CorsPolicy,
+                    builder =>
+                    {
+                        builder.WithOrigins(configuration.ClientUrls);
+                        builder.AllowAnyMethod();
+                        builder.AllowAnyHeader();
+                    }));
+
+        return services;
+    }
 }
