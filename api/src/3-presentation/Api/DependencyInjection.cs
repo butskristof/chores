@@ -2,6 +2,7 @@ using Chores.Api.Common;
 using Chores.Application.Common.Authentication;
 using Chores.Application.Common.Configuration;
 using Chores.Application.Common.Constants;
+using Chores.Application.Common.FluentValidation;
 using Chores.Persistence;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
