@@ -13,15 +13,13 @@ internal sealed class ClientSettingsValidator : AbstractValidator<ClientSettings
     public ClientSettingsValidator()
     {
         RuleFor(r => r.ClientUrls)
-            .Cascade(CascadeMode.Stop)
             .NotNull()
-            .WithErrorCode(ErrorCodes.Required);
+            .WithMessage(ErrorCodes.Required);
 
         RuleForEach(r => r.ClientUrls)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .WithErrorCode(ErrorCodes.Required)
-            .Must(uri => Uri.TryCreate(uri, UriKind.Absolute, out _))
-            .WithErrorCode(ErrorCodes.Invalid);
+            .WithMessage(ErrorCodes.Invalid)
+            .Url();
     }
 }

@@ -17,8 +17,7 @@ internal sealed class AuthenticationSettingsValidator : AbstractValidator<Authen
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .WithMessage(ErrorCodes.Required)
-            .Must(uri => Uri.TryCreate(uri, UriKind.Absolute, out _))
-            .WithMessage(ErrorCodes.Invalid);
+            .Url();
 
         RuleFor(r => r.Audiences)
             .Cascade(CascadeMode.Stop)
@@ -26,5 +25,9 @@ internal sealed class AuthenticationSettingsValidator : AbstractValidator<Authen
             .WithMessage(ErrorCodes.Required)
             .NotEmpty()
             .WithMessage(ErrorCodes.Required);
+
+        RuleForEach(r => r.Audiences)
+            .NotEmpty()
+            .WithMessage(ErrorCodes.Invalid);
     }
 }
