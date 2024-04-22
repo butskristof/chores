@@ -68,7 +68,7 @@ public sealed class AuthenticationSettingsValidatorTests
         result
             // .ShouldHaveValidationErrorFor(r => r.Audiences)
             .ShouldHaveValidationErrorFor("Audiences[0]")
-            .WithErrorMessage("Required");
+            .WithErrorMessage("Invalid");
     }
 
     [Theory]
