@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder
     .Services
-    .AddConfiguration(builder.Configuration)
+    .AddConfiguration()
     .AddApplication()
     .AddInfrastructure()
     .AddPersistence(builder.Configuration.GetConnectionString(ConfigurationConstants.AppDbContextConnectionStringKey))

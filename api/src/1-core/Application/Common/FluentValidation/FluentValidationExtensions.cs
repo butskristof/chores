@@ -17,11 +17,11 @@ internal static class FluentValidationExtensions
     {
         if (required)
             ruleBuilder = ruleBuilder.NotEmptyWithErrorCode();
-        
+
         ruleBuilder = ruleBuilder
             .MaximumLength(maxLength)
             .WithMessage(ErrorCodes.Invalid);
-        
+
         return ruleBuilder;
     }
 
@@ -32,5 +32,11 @@ internal static class FluentValidationExtensions
                     .GreaterThanOrEqualTo(0)
                 : ruleBuilder
                     .GreaterThan(0))
+            .WithMessage(ErrorCodes.Invalid);
+
+    internal static IRuleBuilder<T, string> Url<T>(this IRuleBuilder<T, string> ruleBuilder)
+        => ruleBuilder
+            .Must(value => Uri.TryCreate(value, UriKind.Absolute, out var uri) &&
+                           (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
             .WithMessage(ErrorCodes.Invalid);
 }
