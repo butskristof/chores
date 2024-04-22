@@ -13,7 +13,10 @@ builder
     .AddConfiguration()
     .AddApplication()
     .AddInfrastructure()
-    .AddPersistence(builder.Configuration.GetConnectionString(ConfigurationConstants.AppDbContextConnectionStringKey))
+    .AddPersistence(
+        builder.Configuration
+            .GetConnectionString(ConfigurationConstants.AppDbContextConnectionStringKey)
+    )
     .AddApi();
 
 try

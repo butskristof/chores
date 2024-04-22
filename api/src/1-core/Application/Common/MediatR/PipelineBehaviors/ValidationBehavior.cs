@@ -58,7 +58,7 @@ internal sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavio
             .SelectMany(result => result.Errors)
             .ToList();
 
-        if (failures.Any())
+        if (failures.Count != 0)
         {
             // in case validation resulted in failures, return a result with the failures as errors
             // an exception should *not* be thrown: we're doing flow control here, and validation failures
