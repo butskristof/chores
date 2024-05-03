@@ -6,6 +6,8 @@ using Chores.Application.Common.FluentValidation;
 using Chores.Persistence;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
+using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Chores.Api;
 
@@ -106,5 +108,16 @@ internal static class DependencyInjection
                     }));
 
         return services;
+    }
+
+    internal static LoggerConfiguration WriteToConsole(this LoggerConfiguration loggerConfiguration)
+    {
+        return loggerConfiguration
+            .Enrich.FromLogContext()
+            .WriteTo.Console(
+                theme: AnsiConsoleTheme.Code,
+                outputTemplate:
+                "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {NewLine}{Message:lj} {NewLine}{Exception}"
+            );
     }
 }

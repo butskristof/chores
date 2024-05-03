@@ -5,19 +5,32 @@ using Chores.Application.Common.Constants;
 using Chores.Infrastructure;
 using Chores.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
-
-builder
-    .Services
-    .AddConfiguration()
-    .AddApplication()
-    .AddInfrastructure()
-    .AddPersistence(builder.Configuration.GetConnectionString(ConfigurationConstants.AppDbContextConnectionStringKey))
-    .AddApi();
+Log.Logger = new LoggerConfiguration()
+    .WriteToConsole()
+    .CreateBootstrapLogger();
 
 try
 {
+    var builder = WebApplication.CreateBuilder(args);
+
+    builder
+        .Services
+        .AddConfiguration()
+        .AddApplication()
+        .AddInfrastructure()
+        .AddPersistence(
+            builder.Configuration.GetConnectionString(ConfigurationConstants.AppDbContextConnectionStringKey)
+        )
+        .AddApi();
+
+    builder.Host
+        .UseSerilog((context, configuration) => configuration
+            .WriteToConsole()
+            .ReadFrom.Configuration(context.Configuration)
+        );
+
     var app = builder.Build();
 
     app
@@ -44,14 +57,20 @@ try
 
     using (var scope = app.Services.CreateScope())
     {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
         try
         {
+            logger.LogInformation("Migrating application database");
+
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             context.Database.Migrate();
+
+            logger.LogInformation("Migrated application database");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            // TODO log
+            logger.LogError(ex, "Failed to migrate application database: {Message}", ex.Message);
             throw;
         }
     }
@@ -60,5 +79,10 @@ try
 }
 catch (Exception ex) when (ex is not HostAbortedException)
 {
+    Log.Fatal(ex, "Application terminated unexpectedly");
     throw;
+}
+finally
+{
+    Log.CloseAndFlush();
 }
