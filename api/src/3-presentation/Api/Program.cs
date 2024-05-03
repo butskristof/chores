@@ -15,12 +15,6 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
-    builder.Host
-        .UseSerilog((context, configuration) => configuration
-            .Enrich.FromLogContext()
-            .ReadFrom.Configuration(context.Configuration)
-        );
-
     builder
         .Services
         .AddConfiguration()
@@ -30,6 +24,12 @@ try
             builder.Configuration.GetConnectionString(ConfigurationConstants.AppDbContextConnectionStringKey)
         )
         .AddApi();
+
+    builder.Host
+        .UseSerilog((context, configuration) => configuration
+            .Enrich.FromLogContext()
+            .ReadFrom.Configuration(context.Configuration)
+        );
 
     var app = builder.Build();
 
