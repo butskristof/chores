@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
+    .WriteToConsole()
     .CreateBootstrapLogger();
 
 try
@@ -27,7 +27,7 @@ try
 
     builder.Host
         .UseSerilog((context, configuration) => configuration
-            .Enrich.FromLogContext()
+            .WriteToConsole()
             .ReadFrom.Configuration(context.Configuration)
         );
 
