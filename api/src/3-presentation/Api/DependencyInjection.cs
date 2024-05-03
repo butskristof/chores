@@ -27,7 +27,7 @@ internal static class DependencyInjection
         services
             .AddOptions<TOptions>()
             .BindConfiguration(sectionName)
-            .FluentValidateOptions()
+            // .FluentValidateOptions()
             .ValidateOnStart();
 
         return services;

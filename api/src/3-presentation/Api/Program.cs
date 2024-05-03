@@ -27,7 +27,8 @@ try
         .AddApplication()
         .AddInfrastructure()
         .AddPersistence(
-            builder.Configuration.GetConnectionString(ConfigurationConstants.AppDbContextConnectionStringKey))
+            builder.Configuration.GetConnectionString(ConfigurationConstants.AppDbContextConnectionStringKey)
+        )
         .AddApi();
 
     var app = builder.Build();
@@ -79,6 +80,7 @@ try
 catch (Exception ex) when (ex is not HostAbortedException)
 {
     Log.Fatal(ex, "Application terminated unexpectedly");
+    throw;
 }
 finally
 {
