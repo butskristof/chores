@@ -23,7 +23,7 @@ internal static class ResultExtensions
             .Where(e => e.Type is ErrorType.Validation)
             .GroupBy(e => e.Code)
             .ToDictionary(group => group.Key, group => group.Select(e => e.Description).ToArray());
-        if (validationErrors.Any())
+        if (validationErrors.Count != 0)
             problemDetails = new ValidationProblemDetails(validationErrors);
         else
         {
