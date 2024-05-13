@@ -2,6 +2,7 @@
   <PrimeDialog
     :visible="true"
     modal
+    maximizable
     :draggable="false"
     :header="isEdit ? 'Edit tag' : 'Create new tag'"
     :style="{ width: '50rem' }"

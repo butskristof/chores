@@ -21,6 +21,11 @@
     :tag="tagForEdit"
     @close="closeEditDialog"
   />
+  <DeleteTag
+    v-if="tagForDelete != null"
+    :tag="tagForDelete"
+    @close="closeDeleteDialog"
+  />
 </template>
 
 <script setup>
@@ -28,6 +33,7 @@ import TagsList from '@/components/tags/manage/TagsList.vue';
 import { useChoresApiTags } from '@/composables/queries/chores-api.js';
 import { computed, ref } from 'vue';
 import EditTag from '@/components/tags/manage/EditTag.vue';
+import DeleteTag from '@/components/tags/manage/DeleteTag.vue';
 
 const tagsQuery = useChoresApiTags();
 const tags = computed(() => tagsQuery.data.value?.tags ?? []);
@@ -52,6 +58,7 @@ const closeEditDialog = () => {
 const tagForDelete = ref(null);
 const setTagForDelete = (id) =>
   (tagForDelete.value = id == null ? null : tags.value.find((t) => t.id === id));
+const closeDeleteDialog = () => (tagForDelete.value = null);
 
 //#endregion
 </script>
