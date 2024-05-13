@@ -1,14 +1,47 @@
 <template>
   <footer>
     <div class="actions">
+      <PrimeButton
+        aria-label="Toggle dark mode"
+        :icon="isDark === true ? 'pi pi-sun' : 'pi pi-moon'"
+        text
+        rounded
+        severity="secondary"
+        @click="toggleDark()"
+      />
       <a href="https://github.com/butskristof/chores">
-        <i class="pi pi-github" />
+        <PrimeButton
+          icon="pi pi-github"
+          text
+          rounded
+          severity="secondary"
+          aria-label="GitHub"
+        />
+      </a>
+      <a href="#">
+        <PrimeButton
+          icon="pi pi-cog"
+          text
+          rounded
+          severity="secondary"
+          aria-label="Settings"
+        />
       </a>
     </div>
   </footer>
 </template>
 
-<script setup></script>
+<script setup>
+import { useDark, useToggle } from '@vueuse/core';
+
+const isDark = useDark({
+  selector: 'html',
+  attribute: 'color-scheme',
+  valueDark: 'dark',
+  valueLight: 'light',
+});
+const toggleDark = useToggle(isDark);
+</script>
 
 <style scoped lang="scss">
 @import '@/styles/_utilities.scss';
@@ -20,6 +53,7 @@ footer {
 
   .actions {
     @include flex-row;
+    align-items: center;
     gap: 0.5rem;
   }
 }
