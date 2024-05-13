@@ -10,10 +10,14 @@
           <div class="usage">used by {{ tag.choresCount }} chores</div>
         </div>
         <div class="actions">
-          <PrimeButton icon="pi pi-pencil" />
+          <PrimeButton
+            icon="pi pi-pencil"
+            @click="$emit('edit', tag.id)"
+          />
           <PrimeButton
             icon="pi pi-trash"
             severity="danger"
+            @click="$emit('delete', tag.id)"
           />
         </div>
       </li>
@@ -28,6 +32,7 @@ defineProps({
     required: true,
   },
 });
+defineEmits(['edit', 'delete']);
 </script>
 
 <style scoped lang="scss">

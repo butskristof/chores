@@ -74,8 +74,8 @@
 <script setup>
 import { useChoresApiTags } from '@/composables/queries/chores-api.js';
 import { computed, ref } from 'vue';
-import EditTag from '@/components/tags/manage/EditTag.vue';
-import DeleteTag from '@/components/tags/manage/DeleteTag.vue';
+import EditTag from '@/components/tags/manage/_EditTag.vue';
+import DeleteTag from '@/components/tags/manage/_DeleteTag.vue';
 import { Tippy } from 'vue-tippy';
 
 const tagsQuery = useChoresApiTags();

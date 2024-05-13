@@ -5,19 +5,55 @@
       <PrimeButton
         label="New"
         icon="pi pi-plus"
+        @click="openEditDialog()"
       />
     </div>
   </div>
-  <TagsList :tags="tags" />
+
+  <TagsList
+    :tags="tags"
+    @edit="openEditDialog"
+    @delete="setTagForDelete"
+  />
+
+  <EditTag
+    v-if="showEditDialog"
+    :tag="tagForEdit"
+    @close="closeEditDialog"
+  />
 </template>
 
 <script setup>
 import TagsList from '@/components/tags/manage/TagsList.vue';
 import { useChoresApiTags } from '@/composables/queries/chores-api.js';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+import EditTag from '@/components/tags/manage/EditTag.vue';
 
 const tagsQuery = useChoresApiTags();
 const tags = computed(() => tagsQuery.data.value?.tags ?? []);
+
+//#region edit
+
+const showEditDialog = ref(false);
+const tagForEdit = ref(null);
+const openEditDialog = (id = null) => {
+  tagForEdit.value = id == null ? null : tags.value.find((t) => t.id === id);
+  showEditDialog.value = true;
+};
+const closeEditDialog = () => {
+  showEditDialog.value = false;
+  tagForEdit.value = null;
+};
+
+//#endregion
+
+//#region delete
+
+const tagForDelete = ref(null);
+const setTagForDelete = (id) =>
+  (tagForDelete.value = id == null ? null : tags.value.find((t) => t.id === id));
+
+//#endregion
 </script>
 
 <style scoped lang="scss">
@@ -26,5 +62,6 @@ const tags = computed(() => tagsQuery.data.value?.tags ?? []);
 .header {
   @include flex-row-justify-between-wrapping;
   margin-bottom: var(--default-padding);
+  padding-inline: var(--default-padding);
 }
 </style>
