@@ -1,5 +1,5 @@
 <template>
-  <div>chore detail</div>
+  <div class="tags-list">list</div>
 </template>
 
 <script setup></script>

@@ -121,7 +121,7 @@ header {
   }
 
   @include media-min-width($md) {
-    margin-right: 3rem; // TODO less?
+    margin-right: 2rem;
   }
 }
 
