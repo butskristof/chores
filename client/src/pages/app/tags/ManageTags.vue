@@ -8,17 +8,23 @@
       />
     </div>
   </div>
-  <TagsList />
+  <TagsList :tags="tags" />
 </template>
 
 <script setup>
 import TagsList from '@/components/tags/manage/TagsList.vue';
+import { useChoresApiTags } from '@/composables/queries/chores-api.js';
+import { computed } from 'vue';
+
+const tagsQuery = useChoresApiTags();
+const tags = computed(() => tagsQuery.data.value?.tags ?? []);
 </script>
 
 <style scoped lang="scss">
-@import '@/styles/_layout-elements.scss';
+@import '@/styles/_utilities.scss';
 
 .header {
-  @include header-space-between;
+  @include flex-row-justify-between-wrapping;
+  margin-bottom: var(--default-padding);
 }
 </style>

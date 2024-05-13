@@ -17,6 +17,18 @@
   justify-content: space-between;
 }
 
+@mixin flex-row-justify-between-wrapping {
+  @include flex-row-justify-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--default-padding);
+
+  .actions {
+    margin-left: auto;
+  }
+}
+
+
 @mixin media-min-width($min-width) {
   @media screen and (min-width: $min-width) {
     @content;
@@ -43,4 +55,14 @@
 @mixin padding-y($padding) {
   padding-top: $padding;
   padding-bottom: $padding;
+}
+
+@mixin white-content-box {
+  background-color: var(--surface-card);
+  padding: var(--default-padding);
+  border-radius: var(--default-border-radius);
+}
+
+@mixin pre-overflow {
+  overflow-x: auto;
 }

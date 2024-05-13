@@ -224,7 +224,7 @@ header {
 
 .actions {
   @include media-max-width($md) {
-    border-top: solid 1px var(--surface-border);
+    border-top: 1px solid var(--surface-border);
   }
 
   .action-item {
