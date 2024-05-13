@@ -1,0 +1,16 @@
+@import 'utilities';
+
+// breakpoints
+$sm: 576px;
+$md: 768px;
+$lg: 992px;
+$xl: 1200px;
+
+:root {
+  --border-radius: 6px;
+  --default-padding: 1rem;
+  @include media-min-width($sm) {
+    --default-padding: 2rem;
+  }
+}
+

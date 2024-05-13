@@ -1,0 +1,23 @@
+@import 'utilities';
+
+:root {
+  color-scheme: light;
+  --text-color: var(--p-surface-700);
+  --surface-ground: var(--p-surface-50);
+  --surface-section: var(--p-surface-0);
+  --surface-card: var(--p-surface-0);
+  --surface-overlay: var(--p-surface-0);
+  --surface-border: var(--p-surface-300);
+  --surface-hover: var(--p-surface-200);
+
+  @include dark-mode {
+    color-scheme: dark;
+    --text-color: var(--p-surface-0);
+    --surface-ground: var(--p-surface-800);
+    --surface-section: var(--p-surface-900);
+    --surface-card: var(--p-surface-900);
+    --surface-overlay: var(--p-surface-900);
+    --surface-border: var(--p-surface-700);
+    --surface-hover: var(--p-surface-600);
+  }
+}

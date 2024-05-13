@@ -16,7 +16,12 @@ module.exports = {
     'no-restricted-imports': [
       'error',
       {
-        patterns: ['../*', '^lodash$'],
+        patterns: [
+          // prevent using relative paths for components imports, prefer absolute with '@/'
+          '../*',
+          // prevent importing all of lodash, prefer using lodash/function
+          '^lodash$',
+        ],
       },
     ],
     'no-console': [

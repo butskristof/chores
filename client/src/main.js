@@ -1,10 +1,19 @@
+//#region styling
+
+import '@/styles/reset.css';
+import '@/styles/main.scss';
+
+//#endregion
+
 import { createApp } from 'vue';
 import App from './App.vue';
+
 const app = createApp(App);
 
 //#region router
 
 import router from './router';
+
 app.use(router);
 
 //#endregion
@@ -12,6 +21,7 @@ app.use(router);
 //#region pinia
 
 import { createPinia } from 'pinia';
+
 app.use(createPinia());
 
 //#endregion
@@ -19,14 +29,22 @@ app.use(createPinia());
 //#region tanstack query
 
 import { VueQueryPlugin } from '@tanstack/vue-query';
+
 app.use(VueQueryPlugin);
 
 //#endregion
 
 //#region primevue
 
-import '@/styles/prime.scss';
-setupPrimeVue(app);
+import 'primeicons/primeicons.css';
+import PrimeVue from 'primevue/config';
+import Aura from 'primevue/themes/aura';
+
+app.use(PrimeVue, {
+  theme: {
+    preset: Aura,
+  },
+});
 
 //#endregion
 
@@ -34,6 +52,7 @@ setupPrimeVue(app);
 
 import 'vue-toastification/dist/index.css';
 import Toast, { POSITION } from 'vue-toastification';
+
 app.use(Toast, {
   position: POSITION.BOTTOM_RIGHT,
 });
@@ -59,7 +78,7 @@ import 'vue-multiselect/dist/vue-multiselect.css';
 //#region uid
 
 import { Uid } from '@shimyshack/uid';
-import { setupPrimeVue } from '@/utilities/prime.js';
+
 app
   // .use(UidPlugin)
   .directive('uid', Uid);
