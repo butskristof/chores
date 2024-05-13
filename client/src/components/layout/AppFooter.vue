@@ -3,11 +3,11 @@
     <div class="actions">
       <PrimeButton
         aria-label="Toggle dark mode"
-        :icon="isDark === true ? 'pi pi-sun' : 'pi pi-moon'"
+        :icon="darkMode.isDark === true ? 'pi pi-sun' : 'pi pi-moon'"
         text
         rounded
         severity="secondary"
-        @click="toggleDark()"
+        @click="darkMode.toggle()"
       />
       <a href="https://github.com/butskristof/chores">
         <PrimeButton
@@ -32,15 +32,9 @@
 </template>
 
 <script setup>
-import { useDark, useToggle } from '@vueuse/core';
+import { useAppDarkMode } from '@/composables/utilities.js';
 
-const isDark = useDark({
-  selector: 'html',
-  attribute: 'color-scheme',
-  valueDark: 'dark',
-  valueLight: 'light',
-});
-const toggleDark = useToggle(isDark);
+const darkMode = useAppDarkMode();
 </script>
 
 <style scoped lang="scss">

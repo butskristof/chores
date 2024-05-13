@@ -1,8 +1,15 @@
 <template>
   <header>
     <div class="brand">
-      <div class="icon">icon</div>
-      Chores
+      <router-link :to="{ name: routes.home.name }">
+        <img
+          :src="
+            darkMode.isDark.value === true ? '/images/chores-light.svg' : '/images/chores-dark.svg'
+          "
+          alt="Chores"
+        />
+        Chores
+      </router-link>
     </div>
     <div class="toggle">
       <PrimeButton
@@ -53,6 +60,9 @@
 <script setup>
 import { ref } from 'vue';
 import { routes } from '@/router/routes';
+import { useAppDarkMode } from '@/composables/utilities.js';
+
+const darkMode = useAppDarkMode();
 
 const showMobileMenu = ref(false);
 const navigationRoutes = [
@@ -101,23 +111,19 @@ header {
   @include shadow-2;
 }
 
-.brand {
-  height: 40px;
+// router-link is replaced w/ <a> tag
+// eslint-disable-next-line vue-scoped-css/no-unused-selector
+.brand a {
   font-size: 150%;
   font-weight: 700;
   display: flex;
   flex-direction: row;
-  justify-content: center;
   align-items: center;
+  gap: 0.5rem;
 
-  .icon {
-    height: 100%;
-    display: inline-flex;
-    align-items: center;
-    font-size: 50%;
-    margin-right: 0.75rem;
-    @include padding-x(0.5rem);
-    border: 1px solid var(--p-surface-700);
+  img {
+    display: inline-block;
+    max-height: 35px;
   }
 
   @include media-min-width($md) {
