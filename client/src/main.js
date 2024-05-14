@@ -39,6 +39,7 @@ app.use(VueQueryPlugin);
 import 'primeicons/primeicons.css';
 import PrimeVue from 'primevue/config';
 import Aura from 'primevue/themes/aura';
+import Ripple from 'primevue/ripple';
 
 app.use(PrimeVue, {
   theme: {
@@ -48,6 +49,7 @@ app.use(PrimeVue, {
     },
   },
 });
+app.directive('ripple', Ripple);
 
 //#endregion
 

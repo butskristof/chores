@@ -3,9 +3,11 @@
     :visible="true"
     modal
     :draggable="false"
-    :style="{ width: '25rem' }"
-    :breakpoints="{ '575px': '95vw' }"
-    :closable="false"
+    :style="{ width: isError ? '40rem' : '25rem', 'max-width': '95vw' }"
+    :show-header="!isSuccess"
+    :header="isError ? '&nbsp;' : ''"
+    :closable="isError"
+    class="dialog"
     @update:visible="updateVisible"
   >
     <div
@@ -15,17 +17,18 @@
       <PrimeInlineMessage severity="success">Tag deleted</PrimeInlineMessage>
     </div>
     <div
-      v-else
-      class="confirm-text"
+      v-else-if="mutation.isError.value === true"
+      class="error"
     >
-      Delete tag
-      <strong>{{ tag.name }}</strong>
-      ?
+      <p>Deleting the tag failed, please refer to the error information below for more details.</p>
+      <ApiError :error="mutation.error.value" />
     </div>
-    <template
-      v-if="mutation.isSuccess.value !== true"
-      #footer
-    >
+    <template v-else>
+      <div class="confirm-text">
+        Delete tag
+        <strong>{{ tag.name }}</strong>
+        ?
+      </div>
       <div class="actions">
         <PrimeButton
           label="No, keep tag"
@@ -49,11 +52,12 @@
 <script setup>
 import { useChoreApiDeleteTag } from '@/composables/queries/chores-api.js';
 import { useQueryClient } from '@tanstack/vue-query';
-import { sleep } from '@/utilities/sleep.js';
 import { useToast } from 'vue-toastification';
 import PrimeDialog from 'primevue/dialog';
 import PrimeInlineMessage from 'primevue/inlinemessage';
 import PrimeButton from 'primevue/button';
+import ApiError from '@/components/common/ApiError.vue';
+import { computed } from 'vue';
 
 const props = defineProps({
   tag: {
@@ -67,13 +71,15 @@ const queryClient = useQueryClient();
 const toast = useToast();
 
 const mutation = useChoreApiDeleteTag(queryClient);
+const isError = computed(() => mutation.isError.value === true);
+const isSuccess = computed(() => mutation.isSuccess.value === true);
 const deleteTag = async () => {
   try {
-    await sleep(1);
     await mutation.mutateAsync(props.tag.id);
     toast.success('Tag deleted');
     emit('close');
   } catch (e) {
+    // error should be printed to dialog as well
     console.error(e);
   }
 };
@@ -87,10 +93,20 @@ const updateVisible = (value) => {
 @import '@/styles/_custom-vars.scss';
 @import '@/styles/_utilities.scss';
 
+.success {
+  padding-top: 1.5rem;
+  text-align: center;
+}
+
+.error {
+  @include flex-column;
+  gap: 1rem;
+}
+
 .confirm-text {
   text-align: center;
   font-size: 110%;
-  margin-bottom: var(--default-padding);
+  margin-bottom: 2rem;
 }
 
 .actions {
