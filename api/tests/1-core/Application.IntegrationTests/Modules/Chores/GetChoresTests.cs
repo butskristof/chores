@@ -56,10 +56,10 @@ public sealed class GetChoresTests : ApplicationTestBase
         var request = new GetChores.Request();
         var result = await Application.SendAsync(request);
 
-        var expectedTagDto = new GetChores.Response.TagDto(tagId, "some tag", "#ffffff", "pi pi-check");
 
         result.IsError.Should().BeFalse();
         var choreDto = result.Value.Chores.SingleOrDefault();
+        var expectedTagDto = new GetChores.Response.TagDto(tagId, "some tag", "#ffffff", "pi pi-check");
         choreDto.Should().NotBeNull();
         choreDto!.Tags
             .Should().HaveCount(1)
