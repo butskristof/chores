@@ -1,0 +1,57 @@
+@mixin flex {
+  display: flex;
+}
+
+@mixin flex-column {
+  @include flex;
+  flex-direction: column;
+}
+
+@mixin flex-row {
+  @include flex;
+  flex-direction: row;
+}
+
+@mixin flex-row-justify-between {
+  @include flex-row;
+  justify-content: space-between;
+}
+
+@mixin flex-row-justify-between-wrapping {
+  @include flex-row-justify-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--default-padding);
+
+  .actions {
+    margin-left: auto;
+  }
+}
+
+@mixin media-min-width($min-width) {
+  @media screen and (min-width: $min-width) {
+    @content;
+  }
+}
+
+@mixin media-max-width($max-width) {
+  @media screen and (max-width: calc($max-width - 1px)) {
+    @content;
+  }
+}
+
+//@mixin dark-mode {
+//  @media (prefers-color-scheme: dark) {
+//    @content;
+//  }
+//}
+
+@mixin white-content-box {
+  background-color: var(--surface-card);
+  padding: var(--default-padding);
+  border-radius: var(--border-radius);
+}
+
+@mixin pre-overflow {
+  overflow-x: auto;
+}

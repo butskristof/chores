@@ -1,16 +1,6 @@
 import axios from 'axios';
-import { stringIsNullOrWhitespace } from '@/utilities/string';
 
-const createAxiosInstance = (baseUrl, accessTokenGetter) => {
-  const instance = axios.create({ baseURL: baseUrl });
-  instance.interceptors.request.use((config) => {
-    const accessToken = accessTokenGetter();
-    if (!stringIsNullOrWhitespace(accessToken))
-      config.headers.setAuthorization(`Bearer ${accessToken}`);
-    return config;
-  });
-  return instance;
-};
+const createAxiosInstance = (baseUrl) => axios.create({ baseURL: baseUrl });
 
 export class AuthenticatedApiService {
   #axiosInstance;

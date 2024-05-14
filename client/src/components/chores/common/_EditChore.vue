@@ -1,60 +1,58 @@
 <template>
-  <PrimeDialog
+  <Dialog
     :visible="true"
     modal
-    maximizable
     :draggable="false"
-    :header="isEdit ? 'Edit tag' : 'Create new tag'"
-    :style="{
-      width: '50rem',
-    }"
+    :header="isEdit ? 'Edit chore' : 'Create new chore'"
+    :style="{ width: '50rem' }"
+    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
     @update:visible="updateVisible"
   >
     <form @submit="save">
       <div class="field">
         <label for="name">Name</label>
-        <PrimeInputText
+        <InputText
           id="name"
           v-model.trim="name.value.value"
+          autofocus
           type="text"
           :disabled="isFormDisabled"
-          :invalid="name.errors.value.length > 0"
+          :class="{ 'p-invalid': name.errorMessage.value }"
         />
         <small
-          v-if="name.errors.value.length > 0"
+          v-if="name.errorMessage"
           class="p-error"
+          >{{ name.errorMessage }}</small
         >
-          <span v-if="name.errors.value.length === 1">{{ name.errorMessage.value }}</span>
-          <template v-else>
-            <span
-              v-for="error in name.errors.value"
-              :key="error"
-              >{{ error }} <br
-            /></span>
-          </template>
-        </small>
+      </div>
+
+      <div class="field">
+        <label for="interval">Interval</label>
+        <InputText
+          id="interval"
+          v-model.trim="interval.value.value"
+          autofocus
+          type="number"
+          :disabled="isFormDisabled"
+          :class="{ 'p-invalid': interval.errorMessage.value }"
+        />
+        <small
+          v-if="interval.errorMessage"
+          class="p-error"
+          >{{ interval.errorMessage }}</small
+        >
       </div>
 
       <div class="footer">
         <div class="result">
-          <PrimeInlineMessage
-            v-if="mutation.isSuccess.value"
+          <InlineMessage
+            v-if="mutation.isSuccess.value === true"
             severity="success"
-            >Tag saved</PrimeInlineMessage
+            >Chore saved</InlineMessage
           >
-          <ApiError
-            v-if="mutation.isError.value"
-            :error="mutation.error.value"
-          >
-            <template #message>
-              <p>
-                Saving the tag failed, please refer to the error information below for more details.
-              </p>
-            </template>
-          </ApiError>
         </div>
         <div class="actions">
-          <PrimeButton
+          <Button
             type="submit"
             label="Save"
             icon="pi pi-save"
@@ -64,30 +62,27 @@
         </div>
       </div>
     </form>
-  </PrimeDialog>
+  </Dialog>
 </template>
 
 <script setup>
 import { computed } from 'vue';
-import PrimeDialog from 'primevue/dialog';
-import PrimeInputText from 'primevue/inputtext';
-import PrimeButton from 'primevue/button';
-import PrimeInlineMessage from 'primevue/inlinemessage';
 import { useField, useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/yup';
 import * as yup from 'yup';
-import { useChoresApiUpsertTag } from '@/composables/queries/chores-api.js';
+import { useChoresApiUpsertChore } from '@/composables/queries/chores-api';
 import { useQueryClient } from '@tanstack/vue-query';
-import ApiError from '@/components/common/ApiError.vue';
 
 const props = defineProps({
-  tag: {
+  chore: {
     type: Object,
     default: () => null,
   },
 });
 const emit = defineEmits(['close']);
-const isEdit = computed(() => props.tag != null);
+const isEdit = computed(() => props.chore != null);
+
+const queryClient = useQueryClient();
 
 //#region form
 
@@ -95,10 +90,12 @@ const { handleSubmit, meta } = useForm({
   validationSchema: toTypedSchema(
     yup.object({
       name: yup.string().required().label('Name'),
+      interval: yup.number().required().positive().integer().label('Interval'),
     }),
   ),
   initialValues: {
-    name: props.tag?.name,
+    name: props.chore?.name,
+    interval: props.chore?.interval,
   },
 });
 
@@ -107,21 +104,21 @@ const isFormDisabled = computed(
 );
 
 const name = useField('name');
+const interval = useField('interval');
 
 //#endregion
 
 //#region create/update
 
-const queryClient = useQueryClient();
-const mutation = useChoresApiUpsertTag(queryClient);
+const mutation = useChoresApiUpsertChore(queryClient);
 
 const save = handleSubmit.withControlled(async (values) => {
   try {
-    const payload = {
-      name: values.name,
-    };
-    if (isEdit.value === true) payload.id = props.tag.id;
+    const payload = { ...values };
+    if (isEdit.value === true) payload.id = props.chore.id;
     await mutation.mutateAsync(payload);
+    // toast.success(isEdit.value === true ? 'Chore updated' : 'Chore created');
+    // tryClose(true);
   } catch (e) {
     console.error(e);
   }
@@ -135,30 +132,35 @@ const updateVisible = (value) => {
 const tryClose = (force = false) => {
   let close = true;
   if (!force && meta.value.dirty && mutation.isSuccess.value !== true)
-    // TODO primevue confirm?
     close = confirm('There may be unsaved changes, are you sure you want to stop editing?');
   if (close) emit('close');
 };
 </script>
 
 <style scoped lang="scss">
-@import '@/styles/_utilities';
-
 form {
   .field {
-    @include flex-column;
-    gap: 0.5rem;
-
     margin-bottom: 1rem;
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    :deep(input) {
+      width: 100%;
+    }
   }
 
   .footer {
-    @include flex-row-justify-between-wrapping;
-    align-items: flex-end;
-    flex-wrap: wrap-reverse;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 
-    .result {
-      max-width: 100%;
+    .actions {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
     }
   }
 }

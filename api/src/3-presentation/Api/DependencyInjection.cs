@@ -60,7 +60,8 @@ internal static class DependencyInjection
             .AddScoped<IAuthenticationInfo, ApiAuthenticationInfo>();
 
         services
-            .AddAuthentication()
+            .AddAuthentication(TestAuthHandler.AuthenticationScheme)
+            .AddScheme<TestAuthHandlerOptions, TestAuthHandler>(TestAuthHandler.AuthenticationScheme, _ => { })
             .AddJwtBearer(options =>
             {
                 using var serviceProvider = services.BuildServiceProvider();

@@ -1,82 +1,43 @@
 <template>
-  <div class="card">
-    <Toolbar class="header">
-      <template #start>
-        <h1>Manage tags</h1>
-      </template>
-      <template #end>
-        <Button
-          label="New"
+  <div class="manage-tags">
+    <PageHeader title="Tags">
+      <template #actions>
+        <PrimeButton
+          label="Add new tag"
           icon="pi pi-plus"
-          @click="openEditDialog"
+          @click="openEditDialog()"
         />
       </template>
-    </Toolbar>
+    </PageHeader>
 
-    <DataTable
-      striped-rows
-      removable-sort
-      :value="tags"
-      :loading="tagsQuery.isLoading.value"
-    >
-      <Column
-        field="name"
-        header="Name"
-        :sortable="true"
-      />
-      <Column
-        field="choresCount"
-        header="Used by # chores"
-        :sortable="true"
-      />
-      <Column header-style="min-width: 2rem;">
-        <template #body="slotProps">
-          <div class="row-actions">
-            <Button
-              icon="pi pi-pencil"
-              class="p-button-rounded"
-              @click="openEditDialog(slotProps.data.id)"
-            />
-            <Tippy
-              :content="
-                slotProps.data.choresCount > 0
-                  ? 'Tags which are referenced by chores cannot be deleted'
-                  : null
-              "
-              placement="auto-end"
-            >
-              <Button
-                icon="pi pi-trash"
-                class="p-button-rounded p-button-danger"
-                :disabled="slotProps.data.choresCount > 0"
-                @click="setTagForDelete(slotProps.data.id)"
-              />
-            </Tippy>
-          </div>
-        </template>
-      </Column>
-    </DataTable>
+    <TagsList
+      :tags="tags"
+      :loading="tagsQuery.isPending.value"
+      @edit="openEditDialog"
+      @delete="setTagForDelete"
+    />
 
     <EditTag
       v-if="showEditDialog"
       :tag="tagForEdit"
       @close="closeEditDialog"
     />
-
     <DeleteTag
       v-if="tagForDelete != null"
       :tag="tagForDelete"
-      @close="setTagForDelete(null)"
+      @close="closeDeleteDialog"
     />
   </div>
 </template>
 
 <script setup>
+import TagsList from '@/components/tags/manage/TagsList.vue';
 import { useChoresApiTags } from '@/composables/queries/chores-api.js';
 import { computed, ref } from 'vue';
 import EditTag from '@/components/tags/manage/EditTag.vue';
 import DeleteTag from '@/components/tags/manage/DeleteTag.vue';
-import { Tippy } from 'vue-tippy';
+import PrimeButton from 'primevue/button';
+import PageHeader from '@/components/common/PageHeader.vue';
 
 const tagsQuery = useChoresApiTags();
 const tags = computed(() => tagsQuery.data.value?.tags ?? []);
@@ -101,24 +62,7 @@ const closeEditDialog = () => {
 const tagForDelete = ref(null);
 const setTagForDelete = (id) =>
   (tagForDelete.value = id == null ? null : tags.value.find((t) => t.id === id));
+const closeDeleteDialog = () => (tagForDelete.value = null);
 
 //#endregion
 </script>
-
-<style scoped lang="scss">
-.header {
-  margin-bottom: 2rem;
-
-  h1 {
-    font-size: 1.75rem;
-    margin-block: 0;
-  }
-}
-
-.row-actions {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  gap: 0.5rem;
-}
-</style>

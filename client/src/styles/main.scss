@@ -1,0 +1,25 @@
+@import 'fonts';
+@import 'custom-vars';
+@import 'theme';
+
+html,
+body {
+  font-family: 'Lato', sans-serif;
+  color: var(--text-color);
+  background-color: var(--surface-ground);
+}
+
+a {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+.p-dialog {
+  &:not(.p-dialog-maximized) {
+    max-width: calc(100vw - 2rem);
+  }
+}
