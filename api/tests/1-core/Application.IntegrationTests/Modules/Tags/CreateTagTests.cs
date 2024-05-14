@@ -16,7 +16,7 @@ public sealed class CreateTagTests : ApplicationTestBase
     [Fact]
     public async Task InvalidRequest_ReturnsValidationError()
     {
-        var request = new CreateTag.Request(string.Empty);
+        var request = new CreateTag.Request(string.Empty, null, null);
         var result = await Application.SendAsync(request);
 
         result.IsError.Should().BeTrue("validation failure should be reported as error");
@@ -33,7 +33,7 @@ public sealed class CreateTagTests : ApplicationTestBase
     {
         await Application.AddAsync(new TagBuilder().WithName("super tag").Build());
 
-        var request = new CreateTag.Request("SUPER TAG  ");
+        var request = new CreateTag.Request("SUPER TAG  ", null, null);
         var result = await Application.SendAsync(request);
 
         result.IsError.Should().BeTrue("conflict should be an error");
@@ -48,7 +48,7 @@ public sealed class CreateTagTests : ApplicationTestBase
     {
         var dt = new DateTimeOffset(2023, 12, 13, 13, 21, 15, TimeSpan.Zero);
         Application.SetDateTime(dt);
-        var request = new CreateTag.Request("hey");
+        var request = new CreateTag.Request("hey", "#ffffff", "pi pi-check");
 
         var result = await Application.SendAsync(request);
 
@@ -56,11 +56,15 @@ public sealed class CreateTagTests : ApplicationTestBase
         var tagDto = result.Value;
         tagDto.Id.Should().NotBeEmpty();
         tagDto.Name.Should().Be("hey");
+        tagDto.Color.Should().Be("#ffffff");
+        tagDto.Icon.Should().Be("pi pi-check");
 
         var expectedTag = new Tag
         {
             Id = tagDto.Id,
             Name = "hey",
+            Color = "#ffffff",
+            Icon = "pi pi-check",
             CreatedBy = TestConstants.DefaultUserId,
             CreatedOn = dt,
             LastModifiedBy = TestConstants.DefaultUserId,
@@ -71,12 +75,47 @@ public sealed class CreateTagTests : ApplicationTestBase
     }
 
     [Fact]
+    public async Task SanitisesValues()
+    {
+        var request = new CreateTag.Request("   UNtrimmed    ", "#ffFF09", "   pi pi-check    ");
+        var result = await Application.SendAsync(request);
+
+        var tagDto = result.Value;
+        tagDto!.Name.Should().Be("UNtrimmed");
+        tagDto.Color.Should().Be("#ffff09");
+        tagDto.Icon.Should().Be("pi pi-check");
+
+        var tag = await Application.FindAsync<Tag>(tagDto.Id);
+        tag!.Name.Should().Be("UNtrimmed");
+        tag.Color.Should().Be("#ffff09");
+        tag.Icon.Should().Be("pi pi-check");
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task PersistsNullInsteadOfWhitespace(string? value)
+    {
+        var request = new CreateTag.Request("some tag", value, value);
+        var result = await Application.SendAsync(request);
+
+        var tagDto = result.Value;
+        tagDto!.Color.Should().BeNull();
+        tagDto.Icon.Should().BeNull();
+
+        var tag = await Application.FindAsync<Tag>(tagDto.Id);
+        tag!.Color.Should().BeNull();
+        tag.Icon.Should().BeNull();
+    }
+
+    [Fact]
     public async Task DuplicateNameOfOtherUser_CreatesTag()
     {
         await Application.AddAsync(new TagBuilder().WithName("super tag").Build());
 
         Application.SetUserId("other_user");
-        var request = new CreateTag.Request("super tag");
+        var request = new CreateTag.Request("super tag", null, null);
         var result = await Application.SendAsync(request);
 
         result.IsError.Should().BeFalse();

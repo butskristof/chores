@@ -23,20 +23,23 @@ public sealed class GetTagsTests : ApplicationTestBase
     [Fact]
     public async Task ReturnsDtos()
     {
-        await Application.AddAsync(new TagBuilder().WithName("tag 1").Build());
-        await Application.AddAsync(new TagBuilder().WithName("tag 2").Build());
+        var tag1 = new TagBuilder().WithName("tag 1").WithColor("#ffffff").WithIcon("pi pi-check").Build();
+        var tag2 = new TagBuilder().WithName("tag 2").WithColor(null).WithIcon(null).Build();
+        await Application.AddAsync(tag1, tag2);
 
         var request = new GetTags.Request();
         var result = await Application.SendAsync(request);
 
+        var expectedTag1 = new GetTags.Response.TagDto(tag1.Id, "tag 1", "#ffffff", "pi pi-check", 0);
+        var expectedTag2 = new GetTags.Response.TagDto(tag2.Id, "tag 2", null, null, 0);
+        
         result.IsError.Should().BeFalse();
         result.Value.Tags
             .Should()
             .NotBeEmpty()
             .And.HaveCount(2)
-            .And.ContainSingle(t => t.Name == "tag 1")
-            .And.ContainSingle(t => t.Name == "tag 2")
-            .And.AllSatisfy(t => t.ChoresCount.Should().Be(0));
+            .And.ContainEquivalentOf(expectedTag1)
+            .And.ContainEquivalentOf(expectedTag2);
     }
 
     [Fact]

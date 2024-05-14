@@ -16,7 +16,7 @@ public sealed class UpdateTagTests : ApplicationTestBase
     [Fact]
     public async Task InvalidRequest_ReturnsValidationError()
     {
-        var request = new UpdateTag.Request(Guid.Empty, string.Empty);
+        var request = new UpdateTag.Request(Guid.Empty, string.Empty, null, null);
         var result = await Application.SendAsync(request);
 
         result.IsError.Should().BeTrue("validation failure should be reported as error");
@@ -31,7 +31,7 @@ public sealed class UpdateTagTests : ApplicationTestBase
     [Fact]
     public async Task InvalidId_ReturnsNotFoundError()
     {
-        var request = new UpdateTag.Request(new Guid("F142362E-E424-469D-B495-3FD360A88CE5"), "valid name");
+        var request = new UpdateTag.Request(new Guid("F142362E-E424-469D-B495-3FD360A88CE5"), "valid name", null, null);
         var result = await Application.SendAsync(request);
 
         result.IsError.Should().BeTrue("random ID should not be found");
@@ -48,7 +48,7 @@ public sealed class UpdateTagTests : ApplicationTestBase
         await Application.AddAsync(new TagBuilder().WithName("some name").Build());
         await Application.AddAsync(new TagBuilder().WithId(id).WithName("other name").Build());
 
-        var request = new UpdateTag.Request(id, "some name");
+        var request = new UpdateTag.Request(id, "some name", null, null);
         var result = await Application.SendAsync(request);
 
         result.IsError.Should().BeTrue("conflict should be an error");
@@ -69,7 +69,7 @@ public sealed class UpdateTagTests : ApplicationTestBase
         var modified = new DateTimeOffset(2023, 12, 13, 14, 32, 0, TimeSpan.Zero);
         Application.SetDateTime(modified);
         Application.SetUserId("other_user");
-        var request = new UpdateTag.Request(id, "valid name");
+        var request = new UpdateTag.Request(id, "valid name", null, null);
         var result = await Application.SendAsync(request);
 
         result.IsError.Should().BeTrue("non-owned tag should not be accessible");
@@ -96,7 +96,7 @@ public sealed class UpdateTagTests : ApplicationTestBase
         }
 
         Application.SetDateTime(modified);
-        var request = new UpdateTag.Request(id, "some name");
+        var request = new UpdateTag.Request(id, "some name", "#ffffff", "pi pi-check");
         var result = await Application.SendAsync(request);
 
         result.IsError.Should().BeFalse();
@@ -106,6 +106,8 @@ public sealed class UpdateTagTests : ApplicationTestBase
         {
             Id = id,
             Name = "some name",
+            Color = "#ffffff",
+            Icon = "pi pi-check",
             CreatedBy = TestConstants.DefaultUserId,
             CreatedOn = created,
             LastModifiedBy = TestConstants.DefaultUserId,
@@ -116,6 +118,42 @@ public sealed class UpdateTagTests : ApplicationTestBase
     }
 
     [Fact]
+    public async Task SanitizesValues()
+    {
+        var id = new Guid("3650BDCF-0AA6-44DF-B8AC-F99ECB4690CD");
+        {
+            await Application.AddAsync(new TagBuilder().WithId(id).Build());
+        }
+
+        var request = new UpdateTag.Request(id, "   UNtrimmed    ", "#ffFF09", "   pi pi-check    ");
+        await Application.SendAsync(request);
+
+        var tag = await Application.FindAsync<Tag>(id);
+        tag!.Name.Should().Be("UNtrimmed");
+        tag.Color.Should().Be("#ffff09");
+        tag.Icon.Should().Be("pi pi-check");
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task PersistsNullInsteadOfWhitespace(string? value)
+    {
+        var id = new Guid("6722722A-6FA5-4B25-8262-611617AFEAAE");
+        {
+            await Application.AddAsync(new TagBuilder().WithId(id).Build());
+        }
+
+        var request = new UpdateTag.Request(id, "some tag", value, value);
+        await Application.SendAsync(request);
+
+        var tag = await Application.FindAsync<Tag>(id);
+        tag!.Color.Should().BeNull();
+        tag.Icon.Should().BeNull();
+    }
+
+    [Fact]
     public async Task DuplicateNameOfOtherUser_UpdatesTag()
     {
         await Application.AddAsync(new TagBuilder().WithName("desired name").Build());
@@ -123,7 +161,7 @@ public sealed class UpdateTagTests : ApplicationTestBase
         var id = new Guid("449D9B52-5165-4692-8EDF-58BF9CC77969");
         await Application.AddAsync(new TagBuilder().WithId(id).Build());
 
-        var request = new UpdateTag.Request(id, "desired name");
+        var request = new UpdateTag.Request(id, "desired name", null, null);
         var result = await Application.SendAsync(request);
 
         result.IsError.Should().BeFalse();

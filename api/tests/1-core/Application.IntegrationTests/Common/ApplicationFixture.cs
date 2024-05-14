@@ -102,12 +102,12 @@ public sealed class ApplicationFixture : IAsyncLifetime
         return await query.SingleOrDefaultAsync(identifier);
     }
 
-    public async Task AddAsync<TEntity>(TEntity entity)
+    public async Task AddAsync<TEntity>(params TEntity[] entities)
         where TEntity : class
     {
         using var scope = _scopeFactory.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        context.Add(entity);
+        context.AddRange(entities);
         await context.SaveChangesAsync();
     }
 
