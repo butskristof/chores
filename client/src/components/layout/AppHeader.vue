@@ -63,7 +63,7 @@
 <script setup>
 import { ref } from 'vue';
 import { routes } from '@/router/routes';
-import { useAppDarkMode } from '@/composables/utilities.js';
+import { useAppDarkMode } from '@/composables/app.js';
 import PrimeButton from 'primevue/button';
 
 const darkMode = useAppDarkMode();
@@ -174,7 +174,6 @@ header {
   top: 100%;
   z-index: 1;
   background-color: var(--surface-overlay);
-  // TODO shadow (only bottom border)
 }
 
 .links,

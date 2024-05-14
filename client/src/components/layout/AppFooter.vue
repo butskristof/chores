@@ -1,39 +1,49 @@
 <template>
   <footer>
     <div class="actions">
-      <PrimeButton
-        aria-label="Toggle dark mode"
-        :icon="darkMode.isDark.value === true ? 'pi pi-sun' : 'pi pi-moon'"
-        text
-        rounded
-        severity="secondary"
-        @click="darkMode.toggle()"
-      />
-      <a href="https://github.com/butskristof/chores">
+      <Tippy
+        content="Toggle colour scheme"
+        :hide-on-click="false"
+      >
         <PrimeButton
-          icon="pi pi-github"
+          :icon="darkMode.isDark.value === true ? 'pi pi-sun' : 'pi pi-moon'"
           text
           rounded
           severity="secondary"
-          aria-label="GitHub"
+          aria-label="Toggle colour scheme"
+          @click="darkMode.toggle()"
         />
-      </a>
-      <a href="#">
-        <PrimeButton
-          icon="pi pi-cog"
-          text
-          rounded
-          severity="secondary"
-          aria-label="Settings"
-        />
-      </a>
+      </Tippy>
+      <Tippy content="GitHub">
+        <a href="https://github.com/butskristof/chores">
+          <PrimeButton
+            icon="pi pi-github"
+            text
+            rounded
+            severity="secondary"
+            aria-label="GitHub"
+          />
+        </a>
+      </Tippy>
+      <Tippy content="Settings">
+        <a href="#">
+          <PrimeButton
+            icon="pi pi-cog"
+            text
+            rounded
+            severity="secondary"
+            aria-label="Settings"
+          />
+        </a>
+      </Tippy>
     </div>
   </footer>
 </template>
 
 <script setup>
 import PrimeButton from 'primevue/button';
-import { useAppDarkMode } from '@/composables/utilities.js';
+import { useAppDarkMode } from '@/composables/app.js';
+import { Tippy } from 'vue-tippy';
 
 const darkMode = useAppDarkMode();
 </script>
