@@ -1,5 +1,8 @@
 <template>
   <div class="api-error">
+    <div class="message">
+      <slot name="message"></slot>
+    </div>
     <PrimeButton
       class="toggle"
       :label="(showDetails ? 'Hide' : 'Show') + ' error details'"
@@ -55,8 +58,17 @@ const currentTab = TABS.API_RESPONSE;
 <style scoped lang="scss">
 @import '@/styles/_utilities.scss';
 
+.api-error {
+  max-width: 100%;
+
+  .message {
+    margin-bottom: 1rem;
+  }
+}
+
 .error-details {
   margin-top: 1rem;
+  max-width: 100%;
 }
 
 pre {

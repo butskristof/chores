@@ -20,6 +20,6 @@ button {
 
 .p-dialog {
   &:not(.p-dialog-maximized) {
-    margin-inline: 1rem;
+    max-width: calc(100vw - 2rem);
   }
 }
