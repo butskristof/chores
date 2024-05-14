@@ -26,10 +26,10 @@
 </template>
 
 <script setup>
-import ChoresList from '@/components/chores/overview/ChoresList.vue';
+import ChoresList from '@/components/chores/overview/_ChoresList.vue';
 import { useChoresApiChores } from '@/composables/queries/chores-api.js';
 import { computed, ref } from 'vue';
-import EditChore from '@/components/chores/common/EditChore.vue';
+import EditChore from '@/components/chores/common/_EditChore.vue';
 import CardHeader from '@/components/common/CardHeader.vue';
 
 const choresQuery = useChoresApiChores();

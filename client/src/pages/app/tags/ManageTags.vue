@@ -1,15 +1,14 @@
 <template>
   <div class="manage-tags">
-    <div class="header">
-      <h1>Tags</h1>
-      <div class="actions">
+    <PageHeader title="Tags">
+      <template #actions>
         <PrimeButton
           label="Add new tag"
           icon="pi pi-plus"
           @click="openEditDialog()"
         />
-      </div>
-    </div>
+      </template>
+    </PageHeader>
 
     <TagsList
       :tags="tags"
@@ -38,6 +37,7 @@ import { computed, ref } from 'vue';
 import EditTag from '@/components/tags/manage/EditTag.vue';
 import DeleteTag from '@/components/tags/manage/DeleteTag.vue';
 import PrimeButton from 'primevue/button';
+import PageHeader from '@/components/common/PageHeader.vue';
 
 const tagsQuery = useChoresApiTags();
 const tags = computed(() => tagsQuery.data.value?.tags ?? []);
@@ -66,13 +66,3 @@ const closeDeleteDialog = () => (tagForDelete.value = null);
 
 //#endregion
 </script>
-
-<style scoped lang="scss">
-@import '@/styles/_utilities.scss';
-
-.header {
-  @include flex-row-justify-between-wrapping;
-  margin-bottom: var(--default-padding);
-  padding-inline: var(--default-padding);
-}
-</style>

@@ -76,7 +76,7 @@
 import { useRouteParams } from '@vueuse/router';
 import { computed, ref } from 'vue';
 import { useChoresApiChore } from '@/composables/queries/chores-api.js';
-import EditChore from '@/components/chores/common/EditChore.vue';
+import EditChore from '@/components/chores/common/_EditChore.vue';
 import DeleteChore from '@/components/chores/detail/DeleteChore.vue';
 import { useRouter } from 'vue-router';
 import { routes } from '@/router/routes.js';

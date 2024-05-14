@@ -49,7 +49,7 @@
 @mixin white-content-box {
   background-color: var(--surface-card);
   padding: var(--default-padding);
-  border-radius: var(--default-border-radius);
+  border-radius: var(--border-radius);
 }
 
 @mixin pre-overflow {
