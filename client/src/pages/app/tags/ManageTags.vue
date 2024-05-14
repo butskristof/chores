@@ -34,6 +34,7 @@ import { useChoresApiTags } from '@/composables/queries/chores-api.js';
 import { computed, ref } from 'vue';
 import EditTag from '@/components/tags/manage/EditTag.vue';
 import DeleteTag from '@/components/tags/manage/DeleteTag.vue';
+import PrimeButton from 'primevue/button';
 
 const tagsQuery = useChoresApiTags();
 const tags = computed(() => tagsQuery.data.value?.tags ?? []);

@@ -64,6 +64,7 @@
 import { ref } from 'vue';
 import { routes } from '@/router/routes';
 import { useAppDarkMode } from '@/composables/utilities.js';
+import PrimeButton from 'primevue/button';
 
 const darkMode = useAppDarkMode();
 

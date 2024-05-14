@@ -1,5 +1,6 @@
 <template>
-  <div>chores overview</div>
+  <div class="chores-overview">
+    <div>chores overview</div>
 </template>
 
 <script setup></script>

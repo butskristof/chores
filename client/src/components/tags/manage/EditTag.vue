@@ -15,6 +15,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import PrimeDialog from 'primevue/dialog';
 
 const props = defineProps({
   tag: {

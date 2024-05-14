@@ -3,7 +3,7 @@
     <div class="actions">
       <PrimeButton
         aria-label="Toggle dark mode"
-        :icon="darkMode.isDark === true ? 'pi pi-sun' : 'pi pi-moon'"
+        :icon="darkMode.isDark.value === true ? 'pi pi-sun' : 'pi pi-moon'"
         text
         rounded
         severity="secondary"
@@ -32,6 +32,7 @@
 </template>
 
 <script setup>
+import PrimeButton from 'primevue/button';
 import { useAppDarkMode } from '@/composables/utilities.js';
 
 const darkMode = useAppDarkMode();

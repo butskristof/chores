@@ -32,7 +32,6 @@ import AppFooter from '@/components/layout/AppFooter.vue';
 .app-body {
   flex-grow: 1;
   @include flex-column;
-  overflow-y: auto;
 
   .page {
     flex-grow: 1;

@@ -51,6 +51,9 @@ import { useChoreApiDeleteTag } from '@/composables/queries/chores-api.js';
 import { useQueryClient } from '@tanstack/vue-query';
 import { sleep } from '@/utilities/sleep.js';
 import { useToast } from 'vue-toastification';
+import PrimeDialog from 'primevue/dialog';
+import PrimeInlineMessage from 'primevue/inlinemessage';
+import PrimeButton from 'primevue/button';
 
 const props = defineProps({
   tag: {

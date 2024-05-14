@@ -26,6 +26,8 @@
 </template>
 
 <script setup>
+import PrimeButton from 'primevue/button';
+
 defineProps({
   tags: {
     type: Array,
