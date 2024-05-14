@@ -1,16 +1,19 @@
 <template>
   <header>
-    <div class="brand">
-      <router-link :to="{ name: routes.home.name }">
+    <router-link
+      :to="{ name: routes.home.name }"
+      class="brand"
+    >
+      <div class="logo-wrapper">
         <img
           :src="
             darkMode.isDark.value === true ? '/images/chores-light.svg' : '/images/chores-dark.svg'
           "
           alt="Chores"
         />
-        Chores
-      </router-link>
-    </div>
+      </div>
+      <div>Chores</div>
+    </router-link>
     <div class="toggle">
       <PrimeButton
         icon="pi pi-bars"
@@ -111,9 +114,7 @@ header {
   @include shadow-2;
 }
 
-// router-link is replaced w/ <a> tag
-// eslint-disable-next-line vue-scoped-css/no-unused-selector
-.brand a {
+.brand {
   font-size: 150%;
   font-weight: 700;
   display: flex;
@@ -121,9 +122,14 @@ header {
   align-items: center;
   gap: 0.5rem;
 
-  img {
-    display: inline-block;
-    max-height: 35px;
+  .logo-wrapper {
+    width: 36px;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
   }
 
   @include media-min-width($md) {
