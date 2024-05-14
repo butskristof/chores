@@ -1,70 +1,38 @@
 <template>
   <div class="items">
-    <li
-      v-if="false"
-      class="chore-list-item"
-      :class="STATE_INFO[state].class"
-    >
-      <div class="details">
-        <PrimeAvatar
-          :icon="STATE_INFO[state].icon"
-          size="large"
-          shape="circle"
-          class="state-icon"
-          :class="STATE_INFO[state].class"
-        />
-        <div class="name-tags">
-          <div class="name">{{ chore.name }}</div>
-          <div class="tags">
-            <PrimeTag
-              v-for="tag in chore.tags"
-              :key="tag.id"
-              :value="tag.name"
-              severity="secondary"
-            />
+    <router-link :to="{ name: routes.chores.children.detail.name, params: { id: chore.id } }">
+      <li
+        class="chore-list-item"
+        :class="STATE_INFO[state].class"
+      >
+        <div class="details">
+          <div class="name-tags">
+            <div class="name">{{ chore.name }}</div>
+            <div
+              v-if="chore.tags.length > 0"
+              class="tags"
+            >
+              <PrimeTag
+                v-for="tag in chore.tags"
+                :key="tag.id"
+                :value="tag.name"
+                severity="secondary"
+              />
+            </div>
           </div>
         </div>
-      </div>
-      <div class="actions">
-        <PrimeTag
-          v-if="false"
-          :value="state"
-          :severity="STATE_INFO[state].severity"
-        />
-        <div class="due">due X days</div>
-      </div>
-    </li>
-    <li
-      class="chore-list-item"
-      :class="STATE_INFO[state].class"
-    >
-      <div class="details">
-        <div class="name-tags">
-          <div class="name">{{ chore.name }}</div>
-          <div
-            v-if="chore.tags.length > 0"
-            class="tags"
-          >
-            <PrimeTag
-              v-for="tag in chore.tags"
-              :key="tag.id"
-              :value="tag.name"
-              severity="secondary"
-            />
-          </div>
+        <div class="actions">
+          <div>due X days</div>
+          <PrimeAvatar
+            :icon="STATE_INFO[state].icon"
+            size="large"
+            shape="circle"
+            class="state-icon"
+            :class="STATE_INFO[state].class"
+          />
         </div>
-      </div>
-      <div class="actions">
-        <div>due X days</div>
-        <PrimeAvatar
-          :icon="STATE_INFO[state].icon"
-          size="large"
-          shape="circle"
-          class="state-icon"
-          :class="STATE_INFO[state].class"
-        />
-      </div>
-    </li>
+      </li>
+    </router-link>
   </div>
 </template>
 
@@ -72,6 +40,7 @@
 import { computed } from 'vue';
 import PrimeTag from 'primevue/tag';
 import PrimeAvatar from 'primevue/avatar';
+import { routes } from '@/router/routes.js';
 
 const props = defineProps({
   chore: {
@@ -114,11 +83,16 @@ const state = computed(() => Object.values(STATES)[props.index % Object.keys(STA
 <style scoped lang="scss">
 @import '@/styles/_custom-vars.scss';
 @import '@/styles/_utilities.scss';
+@import '@/styles/_shadows.scss';
 
 .chore-list-item {
   @include flex-row-justify-between-wrapping;
   gap: var(--default-padding);
   border-radius: var(--border-radius);
+
+  &:hover {
+    @include shadow-2;
+  }
 
   padding: 1rem;
   border: 1px solid;
