@@ -25,11 +25,13 @@
           class="p-error"
         >
           <span v-if="name.errors.value.length === 1">{{ name.errorMessage.value }}</span>
-          <span
-            v-for="error in name.errors.value"
-            :key="error"
-            >{{ error }} <br
-          /></span>
+          <template v-else>
+            <span
+              v-for="error in name.errors.value"
+              :key="error"
+              >{{ error }} <br
+            /></span>
+          </template>
         </small>
       </div>
 
@@ -152,6 +154,7 @@ form {
 
   .footer {
     @include flex-row-justify-between-wrapping;
+    align-items: flex-end;
     flex-wrap: wrap-reverse;
 
     .result {
