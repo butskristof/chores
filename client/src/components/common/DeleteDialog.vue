@@ -3,7 +3,7 @@
     :visible="true"
     modal
     :draggable="false"
-    :style="{ width: isError ? '40rem' : '25rem', 'max-width': '95vw' }"
+    :style="{ width: isError ? '40rem' : '25rem' }"
     :show-header="isError"
     header=" "
     :closable="true"

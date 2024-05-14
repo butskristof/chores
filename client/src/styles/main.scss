@@ -17,3 +17,9 @@ a {
 button {
   cursor: pointer;
 }
+
+.p-dialog {
+  &:not(.p-dialog-maximized) {
+    margin-inline: 1rem;
+  }
+}
