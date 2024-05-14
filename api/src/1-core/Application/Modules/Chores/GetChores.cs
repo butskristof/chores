@@ -26,7 +26,7 @@ public static class GetChores
             IEnumerable<TagDto> Tags,
             DateTimeOffset? LastIteration);
 
-        public sealed record TagDto(Guid Id, string Name);
+        public sealed record TagDto(Guid Id, string Name, string? Color, string? Icon);
     }
 
     internal sealed class Handler : IRequestHandler<Request, ErrorOr<Response>>
@@ -52,7 +52,7 @@ public static class GetChores
                 .CurrentUserChores(false)
                 .Select(c =>
                     new Response.ChoreDto(c.Id, c.Name, c.Interval,
-                        c.Tags.Select(t => new Response.TagDto(t.Id, t.Name)),
+                        c.Tags.Select(t => new Response.TagDto(t.Id, t.Name, t.Color, t.Icon)),
                         c.Iterations.Max(i => i.Date)))
                 .ToListAsync(cancellationToken);
             _logger.LogDebug("Fetched all tags from database as DTO");

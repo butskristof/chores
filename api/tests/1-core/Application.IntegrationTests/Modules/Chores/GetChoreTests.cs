@@ -69,7 +69,12 @@ public sealed class GetChoreTests : ApplicationTestBase
     public async Task ReturnsDtoWithTagDtos()
     {
         var tagId = new Guid("78B2C708-A118-4DD4-AF83-4B3A7339E20C");
-        await Application.AddAsync(new TagBuilder().WithId(tagId).WithName("this tag").Build());
+        await Application.AddAsync(new TagBuilder()
+            .WithId(tagId)
+            .WithName("this tag")
+            .WithColor("#000000")
+            .WithIcon("pi pi-check")
+            .Build());
         var choreId = new Guid("CE17BC94-15EE-4FD7-B47B-4A3CCEC47B61");
         await Application.AddAsync(new ChoreBuilder().WithId(choreId).WithTags([tagId]).Build());
 
@@ -78,9 +83,8 @@ public sealed class GetChoreTests : ApplicationTestBase
 
         result.IsError.Should().BeFalse();
         var tagDto = result.Value.Tags.SingleOrDefault();
-        tagDto.Should().NotBeNull();
-        tagDto!.Id.Should().Be(tagId);
-        tagDto.Name.Should().Be("this tag");
+        var expectedTagDto = new GetChore.TagDto(tagId, "this tag", "#000000", "pi pi-check");
+        tagDto.Should().BeEquivalentTo(expectedTagDto);
     }
 
     [Fact]

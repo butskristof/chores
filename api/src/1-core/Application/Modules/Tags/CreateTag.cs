@@ -12,12 +12,16 @@ namespace Chores.Application.Modules.Tags;
 public static class CreateTag
 {
     public sealed record Request(
-        string Name
+        string Name,
+        string? Color,
+        string? Icon
     ) : IRequest<ErrorOr<Response>>;
 
     public sealed record Response(
         Guid Id,
-        string Name
+        string Name,
+        string? Color,
+        string? Icon
     );
 
     internal sealed class Validator : AbstractValidator<Request>
@@ -26,6 +30,16 @@ public static class CreateTag
         {
             RuleFor(r => r.Name)
                 .ValidString();
+
+            RuleFor(r => r.Color)
+                .Cascade(CascadeMode.Stop)
+                .ValidString(required: false)
+                .HexColor()
+                .Unless(r => string.IsNullOrWhiteSpace(r.Color));
+
+            RuleFor(r => r.Icon)
+                .Cascade(CascadeMode.Stop)
+                .ValidString(required: false, maxLength: Tag.IconMaxLength);
         }
     }
 
@@ -53,7 +67,9 @@ public static class CreateTag
 
             var tag = new Tag
             {
-                Name = request.Name,
+                Name = request.Name.Trim(),
+                Color = string.IsNullOrWhiteSpace(request.Color) ? null : request.Color.Trim().ToLowerInvariant(),
+                Icon = string.IsNullOrWhiteSpace(request.Icon) ? null : request.Icon.Trim().ToLowerInvariant(),
             };
             _logger.LogDebug("Mapped request to entity");
 
@@ -61,7 +77,7 @@ public static class CreateTag
             await _db.SaveChangesAsync(CancellationToken.None);
             _logger.LogDebug("Persisted new entity to database");
 
-            var response = new Response(tag.Id, tag.Name);
+            var response = new Response(tag.Id, tag.Name, tag.Color, tag.Icon);
             _logger.LogDebug("Mapped entity to response");
 
             return response;

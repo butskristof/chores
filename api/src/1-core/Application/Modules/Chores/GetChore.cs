@@ -19,7 +19,7 @@ public static class GetChore
         IEnumerable<IterationDto> Iterations
     );
 
-    public sealed record TagDto(Guid Id, string Name);
+    public sealed record TagDto(Guid Id, string Name, string? Color, string? Icon);
 
     public sealed record IterationDto(Guid Id, DateTimeOffset Date, string? Notes);
 
@@ -57,7 +57,7 @@ public static class GetChore
             _logger.LogDebug("Fetched entity from database");
 
             var dto = new Response(chore.Id, chore.Name, chore.Interval, chore.Notes,
-                chore.Tags.Select(t => new TagDto(t.Id, t.Name)),
+                chore.Tags.Select(t => new TagDto(t.Id, t.Name, t.Color, t.Icon)),
                 chore.Iterations
                     .OrderByDescending(i => i.Date)
                     .Select(i => new IterationDto(i.Id, i.Date, i.Notes)));

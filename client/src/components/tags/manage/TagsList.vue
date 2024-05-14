@@ -34,7 +34,10 @@
         :key="tag.id"
       >
         <div class="details">
-          <div class="name">{{ tag.name }}</div>
+          <AppTag
+            :tag="tag"
+            class="tag"
+          />
           <div class="usage">used by {{ tag.choresCount }} chores</div>
         </div>
         <div class="actions">
@@ -62,6 +65,7 @@
 <script setup>
 import PrimeButton from 'primevue/button';
 import PrimeSkeleton from 'primevue/skeleton';
+import AppTag from '@/components/tags/common/AppTag.vue';
 
 defineProps({
   tags: {
@@ -105,9 +109,6 @@ defineEmits(['edit', 'delete']);
       align-items: flex-start;
 
       .details {
-        .name {
-          font-size: 120%;
-        }
         .usage {
           color: var(--text-color-secondary);
           font-size: 80%;

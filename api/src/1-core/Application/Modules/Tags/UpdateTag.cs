@@ -1,5 +1,6 @@
 using Chores.Application.Common.FluentValidation;
 using Chores.Application.Common.Persistence;
+using Chores.Domain.Models.Tags;
 using ErrorOr;
 using FluentValidation;
 using MediatR;
@@ -12,7 +13,9 @@ public static class UpdateTag
 {
     public sealed record Request(
         Guid Id,
-        string Name
+        string Name,
+        string? Color,
+        string? Icon
     ) : IRequest<ErrorOr<Updated>>;
 
     internal sealed class Validator : AbstractValidator<Request>
@@ -21,6 +24,16 @@ public static class UpdateTag
         {
             RuleFor(r => r.Name)
                 .ValidString();
+
+            RuleFor(r => r.Color)
+                .Cascade(CascadeMode.Stop)
+                .ValidString(required: false)
+                .HexColor()
+                .Unless(r => string.IsNullOrWhiteSpace(r.Color));
+
+            RuleFor(r => r.Icon)
+                .Cascade(CascadeMode.Stop)
+                .ValidString(required: false, maxLength: Tag.IconMaxLength);
         }
     }
 
@@ -59,7 +72,9 @@ public static class UpdateTag
                     .AnyAsync(t => t.Name == request.Name && t.Id != tag.Id, cancellationToken))
                 return Error.Conflict(nameof(request.Name));
 
-            tag.Name = request.Name;
+            tag.Name = request.Name.Trim();
+            tag.Color = string.IsNullOrWhiteSpace(request.Color) ? null : request.Color.Trim().ToLowerInvariant();
+            tag.Icon = string.IsNullOrWhiteSpace(request.Icon) ? null : request.Icon.Trim().ToLowerInvariant();
             _logger.LogDebug("Applied changes from request to entity");
 
             await _db.SaveChangesAsync(CancellationToken.None);

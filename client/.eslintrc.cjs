@@ -50,6 +50,7 @@ module.exports = {
     'no-alert': 'off',
     'new-cap': 'off',
     'max-statements': 'off',
-    'vue/no-multiple-template-root': 'error'
+    'vue/no-multiple-template-root': 'error',
+    'prefer-named-capture-group': 'off'
   },
 };
