@@ -45,18 +45,25 @@ public sealed class GetChoresTests : ApplicationTestBase
     public async Task ReturnsChoreDtosWithTagDtos()
     {
         var tagId = new Guid("60C61DC7-EAC4-49F6-AF55-9F9395851514");
-        await Application.AddAsync(new TagBuilder().WithId(tagId).WithName("some tag").Build());
+        await Application.AddAsync(new TagBuilder()
+            .WithId(tagId)
+            .WithName("some tag")
+            .WithColor("#ffffff")
+            .WithIcon("pi pi-check")
+            .Build());
         await Application.AddAsync(new ChoreBuilder().WithTags([tagId]).Build());
 
         var request = new GetChores.Request();
         var result = await Application.SendAsync(request);
+
+        var expectedTagDto = new GetChores.Response.TagDto(tagId, "some tag", "#ffffff", "pi pi-check");
 
         result.IsError.Should().BeFalse();
         var choreDto = result.Value.Chores.SingleOrDefault();
         choreDto.Should().NotBeNull();
         choreDto!.Tags
             .Should().HaveCount(1)
-            .And.ContainSingle(t => t.Id == tagId && t.Name == "some tag");
+            .And.ContainEquivalentOf(expectedTagDto);
     }
 
     [Fact]

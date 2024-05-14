@@ -12,11 +12,10 @@
               v-if="chore.tags.length > 0"
               class="tags"
             >
-              <PrimeTag
+              <AppTag
                 v-for="tag in chore.tags"
                 :key="tag.id"
-                :value="tag.name"
-                severity="secondary"
+                :tag="tag"
               />
             </div>
           </div>
@@ -38,9 +37,9 @@
 
 <script setup>
 import { computed } from 'vue';
-import PrimeTag from 'primevue/tag';
 import PrimeAvatar from 'primevue/avatar';
 import { routes } from '@/router/routes.js';
+import AppTag from '@/components/tags/common/AppTag.vue';
 
 const props = defineProps({
   chore: {
