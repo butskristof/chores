@@ -13,6 +13,7 @@
 
     <TagsList
       :tags="tags"
+      :loading="tagsQuery.isPending.value"
       @edit="openEditDialog"
       @delete="setTagForDelete"
     />

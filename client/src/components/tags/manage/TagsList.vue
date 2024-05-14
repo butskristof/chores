@@ -1,6 +1,34 @@
 <template>
   <div class="tags-list">
-    <ul>
+    <ul v-if="loading">
+      <li
+        v-for="i in 3"
+        :key="i"
+        class="skeleton"
+      >
+        <div class="details">
+          <PrimeSkeleton
+            width="10rem"
+            height="1.6rem"
+          />
+          <PrimeSkeleton
+            width="6rem"
+            height="0.8rem"
+          />
+        </div>
+        <div class="actions">
+          <PrimeSkeleton
+            width="2.5rem"
+            height="calc(2rem + 2px)"
+          />
+          <PrimeSkeleton
+            width="2.5rem"
+            height="calc(2rem + 2px)"
+          />
+        </div>
+      </li>
+    </ul>
+    <ul v-else-if="tags.length > 0">
       <li
         v-for="tag in tags"
         :key="tag.id"
@@ -22,16 +50,27 @@
         </div>
       </li>
     </ul>
+    <div
+      v-else
+      class="empty-state"
+    >
+      No tags found, get started by adding a new one.
+    </div>
   </div>
 </template>
 
 <script setup>
 import PrimeButton from 'primevue/button';
+import PrimeSkeleton from 'primevue/skeleton';
 
 defineProps({
   tags: {
     type: Array,
     required: true,
+  },
+  loading: {
+    type: Boolean,
+    default: false,
   },
 });
 defineEmits(['edit', 'delete']);
@@ -43,7 +82,10 @@ defineEmits(['edit', 'delete']);
 
 .tags-list {
   @include white-content-box;
-  padding-block: 0;
+
+  &:has(ul) {
+    padding-block: 0;
+  }
 
   ul {
     list-style: none;
@@ -51,6 +93,10 @@ defineEmits(['edit', 'delete']);
     margin: 0;
 
     li {
+      &.skeleton .details {
+        @include flex-column;
+        gap: 0.5rem;
+      }
       &:not(:last-of-type) {
         border-bottom: 1px solid var(--surface-border);
       }
@@ -70,6 +116,7 @@ defineEmits(['edit', 'delete']);
 
       .actions {
         @include flex-row;
+        align-items: center;
         gap: 0.5rem;
       }
     }
