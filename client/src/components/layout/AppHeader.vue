@@ -102,7 +102,7 @@ header {
   @include flex-row-justify-between;
   align-items: center;
 
-  @include padding-x(var(--default-padding));
+  padding-inline: var(--default-padding);
 
   position: sticky;
   top: 0;
@@ -188,11 +188,11 @@ header {
     @include flex;
     align-items: center;
 
-    @include padding-x(2rem);
+    padding-inline: 2rem;
     @include media-min-width($md) {
-      @include padding-x(1rem);
+      padding-inline: 1rem;
     }
-    @include padding-y(1rem);
+    padding-block: 1rem;
 
     @include media-min-width($md) {
       border-radius: var(--border-radius);

@@ -28,7 +28,6 @@
   }
 }
 
-
 @mixin media-min-width($min-width) {
   @media screen and (min-width: $min-width) {
     @content;
@@ -41,21 +40,11 @@
   }
 }
 
-@mixin dark-mode {
-  @media (prefers-color-scheme: dark) {
-    @content;
-  }
-}
-
-@mixin padding-x($padding) {
-  padding-left: $padding;
-  padding-right: $padding;
-}
-
-@mixin padding-y($padding) {
-  padding-top: $padding;
-  padding-bottom: $padding;
-}
+//@mixin dark-mode {
+//  @media (prefers-color-scheme: dark) {
+//    @content;
+//  }
+//}
 
 @mixin white-content-box {
   background-color: var(--surface-card);

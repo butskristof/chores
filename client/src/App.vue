@@ -36,7 +36,7 @@ import AppFooter from '@/components/layout/AppFooter.vue';
 
   .page {
     flex-grow: 1;
-    @include padding-x(var(--default-padding));
+    padding-inline: var(--default-padding);
   }
 
   .app-footer {
