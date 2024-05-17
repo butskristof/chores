@@ -22,7 +22,7 @@
     "date-fns": "^3.6.0",
     "pinia": "^2.1.7",
     "primeicons": "^7.0.0",
-    "primevue": "^4.0.0-beta.2",
+    "primevue": "4.0.0-beta.3",
     "vee-validate": "^4.12.4",
     "vue": "^3.4.21",
     "vue-multiselect": "3.0.0",
