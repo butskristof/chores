@@ -23,7 +23,7 @@
 import PageHeader from '@/components/common/PageHeader.vue';
 import PrimeButton from 'primevue/button';
 import { computed, ref } from 'vue';
-import EditChore from '@/components/chores/common/EditChore.vue';
+import EditChore from '@/components/chores/detail/EditChore.vue';
 import ChoresList from '@/components/chores/overview/ChoresList.vue';
 import { useChoresApiChores } from '@/composables/queries/chores-api.js';
 

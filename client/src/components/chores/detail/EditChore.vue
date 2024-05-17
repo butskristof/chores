@@ -176,7 +176,7 @@ const tryClose = (force = false) => {
 </script>
 
 <style scoped lang="scss">
-@import '@/styles/_utilities.scss';
+@import '@/styles/utilities';
 
 form {
   @include form-styling;

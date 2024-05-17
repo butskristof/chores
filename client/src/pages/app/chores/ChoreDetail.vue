@@ -20,6 +20,7 @@
           <PrimeButton
             label="Edit tags"
             icon="pi pi-tags"
+            @click="showEditTags = true"
           />
           <PrimeButton
             label="Edit"
@@ -41,6 +42,11 @@
 
     <h2>Iterations</h2>
 
+    <EditChoreTags
+      v-if="showEditTags"
+      :chore="chore"
+      @close="showEditTags = false"
+    />
     <EditChore
       v-if="showEdit"
       :chore="chore"
@@ -63,10 +69,11 @@ import { computed, ref } from 'vue';
 import PrimeButton from 'primevue/button';
 import PageHeader from '@/components/common/PageHeader.vue';
 import ChoreTags from '@/components/chores/common/ChoreTags.vue';
-import EditChore from '@/components/chores/common/EditChore.vue';
+import EditChore from '@/components/chores/detail/EditChore.vue';
 import { routes } from '@/router/routes.js';
 import { useRouter } from 'vue-router';
-import DeleteChore from '@/components/chores/common/DeleteChore.vue';
+import DeleteChore from '@/components/chores/detail/DeleteChore.vue';
+import EditChoreTags from '@/components/chores/detail/EditChoreTags.vue';
 
 const choreId = useRouteParams('id');
 const choreQuery = useChoresApiChore(choreId);
@@ -74,6 +81,7 @@ const chore = computed(() => choreQuery.data.value);
 
 const router = useRouter();
 
+const showEditTags = ref(true);
 const showEdit = ref(false);
 const showDelete = ref(false);
 const closeDelete = (deleted) => {
