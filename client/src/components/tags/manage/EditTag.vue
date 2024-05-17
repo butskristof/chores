@@ -250,12 +250,7 @@ const tryClose = (force = false) => {
 @import '@/styles/_utilities.scss';
 
 form {
-  .field {
-    @include flex-column;
-    gap: 0.5rem;
-
-    margin-bottom: 1rem;
-  }
+  @include form-styling;
 
   .row {
     @include flex-column;
@@ -266,16 +261,6 @@ form {
       > * {
         flex-basis: 50%;
       }
-    }
-  }
-
-  .footer {
-    @include flex-row-justify-between-wrapping;
-    align-items: flex-end;
-    flex-wrap: wrap-reverse;
-
-    .result {
-      max-width: 100%;
     }
   }
 }
