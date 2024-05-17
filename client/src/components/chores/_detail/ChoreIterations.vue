@@ -57,9 +57,9 @@
 
 <script setup>
 import { computed, ref } from 'vue';
-import EditChoreIteration from '@/components/chores/detail/EditChoreIteration.vue';
+import EditChoreIteration from '@/components/chores/_detail/EditChoreIteration.vue';
 import { stringIsNullOrWhitespace } from '@/utilities/string';
-import DeleteChoreIteration from '@/components/chores/detail/DeleteChoreIteration.vue';
+import DeleteChoreIteration from '@/components/chores/_detail/DeleteChoreIteration.vue';
 
 const props = defineProps({
   chore: {
