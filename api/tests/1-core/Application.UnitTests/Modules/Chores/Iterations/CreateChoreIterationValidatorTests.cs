@@ -39,31 +39,31 @@ public sealed class CreateChoreIterationValidatorTests
         result.ShouldNotHaveValidationErrorFor(r => r.Date);
     }
 
-    // [Fact]
-    // public void Date_Today_InEarlierTimeZone_Passes()
-    // {
-    //     // 25/12/2023 00:00:00 UTC
-    //     _timeProvider.SetUtcNow(new DateTimeOffset(2023, 12, 25, 0, 0, 0, TimeSpan.Zero));
-    //     // 26/12/2023 00:00:00 +13
-    //     // if we only regard the date, this is the same day since the validator should covert the +13 timestamp to UTC
-    //     // and compare the dates 
-    //     var date = new DateTimeOffset(2023, 12, 26, 0, 0, 0, TimeSpan.FromHours(13));
-    //     var request = new CreateChoreIteration.Request(Guid.Empty, date, null);
-    //     var result = _sut.TestValidate(request);
-    //     result.ShouldNotHaveValidationErrorFor(r => r.Date);
-    // }
-    //
-    // [Fact]
-    // public void Date_Future_InEarlierTimeZone_Fails()
-    // {
-    //     // 25/12/2023 00:00:00 UTC
-    //     _timeProvider.SetUtcNow(new DateTimeOffset(2023, 12, 25, 0, 0, 0, TimeSpan.Zero));
-    //     // 26/12/2023 13:00:00 +13
-    //     // this should NOT be possible: the +13 timestamp is converted to UTC, which still results in 26/12, which in 
-    //     // turn does NOT match the current time of the system
-    //     var date = new DateTimeOffset(2023, 12, 26, 13, 0, 0, TimeSpan.FromHours(13));
-    //     var request = new CreateChoreIteration.Request(Guid.Empty, date, null);
-    //     var result = _sut.TestValidate(request);
-    //     result.ShouldHaveValidationErrorFor(r => r.Date);
-    // }
+    [Fact]
+    public void Date_Today_InEarlierTimeZone_Passes()
+    {
+        // 25/12/2023 10:00:00 UTC
+        _timeProvider.SetUtcNow(new DateTimeOffset(2023, 12, 25, 10, 0, 0, TimeSpan.Zero));
+        // 26/12/2023 00:00:00 +14
+        // if we only regard the date, this is the same day since the validator should covert the +13 timestamp to UTC
+        // and compare the dates 
+        var date = new DateOnly(2023, 12, 26);
+        var request = new CreateChoreIteration.Request(Guid.Empty, date, null);
+        var result = _sut.TestValidate(request);
+        result.ShouldNotHaveValidationErrorFor(r => r.Date);
+    }
+    
+    [Fact]
+    public void Date_Future_InEarlierTimeZone_Fails()
+    {
+        // 25/12/2023 10:59:59 UTC
+        _timeProvider.SetUtcNow(new DateTimeOffset(2023, 12, 25, 9, 59, 59, TimeSpan.Zero));
+        // 26/12/2023 00:00:00 +14
+        // this should NOT be possible: the +13 timestamp is converted to UTC, which still results in 26/12, which in 
+        // turn does NOT match the current time of the system
+        var date = new DateOnly(2023, 12, 26);
+        var request = new CreateChoreIteration.Request(Guid.Empty, date, null);
+        var result = _sut.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(r => r.Date);
+    }
 }
