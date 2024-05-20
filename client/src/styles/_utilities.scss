@@ -40,11 +40,11 @@
   }
 }
 
-//@mixin dark-mode {
-//  @media (prefers-color-scheme: dark) {
-//    @content;
-//  }
-//}
+@mixin dark-mode {
+  html[color-scheme="dark"] & {
+    @content;
+  }
+}
 
 @mixin white-content-box {
   padding: var(--default-padding);
