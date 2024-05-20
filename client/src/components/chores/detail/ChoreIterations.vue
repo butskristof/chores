@@ -16,7 +16,20 @@
     </PageHeader>
 
     <div v-if="chore.iterations.length > 0">
-      <DebugValue :value="chore.iterations" />
+      <div
+        v-for="iteration in chore.iterations"
+        :key="iteration.id"
+        class="iteration"
+      >
+        <div class="date">{{ format(new Date(iteration.date), 'dd/MM/yyyy') }}</div>
+        <div
+          v-if="!stringIsNullOrWhitespace(iteration.notes)"
+          class="notes"
+        >
+          {{ iteration.notes }}
+        </div>
+        <PrimeDivider />
+      </div>
     </div>
     <div v-else>This chore doesn't have any iterations registered.</div>
 
@@ -33,8 +46,10 @@
 import PageHeader from '@/components/common/PageHeader.vue';
 import PrimeButton from 'primevue/button';
 import { ref } from 'vue';
-import DebugValue from '@/components/debug/DebugValue.vue';
 import EditIteration from '@/components/chores/detail/EditIteration.vue';
+import { stringIsNullOrWhitespace } from '@/utilities/string.js';
+import PrimeDivider from 'primevue/divider';
+import { format } from 'date-fns';
 
 const props = defineProps({
   chore: {
