@@ -41,7 +41,7 @@
 }
 
 @mixin dark-mode {
-  html[color-scheme="dark"] & {
+  html[color-scheme='dark'] & {
     @content;
   }
 }
