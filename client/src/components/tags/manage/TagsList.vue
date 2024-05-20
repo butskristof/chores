@@ -102,7 +102,7 @@ defineEmits(['edit', 'delete']);
         gap: 0.5rem;
       }
       &:not(:last-of-type) {
-        border-bottom: 1px solid var(--surface-border);
+        border-bottom: 1px solid var(--border-color);
       }
       padding-block: 1rem;
       @include flex-row-justify-between-wrapping;

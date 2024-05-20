@@ -21,7 +21,7 @@ import AppFooter from '@/components/layout/AppFooter.vue';
 
 .app-layout {
   min-height: 100vh;
-  background-color: var(--surface-ground);
+  background-color: var(--ground-background);
   @include flex-column;
 }
 

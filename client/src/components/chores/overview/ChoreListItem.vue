@@ -91,18 +91,36 @@ const state = computed(() => Object.values(STATES)[props.index % Object.keys(STA
     background-color: var(--p-green-50);
     border-color: var(--p-green-500);
     color: var(--p-green-700);
+
+    @include dark-mode {
+      background-color: var(--p-green-950);
+      border-color: var(--p-green-700);
+      color: var(--p-green-300);
+    }
   }
 
   &.almost-due {
     background-color: var(--p-yellow-50);
     border-color: var(--p-yellow-500);
     color: var(--p-yellow-700);
+
+    @include dark-mode {
+      background-color: var(--p-yellow-900);
+      border-color: var(--p-yellow-500);
+      color: var(--p-yellow-200);
+    }
   }
 
   &.overdue {
     background-color: var(--p-red-50);
     border-color: var(--p-red-500);
     color: var(--p-red-700);
+
+    @include dark-mode {
+      background-color: var(--p-red-950);
+      border-color: var(--p-red-700);
+      color: var(--p-red-300);
+    }
   }
 }
 
@@ -126,18 +144,33 @@ const state = computed(() => Object.values(STATES)[props.index % Object.keys(STA
   border: 2px solid;
 
   &.ok {
-    background-color: var(--p-green-50);
+    background-color: var(--p-green-100);
     border-color: var(--p-green-500);
+
+    @include dark-mode {
+      background-color: var(--p-green-900);
+      border-color: var(--p-green-700);
+    }
   }
 
   &.almost-due {
-    background-color: var(--p-yellow-50);
+    background-color: var(--p-yellow-100);
     border-color: var(--p-yellow-500);
+
+    @include dark-mode {
+      background-color: var(--p-yellow-800);
+      border-color: var(--p-yellow-700);
+    }
   }
 
   &.overdue {
-    background-color: var(--p-red-50);
+    background-color: var(--p-red-100);
     border-color: var(--p-red-500);
+
+    @include dark-mode {
+      background-color: var(--p-red-900);
+      border-color: var(--p-red-700);
+    }
   }
 }
 

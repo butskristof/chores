@@ -100,7 +100,7 @@ const actions = [
 
 header {
   min-height: 80px;
-  background-color: var(--surface-overlay);
+  background-color: var(--overlay-background);
   margin-bottom: var(--default-padding);
 
   @include flex-row-justify-between;
@@ -173,7 +173,7 @@ header {
   left: 0;
   top: 100%;
   z-index: 1;
-  background-color: var(--surface-overlay);
+  background-color: var(--overlay-background);
 }
 
 .links,
@@ -208,7 +208,7 @@ header {
 
     // TODO transition
     &:hover {
-      background-color: var(--surface-hover);
+      background-color: var(--hover-background);
     }
 
     .pi {
@@ -222,7 +222,8 @@ header {
   // eslint-disable-next-line vue-scoped-css/no-unused-selector
   a {
     &.router-link-active {
-      background-color: var(--surface-ground);
+      background-color: var(--ground-background);
+      // TODO
       color: var(--p-text-900);
     }
   }
@@ -230,7 +231,7 @@ header {
 
 .actions {
   @include media-max-width($md) {
-    border-top: 1px solid var(--surface-border);
+    border-top: 1px solid var(--border-color);
   }
 
   .action-item {
