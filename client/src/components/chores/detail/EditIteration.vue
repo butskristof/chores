@@ -18,7 +18,7 @@
           v-model="date.value.value"
           :invalid="date.errors.value.length > 0"
           :disabled="isFormDisabled"
-          date-format="yy-mm-dd"
+          date-format="dd/mm/yy"
         />
         <small
           v-if="date.errors.value.length > 0"
@@ -123,7 +123,21 @@ const isEdit = computed(() => props.iteration != null);
 
 //#region form
 const { handleSubmit, meta } = useForm({
-  validationSchema: toTypedSchema(yup.object({})),
+  validationSchema: toTypedSchema(
+    yup.object({
+      date: yup.date().label('Date'),
+      notes: yup.string().label('Notes'),
+    }),
+  ),
+  initialValues: {
+    date:
+      props.iteration?.date ??
+      (() => {
+        const now = new Date();
+        return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      })(),
+    notes: props.iteration?.notes,
+  },
 });
 
 const isFormDisabled = computed(
