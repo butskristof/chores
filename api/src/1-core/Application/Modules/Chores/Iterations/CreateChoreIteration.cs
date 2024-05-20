@@ -13,7 +13,7 @@ public static class CreateChoreIteration
 {
     public sealed record Request(
         Guid ChoreId,
-        DateTimeOffset Date, // TODO make DateOnly
+        DateOnly Date,
         string? Notes
     ) : IRequest<ErrorOr<Response>>;
 
@@ -24,7 +24,7 @@ public static class CreateChoreIteration
         public Validator(TimeProvider timeProvider)
         {
             RuleFor(r => r.Date)
-                .Must(input => input.UtcDateTime.Date <= timeProvider.GetUtcNow().Date)
+                .Must(input => input <= DateOnly.FromDateTime(timeProvider.GetUtcNow().Date))
                 .WithMessage(ErrorCodes.Invalid);
         }
     }

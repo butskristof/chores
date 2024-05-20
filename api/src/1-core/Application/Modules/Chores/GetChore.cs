@@ -21,7 +21,7 @@ public static class GetChore
 
     public sealed record TagDto(Guid Id, string Name, string? Color, string? Icon);
 
-    public sealed record IterationDto(Guid Id, DateTimeOffset Date, string? Notes);
+    public sealed record IterationDto(Guid Id, DateOnly Date, string? Notes);
 
     internal class Handler : IRequestHandler<Request, ErrorOr<Response>>
     {

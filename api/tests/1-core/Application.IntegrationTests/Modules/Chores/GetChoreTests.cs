@@ -99,7 +99,7 @@ public sealed class GetChoreTests : ApplicationTestBase
                 new ChoreIterationBuilder()
                     .WithId(iterationId)
                     .WithNotes("some notes")
-                    .WithDate(new DateTimeOffset(2023, 12, 24, 0, 0, 0, TimeSpan.Zero))
+                    .WithDate(new DateOnly(2023, 12, 24))
                     .Build()
             ])
             .Build());
@@ -112,7 +112,7 @@ public sealed class GetChoreTests : ApplicationTestBase
         iterationDto.Should().NotBeNull();
         iterationDto.Should()
             .BeEquivalentTo(new GetChore.IterationDto(iterationId,
-                new DateTimeOffset(2023, 12, 24, 0, 0, 0, TimeSpan.Zero), "some notes"));
+                new DateOnly(2023, 12, 24), "some notes"));
     }
 
     [Fact]
@@ -124,11 +124,11 @@ public sealed class GetChoreTests : ApplicationTestBase
             .WithId(choreId)
             .WithIterations([
                 new ChoreIterationBuilder()
-                    .WithDate(new DateTimeOffset(2023, 12, 24, 0, 0, 0, TimeSpan.Zero)),
+                    .WithDate(new DateOnly(2023, 12, 24)),
                 new ChoreIterationBuilder()
-                    .WithDate(new DateTimeOffset(2023, 12, 23, 0, 0, 0, TimeSpan.Zero)),
+                    .WithDate(new DateOnly(2023, 12, 23)),
                 new ChoreIterationBuilder()
-                    .WithDate(new DateTimeOffset(2023, 11, 23, 0, 0, 0, TimeSpan.Zero))
+                    .WithDate(new DateOnly(2023, 11, 23))
             ])
             .Build());
 

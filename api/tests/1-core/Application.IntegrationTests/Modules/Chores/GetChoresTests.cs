@@ -105,9 +105,9 @@ public sealed class GetChoresTests : ApplicationTestBase
         await Application.AddAsync(new ChoreBuilder()
             .WithId(choreId)
             .WithIterations([
-                new ChoreIterationBuilder().WithDate(new DateTimeOffset(2023, 12, 15, 0, 0, 0, TimeSpan.Zero)),
-                new ChoreIterationBuilder().WithDate(new DateTimeOffset(2023, 12, 24, 0, 0, 0, TimeSpan.Zero)),
-                new ChoreIterationBuilder().WithDate(new DateTimeOffset(2023, 11, 24, 0, 0, 0, TimeSpan.Zero)),
+                new ChoreIterationBuilder().WithDate(new DateOnly(2023, 12, 15)),
+                new ChoreIterationBuilder().WithDate(new DateOnly(2023, 12, 24)),
+                new ChoreIterationBuilder().WithDate(new DateOnly(2023, 11, 24)),
             ])
             .Build());
 
@@ -117,6 +117,6 @@ public sealed class GetChoresTests : ApplicationTestBase
         result.IsError.Should().BeFalse();
         var chore = result.Value.Chores.SingleOrDefault();
         chore.Should().NotBeNull();
-        chore!.LastIteration.Should().Be(new DateTimeOffset(2023, 12, 24, 0, 0, 0, TimeSpan.Zero));
+        chore!.LastIteration.Should().Be(new DateOnly(2023, 12, 24));
     }
 }
