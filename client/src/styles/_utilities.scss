@@ -47,9 +47,11 @@
 //}
 
 @mixin white-content-box {
-  background-color: var(--surface-card);
   padding: var(--default-padding);
   border-radius: var(--border-radius);
+
+  background-color: var(--card-background);
+  border: var(--card-border);
 }
 
 @mixin pre-overflow {
