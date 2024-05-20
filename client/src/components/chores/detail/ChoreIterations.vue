@@ -34,6 +34,15 @@
           </div>
         </div>
         <div class="actions">
+          <Tippy
+            content="Not implemented yet"
+            placement="bottom-end"
+          >
+            <PrimeButton
+              icon="pi pi-pencil"
+              disabled
+            />
+          </Tippy>
           <PrimeButton
             icon="pi pi-trash"
             severity="danger"
@@ -69,6 +78,7 @@ import { stringIsNullOrWhitespace } from '@/utilities/string.js';
 import PrimeDivider from 'primevue/divider';
 import { format } from 'date-fns';
 import DeleteIteration from '@/components/chores/detail/DeleteIteration.vue';
+import { Tippy } from 'vue-tippy';
 
 const props = defineProps({
   chore: {
@@ -108,6 +118,12 @@ const iterationForDelete = ref(null);
 
     .details {
       flex-grow: 1;
+    }
+
+    .actions {
+      @include flex-row;
+      gap: 0.5rem;
+      align-items: flex-start;
     }
   }
 }
