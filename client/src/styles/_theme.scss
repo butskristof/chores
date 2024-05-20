@@ -23,3 +23,7 @@ html[color-scheme='dark'] {
   --surface-border: var(--p-surface-700);
   --surface-hover: var(--p-surface-600);
 }
+
+.p-error {
+  color: var(--p-red-400);
+}

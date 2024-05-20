@@ -55,3 +55,22 @@
 @mixin pre-overflow {
   overflow-x: auto;
 }
+
+@mixin form-styling {
+  .field {
+    @include flex-column;
+    gap: 0.5rem;
+
+    margin-bottom: 1rem;
+  }
+
+  .footer {
+    @include flex-row-justify-between-wrapping;
+    align-items: flex-end;
+    flex-wrap: wrap-reverse;
+
+    .result {
+      max-width: 100%;
+    }
+  }
+}

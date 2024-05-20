@@ -4,7 +4,7 @@
     modal
     maximizable
     :draggable="false"
-    :header="isEdit ? 'Edit chore' : 'Create new chore'"
+    :header="isEdit ? 'Edit iteration' : 'Create new iteration'"
     :style="{
       width: '50rem',
     }"
@@ -12,22 +12,22 @@
   >
     <form @submit="save">
       <div class="field">
-        <label for="name">Name</label>
-        <PrimeInputText
-          id="name"
-          v-model.trim="name.value.value"
-          type="text"
+        <label for="date">Date</label>
+        <PrimeDatePicker
+          id="date"
+          v-model="date.value.value"
+          :invalid="date.errors.value.length > 0"
           :disabled="isFormDisabled"
-          :invalid="name.errors.value.length > 0"
+          date-format="dd/mm/yy"
         />
         <small
-          v-if="name.errors.value.length > 0"
+          v-if="date.errors.value.length > 0"
           class="p-error"
         >
-          <span v-if="name.errors.value.length === 1">{{ name.errorMessage.value }}</span>
+          <span v-if="date.errors.value.length === 1">{{ date.errorMessage.value }}</span>
           <template v-else>
             <span
-              v-for="error in name.errors.value"
+              v-for="error in date.errors.value"
               :key="error"
               >{{ error }} <br
             /></span>
@@ -36,22 +36,24 @@
       </div>
 
       <div class="field">
-        <label for="interval">Interval</label>
-        <PrimeInputNumber
-          id="interval"
-          v-model.number="interval.value.value"
+        <label for="notes">Notes</label>
+        <PrimeTextarea
+          id="notes"
+          v-model.trim="notes.value.value"
+          :rows="5"
+          auto-resize
+          class="editor"
+          :invalid="notes.errors.value.length > 0"
           :disabled="isFormDisabled"
-          :invalid="interval.errors.value.length > 0"
-          :min="1"
         />
         <small
-          v-if="interval.errors.value.length > 0"
+          v-if="notes.errors.value.length > 0"
           class="p-error"
         >
-          <span v-if="interval.errors.value.length === 1">{{ interval.errorMessage.value }}</span>
+          <span v-if="notes.errors.value.length === 1">{{ notes.errorMessage.value }}</span>
           <template v-else>
             <span
-              v-for="error in interval.errors.value"
+              v-for="error in notes.errors.value"
               :key="error"
               >{{ error }} <br
             /></span>
@@ -64,7 +66,7 @@
           <PrimeInlineMessage
             v-if="mutation.isSuccess.value"
             severity="success"
-            >Chore saved</PrimeInlineMessage
+            >Iteration saved</PrimeInlineMessage
           >
           <ApiError
             v-if="mutation.isError.value"
@@ -72,7 +74,7 @@
           >
             <template #message>
               <p>
-                Saving the chore failed, please refer to the error information below for more
+                Saving the iteration failed, please refer to the error information below for more
                 details.
               </p>
             </template>
@@ -94,43 +96,47 @@
 
 <script setup>
 import { computed } from 'vue';
+import { useQueryClient } from '@tanstack/vue-query';
+import { useChoresApiUpsertChoreIteration } from '@/composables/queries/chores-api.js';
 import { useField, useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/yup';
 import * as yup from 'yup';
-import { useQueryClient } from '@tanstack/vue-query';
-import { useChoresApiUpsertChore } from '@/composables/queries/chores-api.js';
 import PrimeDialog from 'primevue/dialog';
 import PrimeInlineMessage from 'primevue/inlinemessage';
 import PrimeButton from 'primevue/button';
 import ApiError from '@/components/common/ApiError.vue';
-import PrimeInputText from 'primevue/inputtext';
-import PrimeInputNumber from 'primevue/inputnumber';
-
-// TODO enable buttons on interval field when fixed
-// show-buttons
-// button-layout="horizontal"
-// https://github.com/primefaces/primevue/issues/5754
+import PrimeTextarea from 'primevue/textarea';
+import PrimeDatePicker from 'primevue/datepicker';
 
 const props = defineProps({
-  chore: {
+  choreId: {
+    type: String,
+    required: true,
+  },
+  iteration: {
     type: Object,
     default: () => null,
   },
 });
 const emit = defineEmits(['close']);
-const isEdit = computed(() => props.chore != null);
+const isEdit = computed(() => props.iteration != null);
 
 //#region form
 const { handleSubmit, meta } = useForm({
   validationSchema: toTypedSchema(
     yup.object({
-      name: yup.string().required().label('Name'),
-      interval: yup.number().required().positive().integer().label('Interval'),
+      date: yup.date().required().label('Date'),
+      notes: yup.string().label('Notes'),
     }),
   ),
   initialValues: {
-    name: props.chore?.name,
-    interval: props.chore?.interval,
+    date:
+      props.iteration?.date ??
+      (() => {
+        const now = new Date();
+        return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      })(),
+    notes: props.iteration?.notes,
   },
 });
 
@@ -138,29 +144,28 @@ const isFormDisabled = computed(
   () => mutation.isPending.value === true || mutation.isSuccess.value === true,
 );
 
-const name = useField('name');
-const interval = useField('interval');
-
+const date = useField('date');
+const notes = useField('notes');
 //#endregion
 
 //#region create/update
 
 const queryClient = useQueryClient();
-const mutation = useChoresApiUpsertChore(queryClient);
+const mutation = useChoresApiUpsertChoreIteration(queryClient);
 
 const save = handleSubmit.withControlled(async (values) => {
   try {
     const payload = {
-      name: values.name,
-      interval: values.interval,
+      choreId: props.choreId,
+      date: values.date,
+      notes: values.notes,
     };
-    if (isEdit.value === true) payload.id = props.chore.id;
+    // if (isEdit.value === true) payload.id = props.iteration.id;
     await mutation.mutateAsync(payload);
   } catch (e) {
     console.error(e);
   }
 });
-
 //#endregion
 
 const updateVisible = (value) => {
@@ -176,13 +181,9 @@ const tryClose = (force = false) => {
 </script>
 
 <style scoped lang="scss">
-@import '@/styles/utilities';
+@import '@/styles/_utilities.scss';
 
 form {
   @include form-styling;
-}
-
-:deep(.p-inputnumber-input) {
-  text-align: center;
 }
 </style>

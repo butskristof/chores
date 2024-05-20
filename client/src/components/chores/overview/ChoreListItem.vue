@@ -8,16 +8,7 @@
         <div class="details">
           <div class="name-tags">
             <div class="name">{{ chore.name }}</div>
-            <div
-              v-if="chore.tags.length > 0"
-              class="tags"
-            >
-              <AppTag
-                v-for="tag in chore.tags"
-                :key="tag.id"
-                :tag="tag"
-              />
-            </div>
+            <ChoreTags :tags="chore.tags" />
           </div>
         </div>
         <div class="actions">
@@ -39,7 +30,7 @@
 import { computed } from 'vue';
 import PrimeAvatar from 'primevue/avatar';
 import { routes } from '@/router/routes.js';
-import AppTag from '@/components/tags/common/AppTag.vue';
+import ChoreTags from '@/components/chores/common/ChoreTags.vue';
 
 const props = defineProps({
   chore: {
@@ -126,11 +117,6 @@ const state = computed(() => Object.values(STATES)[props.index % Object.keys(STA
     .name {
       font-size: 120%;
       font-weight: 700;
-    }
-    .tags {
-      @include flex-row;
-      flex-wrap: wrap;
-      gap: 0.5rem;
     }
   }
 }

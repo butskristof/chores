@@ -35,7 +35,7 @@
 import { getDueDays } from '@/utilities/chores.js';
 import { computed } from 'vue';
 import { routes } from '@/router/routes.js';
-import ChoreLastIteration from '@/components/chores/common/ChoreLastIteration.vue';
+import ChoreLastIteration from '@/components/chores/common/_ChoreLastIteration.vue';
 
 const props = defineProps({
   chores: {

@@ -1,65 +1,55 @@
-<!-- eslint-disable vue/no-multiple-template-root -->
 <template>
-  <Toolbar class="header">
-    <template #start>
-      <h2>Iterations</h2>
-    </template>
-
-    <template #end>
-      <div class="actions">
-        <Button
-          type="button"
-          label="Add"
-          icon="pi pi-plus"
-          @click="openEditDialog"
-        />
-      </div>
-    </template>
-  </Toolbar>
-
-  <EditChoreIteration
-    v-if="showEditDialog"
-    :chore-id="chore.id"
-    :iteration="iterationForEdit"
-    @close="closeEditDialog"
-  />
-
-  <DeleteChoreIteration
-    v-if="iterationForDelete != null"
-    :iteration="iterationForDelete"
-    :chore-id="chore.id"
-    @close="setIterationForDelete(null)"
-  />
-
-  <ul>
-    <li
-      v-for="iteration in chore.iterations"
-      :key="iteration.id"
-    >
-      <div class="iteration">
-        <div class="content">
-          <div>{{ iteration.date }}</div>
-          <div v-if="!stringIsNullOrWhitespace(iteration.notes)">{{ iteration.notes }}</div>
-        </div>
+  <div class="chore-iterations">
+    <PageHeader :inline-padding="false">
+      <template #title>
+        <h2>Iterations</h2>
+      </template>
+      <template #actions>
         <div class="actions">
-          <Button
-            type="button"
-            label="Delete"
-            icon="pi pi-trash"
-            severity="danger"
-            @click="setIterationForDelete(iteration.id)"
+          <PrimeButton
+            label="Add iteration"
+            icon="pi pi-plus"
+            @click="openEditDialog()"
           />
         </div>
+      </template>
+    </PageHeader>
+
+    <div v-if="chore.iterations.length > 0">
+      <div
+        v-for="iteration in chore.iterations"
+        :key="iteration.id"
+        class="iteration"
+      >
+        <div class="date">{{ format(new Date(iteration.date), 'dd/MM/yyyy') }}</div>
+        <div
+          v-if="!stringIsNullOrWhitespace(iteration.notes)"
+          class="notes"
+        >
+          {{ iteration.notes }}
+        </div>
+        <PrimeDivider />
       </div>
-    </li>
-  </ul>
+    </div>
+    <div v-else>This chore doesn't have any iterations registered.</div>
+
+    <EditIteration
+      v-if="showEditDialog"
+      :iteration="iterationForEdit"
+      :chore-id="chore.id"
+      @close="closeEditDialog"
+    />
+  </div>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
-import EditChoreIteration from '@/components/chores/detail/EditChoreIteration.vue';
-import { stringIsNullOrWhitespace } from '@/utilities/string';
-import DeleteChoreIteration from '@/components/chores/detail/DeleteChoreIteration.vue';
+import PageHeader from '@/components/common/PageHeader.vue';
+import PrimeButton from 'primevue/button';
+import { ref } from 'vue';
+import EditIteration from '@/components/chores/detail/EditIteration.vue';
+import { stringIsNullOrWhitespace } from '@/utilities/string.js';
+import PrimeDivider from 'primevue/divider';
+import { format } from 'date-fns';
 
 const props = defineProps({
   chore: {
@@ -68,13 +58,11 @@ const props = defineProps({
   },
 });
 
-const iterations = computed(() => props.chore.iterations ?? []);
-
 //#region edit
 const showEditDialog = ref(false);
 const iterationForEdit = ref(null);
 const openEditDialog = (id = null) => {
-  iterationForEdit.value = id == null ? null : iterations.value.find((i) => i.id === id);
+  iterationForEdit.value = id == null ? null : props.chore.iterations.find((i) => i.id === id);
   showEditDialog.value = true;
 };
 const closeEditDialog = () => {
@@ -82,37 +70,6 @@ const closeEditDialog = () => {
   iterationForEdit.value = null;
 };
 //#endregion
-
-//#region delete
-
-const iterationForDelete = ref(null);
-const setIterationForDelete = (id) =>
-  (iterationForDelete.value = id == null ? null : iterations.value.find((i) => i.id === id));
-
-//#endregion
 </script>
 
-<style scoped lang="scss">
-.header {
-  margin-bottom: 1rem;
-
-  h2 {
-    //font-size: 1.75rem;
-    margin-block: 0;
-  }
-}
-.iteration {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-
-  margin-bottom: 1rem;
-
-  .actions {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-}
-</style>
+<style scoped lang="scss"></style>

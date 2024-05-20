@@ -1,55 +1,26 @@
 <template>
-  <Dialog
-    :visible="true"
-    modal
-    :draggable="false"
-    :style="{ width: '50rem' }"
-    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-    :closable="false"
-    @update:visible="updateVisible"
+  <DeleteDialog
+    entity="chore"
+    :is-loading="mutation.isPending.value"
+    :is-error="mutation.isError.value"
+    :is-success="mutation.isSuccess.value"
+    :error="mutation.error.value"
+    @close="$emit('close')"
+    @delete="deleteChore"
   >
-    <div
-      v-if="mutation.isSuccess.value === true"
-      class="success"
-    >
-      <InlineMessage severity="success">Chore deleted</InlineMessage>
-    </div>
-    <p v-else>
+    <template #confirm-text>
       Delete chore
       <strong>{{ chore.name }}</strong>
       ?
-    </p>
-    <template
-      v-if="mutation.isSuccess.value !== true"
-      #footer
-    >
-      <div class="actions">
-        <Button
-          type="button"
-          label="No, keep chore"
-          icon="pi pi-times"
-          class="p-button-text"
-          :disabled="mutation.isPending.value === true"
-          @click="emit('close')"
-        />
-        <Button
-          type="button"
-          :label="mutation.isPending.value === true ? 'Deleting...' : 'Yes, delete'"
-          icon="pi pi-trash"
-          severity="danger"
-          :loading="mutation.isPending.value === true"
-          :disabled="mutation.isPending.value === true"
-          @click="deleteChore"
-        />
-      </div>
     </template>
-  </Dialog>
+  </DeleteDialog>
 </template>
 
 <script setup>
 import { useQueryClient } from '@tanstack/vue-query';
+import { useChoresApiDeleteChore } from '@/composables/queries/chores-api.js';
 import { useToast } from 'vue-toastification';
-import { useChoresApiDeleteChore } from '@/composables/queries/chores-api';
+import DeleteDialog from '@/components/common/DeleteDialog.vue';
 
 const props = defineProps({
   chore: {
@@ -59,43 +30,18 @@ const props = defineProps({
 });
 const emit = defineEmits(['close']);
 
-const queryClient = useQueryClient();
 const toast = useToast();
-
-//#region delete
-
+const queryClient = useQueryClient();
 const mutation = useChoresApiDeleteChore(queryClient);
+
 const deleteChore = async () => {
   try {
     await mutation.mutateAsync(props.chore.id);
     toast.success('Chore deleted');
     emit('close', true);
   } catch (e) {
+    // error should be printed to dialog as well
     console.error(e);
   }
 };
-
-const updateVisible = (value) => {
-  if (value === false) emit('close');
-};
-
-//#endregion
 </script>
-
-<style scoped lang="scss">
-p {
-  text-align: center;
-  font-size: 1.25rem;
-}
-
-.actions {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.success {
-  display: flex;
-  justify-content: center;
-}
-</style>

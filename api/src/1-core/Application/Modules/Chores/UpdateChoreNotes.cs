@@ -44,6 +44,7 @@ public static class UpdateChoreNotes
 
             _logger.LogDebug("Fetched entity from database");
 
+            // TODO trim & replace w/ null
             chore.Notes = request.Notes;
             _logger.LogDebug("Applied changes from request to entity");
 

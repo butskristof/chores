@@ -1,6 +1,11 @@
 <template>
-  <div class="header">
-    <h1>{{ title }}</h1>
+  <div
+    class="header"
+    :class="{ 'inline-padding': inlinePadding }"
+  >
+    <slot name="title">
+      <h1>{{ title }}</h1>
+    </slot>
     <div class="actions">
       <slot name="actions"></slot>
     </div>
@@ -11,7 +16,11 @@
 defineProps({
   title: {
     type: String,
-    required: true,
+    default: () => null,
+  },
+  inlinePadding: {
+    type: Boolean,
+    default: true,
   },
 });
 </script>
@@ -22,6 +31,9 @@ defineProps({
 .header {
   @include flex-row-justify-between-wrapping;
   margin-bottom: var(--default-padding);
-  padding-inline: var(--default-padding);
+
+  &.inline-padding {
+    padding-inline: var(--default-padding);
+  }
 }
 </style>

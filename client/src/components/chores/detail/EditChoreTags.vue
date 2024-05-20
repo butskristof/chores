@@ -1,40 +1,67 @@
 <template>
-  <Dialog
+  <PrimeDialog
     :visible="true"
     modal
     :draggable="false"
     header="Edit chore tags"
-    :style="{ width: '50rem' }"
-    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+    :style="{
+      width: '50rem',
+    }"
     @update:visible="updateVisible"
   >
-    <div class="field">
-      <Multiselect
-        v-model="selectedTags"
-        :options="tags"
-        label="name"
-        track-by="id"
-        :multiple="true"
-      />
+    <div class="edit-chore-tags">
+      <div class="field">
+        <PrimeMultiSelect
+          v-model="selectedTags"
+          :options="tags"
+          option-label="name"
+          option-value="id"
+          filter
+          :max-selected-labels="3"
+        />
+      </div>
+      <div class="footer">
+        <div class="result">
+          <PrimeInlineMessage
+            v-if="mutation.isSuccess.value"
+            severity="success"
+            >Tags saved</PrimeInlineMessage
+          >
+          <ApiError
+            v-if="mutation.isError.value"
+            :error="mutation.error.value"
+          >
+            <template #message>
+              <p>
+                Saving the tags failed, please refer to the error information below for more
+                details.
+              </p>
+            </template>
+          </ApiError>
+        </div>
+        <div class="actions">
+          <PrimeButton
+            label="Save"
+            icon="pi pi-save"
+            :loading="mutation.isPending.value"
+            @click="save"
+          />
+        </div>
+      </div>
     </div>
-
-    <div class="actions">
-      <Button
-        type="button"
-        label="Save"
-        icon="pi pi-save"
-        @click="save"
-      />
-    </div>
-  </Dialog>
+  </PrimeDialog>
 </template>
 
 <script setup>
-import { useChoresApiTags, useChoresApiUpdateChoreTags } from '@/composables/queries/chores-api.js';
-import { computed, ref } from 'vue';
+import PrimeDialog from 'primevue/dialog';
 import { useQueryClient } from '@tanstack/vue-query';
+import { useChoresApiTags, useChoresApiUpdateChoreTags } from '@/composables/queries/chores-api.js';
 import { useToast } from 'vue-toastification';
-import Multiselect from 'vue-multiselect';
+import { computed, ref } from 'vue';
+import PrimeButton from 'primevue/button';
+import PrimeMultiSelect from 'primevue/multiselect';
+import PrimeInlineMessage from 'primevue/inlinemessage';
+import ApiError from '@/components/common/ApiError.vue';
 
 const props = defineProps({
   chore: {
@@ -46,18 +73,19 @@ const emit = defineEmits(['close']);
 
 const tagsQuery = useChoresApiTags();
 const tags = computed(() => tagsQuery.data.value?.tags ?? []);
-const selectedTags = ref(props.chore.tags);
+
+const selectedTags = ref(props.chore.tags.map((t) => t.id));
 
 //#region update
 
-const queryClient = useQueryClient();
 const toast = useToast();
+const queryClient = useQueryClient();
 const mutation = useChoresApiUpdateChoreTags(queryClient);
 const save = async () => {
   try {
     const payload = {
       choreId: props.chore.id,
-      tagIds: selectedTags.value.map((t) => t.id),
+      tagIds: [...selectedTags.value],
     };
     await mutation.mutateAsync(payload);
     toast.success('Chore tags updated');
@@ -75,13 +103,9 @@ const updateVisible = (value) => {
 </script>
 
 <style scoped lang="scss">
-.actions {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-}
+@import '@/styles/_utilities.scss';
 
-.field {
-  margin-bottom: 1rem;
+.edit-chore-tags {
+  @include form-styling;
 }
 </style>

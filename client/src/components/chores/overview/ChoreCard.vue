@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import ChoreLastIteration from '@/components/chores/common/ChoreLastIteration.vue';
+import ChoreLastIteration from '@/components/chores/common/_ChoreLastIteration.vue';
 import { routes } from '@/router/routes.js';
 
 defineProps({

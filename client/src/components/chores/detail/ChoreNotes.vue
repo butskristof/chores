@@ -1,66 +1,70 @@
-<!-- eslint-disable vue/no-multiple-template-root -->
 <template>
-  <Toolbar class="header">
-    <template #start>
-      <h2>Notes</h2>
-    </template>
-    <template #end>
-      <div class="actions">
-        <Button
-          v-if="!isEdit"
-          type="button"
-          label="Edit"
-          icon="pi pi-pencil"
-          @click="showEdit"
-        />
+  <div class="chore-notes">
+    <PageHeader :inline-padding="false">
+      <template #title>
+        <h2>Notes</h2>
+      </template>
+      <template #actions>
+        <div class="actions">
+          <PrimeButton
+            v-if="!showEdit"
+            label="Edit notes"
+            icon="pi pi-pencil"
+            @click="startEdit"
+          />
+        </div>
+      </template>
+    </PageHeader>
+
+    <div
+      v-if="showEdit"
+      class="edit-mode"
+    >
+      <PrimeTextarea
+        v-model.trim="notes"
+        :rows="5"
+        auto-resize
+        class="editor"
+      />
+      <div class="footer">
+        <div class="actions">
+          <PrimeButton
+            severity="secondary"
+            label="Cancel"
+            icon="pi pi-times"
+            :disabled="mutation.isPending.value"
+            @click="showEdit = false"
+          />
+          <PrimeButton
+            label="Save"
+            icon="pi pi-save"
+            :loading="mutation.isPending.value"
+            @click="save"
+          />
+        </div>
       </div>
-    </template>
-  </Toolbar>
-
-  <div
-    v-if="isEdit"
-    class="edit"
-  >
-    <Textarea
-      v-model.trim="notes"
-      auto-resize
-      class="input"
-    />
-
-    <div class="actions">
-      <Button
-        type="button"
-        label="Cancel"
-        icon="pi pi-times"
-        class="p-button-text"
-        @click="cancelEdit"
-      />
-      <Button
-        type="button"
-        label="Save"
-        icon="pi pi-save"
-        @click="saveEdit"
-      />
-    </div>
-  </div>
-
-  <div
-    v-else
-    class="view"
-  >
-    <div v-if="stringIsNullOrWhitespace(chore.notes)">
-      <em>No notes have been added</em>
     </div>
 
-    <div v-else>{{ chore.notes }}</div>
+    <div v-else>
+      <div v-if="!stringIsNullOrWhitespace(chore.notes)">{{ chore.notes }}</div>
+      <div
+        v-else
+        class="no-notes"
+      >
+        This chore doesn't have any notes attached.
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { stringIsNullOrWhitespace } from '@/utilities/string';
+import { stringIsNullOrWhitespace } from '@/utilities/string.js';
+import PageHeader from '@/components/common/PageHeader.vue';
+import PrimeButton from 'primevue/button';
 import { ref } from 'vue';
-import { useChoresApiUpdateChoreNotes } from '@/composables/queries/chores-api';
 import { useQueryClient } from '@tanstack/vue-query';
+import { useChoresApiUpdateChoreNotes } from '@/composables/queries/chores-api.js';
+import PrimeTextarea from 'primevue/textarea';
 import { useToast } from 'vue-toastification';
 
 const props = defineProps({
@@ -70,20 +74,19 @@ const props = defineProps({
   },
 });
 
-const queryClient = useQueryClient();
-const toast = useToast();
+const showEdit = ref(false);
 
-//#region edit
+const notes = ref('');
+const startEdit = () => {
+  notes.value = props.chore.notes;
+  showEdit.value = true;
+};
+
+const toast = useToast();
+const queryClient = useQueryClient();
 const mutation = useChoresApiUpdateChoreNotes(queryClient);
 
-const isEdit = ref(false);
-const notes = ref(null);
-
-const showEdit = () => {
-  notes.value = props.chore.notes;
-  isEdit.value = true;
-};
-const saveEdit = async () => {
+const save = async () => {
   try {
     const payload = {
       choreId: props.chore.id,
@@ -91,44 +94,30 @@ const saveEdit = async () => {
     };
     await mutation.mutateAsync(payload);
     toast.success('Chore notes updated');
-    isEdit.value = false;
-    // notes.value = null;
+    showEdit.value = false;
   } catch (e) {
     console.error(e);
   }
 };
-const cancelEdit = () => {
-  if (notes.value !== props.chore.notes) {
-    // TODO alert
-  }
-  isEdit.value = false;
-  // notes.value = null;
-};
-//#endregion
 </script>
 
 <style scoped lang="scss">
-.header {
-  margin-bottom: 1rem;
+@import '@/styles/_utilities.scss';
 
-  h2 {
-    //font-size: 1.75rem;
-    margin-block: 0;
-  }
-}
-
-.edit {
-  .input {
+.edit-mode {
+  @include flex-column;
+  gap: 1rem;
+  .editor {
     width: 100%;
-    margin-bottom: 1rem;
-    min-height: 10rem;
   }
 
-  .actions {
-    display: flex;
-    flex-direction: row;
+  .footer {
+    @include flex-row;
     justify-content: flex-end;
-    gap: 0.5rem;
+    .actions {
+      @include flex-row;
+      gap: 1rem;
+    }
   }
 }
 </style>
