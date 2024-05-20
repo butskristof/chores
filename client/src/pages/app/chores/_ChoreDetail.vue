@@ -83,7 +83,7 @@ import { useRouter } from 'vue-router';
 import { routes } from '@/router/routes.js';
 import ChoreNotes from '@/components/chores/_detail/ChoreNotes.vue';
 import ChoreIterations from '@/components/chores/_detail/ChoreIterations.vue';
-import ChoreLastIteration from '@/components/chores/common/ChoreLastIteration.vue';
+import ChoreLastIteration from '@/components/chores/common/_ChoreLastIteration.vue';
 import EditChoreTags from '@/components/chores/_detail/EditChoreTags.vue';
 
 const choreId = useRouteParams('id');

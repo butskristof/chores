@@ -4,7 +4,6 @@
     class="chore-detail"
   >
     <PageHeader
-      :title="chore.name"
       :inline-padding="false"
       class="header"
     >
@@ -37,10 +36,13 @@
       </template>
     </PageHeader>
 
-    <h2>Notes</h2>
-    <div>{{ chore.notes }}</div>
+    <PrimeDivider />
 
-    <h2>Iterations</h2>
+    <ChoreNotes :chore="chore" />
+
+    <PrimeDivider />
+
+    <ChoreIterations :chore="chore" />
 
     <EditChoreTags
       v-if="showEditTags"
@@ -57,23 +59,24 @@
       :chore="chore"
       @close="closeDelete"
     />
-    <DebugValue :value="chore" />
   </div>
 </template>
 
 <script setup>
-import DebugValue from '@/components/debug/DebugValue.vue';
 import { useRouteParams } from '@vueuse/router';
 import { useChoresApiChore } from '@/composables/queries/chores-api.js';
 import { computed, ref } from 'vue';
 import PrimeButton from 'primevue/button';
 import PageHeader from '@/components/common/PageHeader.vue';
 import ChoreTags from '@/components/chores/common/ChoreTags.vue';
-import EditChore from '@/components/chores/detail/EditChore.vue';
+import EditChore from '@/components/chores/common/EditChore.vue';
 import { routes } from '@/router/routes.js';
 import { useRouter } from 'vue-router';
 import DeleteChore from '@/components/chores/detail/DeleteChore.vue';
 import EditChoreTags from '@/components/chores/detail/EditChoreTags.vue';
+import ChoreNotes from '@/components/chores/detail/ChoreNotes.vue';
+import PrimeDivider from 'primevue/divider';
+import ChoreIterations from '@/components/chores/detail/ChoreIterations.vue';
 
 const choreId = useRouteParams('id');
 const choreQuery = useChoresApiChore(choreId);
@@ -81,7 +84,7 @@ const chore = computed(() => choreQuery.data.value);
 
 const router = useRouter();
 
-const showEditTags = ref(true);
+const showEditTags = ref(false);
 const showEdit = ref(false);
 const showDelete = ref(false);
 const closeDelete = (deleted) => {

@@ -13,7 +13,7 @@ public static class CreateChoreIteration
 {
     public sealed record Request(
         Guid ChoreId,
-        DateTimeOffset Date,
+        DateTimeOffset Date, // TODO make DateOnly
         string? Notes
     ) : IRequest<ErrorOr<Response>>;
 
