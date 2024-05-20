@@ -125,7 +125,7 @@ const isEdit = computed(() => props.iteration != null);
 const { handleSubmit, meta } = useForm({
   validationSchema: toTypedSchema(
     yup.object({
-      date: yup.date().label('Date'),
+      date: yup.date().required().label('Date'),
       notes: yup.string().label('Notes'),
     }),
   ),
