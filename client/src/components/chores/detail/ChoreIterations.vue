@@ -15,20 +15,32 @@
       </template>
     </PageHeader>
 
-    <div v-if="chore.iterations.length > 0">
+    <div
+      v-if="chore.iterations.length > 0"
+      class="iterations"
+    >
       <div
         v-for="iteration in chore.iterations"
         :key="iteration.id"
         class="iteration"
       >
-        <div class="date">{{ format(new Date(iteration.date), 'dd/MM/yyyy') }}</div>
-        <div
-          v-if="!stringIsNullOrWhitespace(iteration.notes)"
-          class="notes"
-        >
-          {{ iteration.notes }}
+        <div class="details">
+          <div class="date">{{ format(new Date(iteration.date), 'dd/MM/yyyy') }}</div>
+          <div
+            v-if="!stringIsNullOrWhitespace(iteration.notes)"
+            class="notes"
+          >
+            {{ iteration.notes }}
+          </div>
         </div>
-        <PrimeDivider />
+        <div class="actions">
+          <PrimeButton
+            icon="pi pi-trash"
+            severity="danger"
+            @click="iterationForDelete = iteration"
+          />
+        </div>
+        <PrimeDivider v-if="false" />
       </div>
     </div>
     <div v-else>This chore doesn't have any iterations registered.</div>
@@ -38,6 +50,12 @@
       :iteration="iterationForEdit"
       :chore-id="chore.id"
       @close="closeEditDialog"
+    />
+    <DeleteIteration
+      v-if="iterationForDelete != null"
+      :iteration="iterationForDelete"
+      :chore-id="chore.id"
+      @close="iterationForDelete = null"
     />
   </div>
 </template>
@@ -50,6 +68,7 @@ import EditIteration from '@/components/chores/detail/EditIteration.vue';
 import { stringIsNullOrWhitespace } from '@/utilities/string.js';
 import PrimeDivider from 'primevue/divider';
 import { format } from 'date-fns';
+import DeleteIteration from '@/components/chores/detail/DeleteIteration.vue';
 
 const props = defineProps({
   chore: {
@@ -70,6 +89,26 @@ const closeEditDialog = () => {
   iterationForEdit.value = null;
 };
 //#endregion
+
+//#region delete
+const iterationForDelete = ref(null);
+//#endregion
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+@import '@/styles/_utilities.scss';
+
+.iterations {
+  @include flex-column;
+  gap: 1rem;
+  .iteration {
+    @include flex-row-justify-between;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+
+    .details {
+      flex-grow: 1;
+    }
+  }
+}
+</style>
