@@ -21,7 +21,7 @@ public sealed class CreateChoreIterationValidatorTests
     [Fact]
     public void Date_InTheFuture_Fails()
     {
-        _timeProvider.SetUtcNow(new DateTimeOffset(2023, 12, 23, 17, 35, 23, TimeSpan.Zero));
+        _timeProvider.SetUtcNow(new DateTimeOffset(2023, 12, 23, 7, 35, 23, TimeSpan.Zero));
         var request = new CreateChoreIteration.Request(Guid.Empty, new DateOnly(2023, 12, 24), null);
         var result = _sut.TestValidate(request);
         result.ShouldHaveValidationErrorFor(r => r.Date);
