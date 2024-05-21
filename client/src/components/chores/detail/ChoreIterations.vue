@@ -15,20 +15,45 @@
       </template>
     </PageHeader>
 
-    <div v-if="chore.iterations.length > 0">
+    <ChoreNextDue
+      :chore="chore"
+      class="due-next"
+    />
+
+    <div
+      v-if="chore.iterations.length > 0"
+      class="iterations"
+    >
       <div
         v-for="iteration in chore.iterations"
         :key="iteration.id"
         class="iteration"
       >
-        <div class="date">{{ format(new Date(iteration.date), 'dd/MM/yyyy') }}</div>
-        <div
-          v-if="!stringIsNullOrWhitespace(iteration.notes)"
-          class="notes"
-        >
-          {{ iteration.notes }}
+        <div class="details">
+          <div class="date">{{ formatDate(iteration.date) }}</div>
+          <div
+            v-if="!stringIsNullOrWhitespace(iteration.notes)"
+            class="notes"
+          >
+            {{ iteration.notes }}
+          </div>
         </div>
-        <PrimeDivider />
+        <div class="actions">
+          <Tippy
+            content="Not implemented yet"
+            placement="bottom-end"
+          >
+            <PrimeButton
+              icon="pi pi-pencil"
+              disabled
+            />
+          </Tippy>
+          <PrimeButton
+            icon="pi pi-trash"
+            severity="danger"
+            @click="iterationForDelete = iteration"
+          />
+        </div>
       </div>
     </div>
     <div v-else>This chore doesn't have any iterations registered.</div>
@@ -39,6 +64,12 @@
       :chore-id="chore.id"
       @close="closeEditDialog"
     />
+    <DeleteIteration
+      v-if="iterationForDelete != null"
+      :iteration="iterationForDelete"
+      :chore-id="chore.id"
+      @close="iterationForDelete = null"
+    />
   </div>
 </template>
 
@@ -48,8 +79,10 @@ import PrimeButton from 'primevue/button';
 import { ref } from 'vue';
 import EditIteration from '@/components/chores/detail/EditIteration.vue';
 import { stringIsNullOrWhitespace } from '@/utilities/string.js';
-import PrimeDivider from 'primevue/divider';
-import { format } from 'date-fns';
+import DeleteIteration from '@/components/chores/detail/DeleteIteration.vue';
+import { Tippy } from 'vue-tippy';
+import ChoreNextDue from '@/components/chores/detail/ChoreNextDue.vue';
+import { formatDate } from '@/utilities/datetime.js';
 
 const props = defineProps({
   chore: {
@@ -70,6 +103,39 @@ const closeEditDialog = () => {
   iterationForEdit.value = null;
 };
 //#endregion
+
+//#region delete
+const iterationForDelete = ref(null);
+//#endregion
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+@import '@/styles/_utilities.scss';
+
+.due-next {
+  margin-bottom: 1.25rem;
+}
+
+.iterations {
+  @include flex-column;
+  gap: 1rem;
+  .iteration {
+    @include flex-row-justify-between;
+    padding-bottom: 1rem;
+
+    &:not(:last-of-type) {
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .details {
+      flex-grow: 1;
+    }
+
+    .actions {
+      @include flex-row;
+      gap: 0.5rem;
+      align-items: flex-start;
+    }
+  }
+}
+</style>

@@ -13,7 +13,7 @@ public static class CreateChoreIteration
 {
     public sealed record Request(
         Guid ChoreId,
-        DateTimeOffset Date, // TODO make DateOnly
+        DateOnly Date,
         string? Notes
     ) : IRequest<ErrorOr<Response>>;
 
@@ -24,7 +24,19 @@ public static class CreateChoreIteration
         public Validator(TimeProvider timeProvider)
         {
             RuleFor(r => r.Date)
-                .Must(input => input.UtcDateTime.Date <= timeProvider.GetUtcNow().Date)
+                .Must(input =>
+                {
+                    // we aim to support time zones partially: the passed in date should already have begun
+                    // *somewhere* in the world. As an easy validation, we start from the current UTC date and port it 
+                    // to the "earliest" (most in the east) time zone and use that as a reference for the current date
+                    
+                    var now = timeProvider.GetUtcNow();
+                    // UTC+14:00 is regarding as the largest possible offset from UTC
+                    // https://en.wikipedia.org/wiki/UTC%2B14:00
+                    var earliest = now.ToOffset(TimeSpan.FromHours(14));
+                    var currentDay = DateOnly.FromDateTime(earliest.Date);
+                    return input <= currentDay;
+                })
                 .WithMessage(ErrorCodes.Invalid);
         }
     }

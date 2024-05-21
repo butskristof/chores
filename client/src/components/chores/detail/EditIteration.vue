@@ -107,6 +107,7 @@ import PrimeButton from 'primevue/button';
 import ApiError from '@/components/common/ApiError.vue';
 import PrimeTextarea from 'primevue/textarea';
 import PrimeDatePicker from 'primevue/datepicker';
+import { formatDateAsJson } from '@/utilities/datetime.js';
 
 const props = defineProps({
   choreId: {
@@ -157,7 +158,7 @@ const save = handleSubmit.withControlled(async (values) => {
   try {
     const payload = {
       choreId: props.choreId,
-      date: values.date,
+      date: formatDateAsJson(values.date),
       notes: values.notes,
     };
     // if (isEdit.value === true) payload.id = props.iteration.id;
@@ -166,6 +167,7 @@ const save = handleSubmit.withControlled(async (values) => {
     console.error(e);
   }
 });
+
 //#endregion
 
 const updateVisible = (value) => {

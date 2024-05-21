@@ -7,7 +7,7 @@ internal sealed class ChoreIterationBuilder
     private Guid _id = Guid.NewGuid();
 
     // default value is before the default FakeTimeProvider UtcNow value
-    private DateTimeOffset _date = new(1999, 12, 31, 0, 0, 0, TimeSpan.Zero);
+    private DateOnly _date = new(1999, 12, 31);
     private string? _notes = null;
 
     internal ChoreIterationBuilder WithId(Guid id)
@@ -16,7 +16,7 @@ internal sealed class ChoreIterationBuilder
         return this;
     }
 
-    internal ChoreIterationBuilder WithDate(DateTimeOffset date)
+    internal ChoreIterationBuilder WithDate(DateOnly date)
     {
         _date = date;
         return this;
