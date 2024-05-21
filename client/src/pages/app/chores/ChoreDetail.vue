@@ -3,6 +3,16 @@
     v-if="chore"
     class="chore-detail"
   >
+    <div class="back-to-overview">
+      <router-link :to="{ name: routes.chores.children.overview.name }">
+        <PrimeButton
+          icon="pi pi-arrow-left"
+          label="Back to overview"
+          severity="secondary"
+        />
+      </router-link>
+    </div>
+
     <PageHeader
       :inline-padding="false"
       class="header"
@@ -94,7 +104,14 @@ const closeDelete = (deleted) => {
 </script>
 
 <style scoped lang="scss">
+@import '@/styles/_custom-vars.scss';
 @import '@/styles/_utilities.scss';
+
+.back-to-overview {
+  @include media-min-width($md) {
+    margin-bottom: 1rem;
+  }
+}
 
 .header {
   align-items: flex-start;

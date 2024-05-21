@@ -20,42 +20,41 @@
       class="due-next"
     />
 
-    <div
+    <PrimeTimeline
       v-if="chore.iterations.length > 0"
-      class="iterations"
+      :value="chore.iterations"
+      class="timeline"
     >
-      <div
-        v-for="iteration in chore.iterations"
-        :key="iteration.id"
-        class="iteration"
-      >
-        <div class="details">
-          <div class="date">{{ formatDate(iteration.date) }}</div>
-          <div
-            v-if="!stringIsNullOrWhitespace(iteration.notes)"
-            class="notes"
-          >
-            {{ iteration.notes }}
+      <template #content="{ item: iteration }">
+        <div class="iteration">
+          <div class="details">
+            <div class="date">{{ formatDate(iteration.date) }}</div>
+            <div
+              v-if="!stringIsNullOrWhitespace(iteration.notes)"
+              class="notes"
+            >
+              {{ iteration.notes }}
+            </div>
+          </div>
+          <div class="actions">
+            <Tippy
+              content="Not implemented yet"
+              placement="bottom-end"
+            >
+              <PrimeButton
+                icon="pi pi-pencil"
+                disabled
+              />
+            </Tippy>
+            <PrimeButton
+              icon="pi pi-trash"
+              severity="danger"
+              @click="iterationForDelete = iteration"
+            />
           </div>
         </div>
-        <div class="actions">
-          <Tippy
-            content="Not implemented yet"
-            placement="bottom-end"
-          >
-            <PrimeButton
-              icon="pi pi-pencil"
-              disabled
-            />
-          </Tippy>
-          <PrimeButton
-            icon="pi pi-trash"
-            severity="danger"
-            @click="iterationForDelete = iteration"
-          />
-        </div>
-      </div>
-    </div>
+      </template>
+    </PrimeTimeline>
     <div v-else>This chore doesn't have any iterations registered.</div>
 
     <EditIteration
@@ -83,6 +82,7 @@ import DeleteIteration from '@/components/chores/detail/DeleteIteration.vue';
 import { Tippy } from 'vue-tippy';
 import ChoreNextDue from '@/components/chores/detail/ChoreNextDue.vue';
 import { formatDate } from '@/utilities/datetime.js';
+import PrimeTimeline from 'primevue/timeline';
 
 const props = defineProps({
   chore: {
@@ -116,26 +116,33 @@ const iterationForDelete = ref(null);
   margin-bottom: 1.25rem;
 }
 
-.iterations {
-  @include flex-column;
-  gap: 1rem;
-  .iteration {
-    @include flex-row-justify-between;
-    padding-bottom: 1rem;
+.timeline {
+  --p-timeline-vertical-event-content-padding: 0;
+  :deep(.p-timeline-event-separator) {
+    margin-right: 1rem;
+  }
 
-    &:not(:last-of-type) {
-      border-bottom: 1px solid var(--border-color);
-    }
+  :deep(.p-timeline-event-opposite) {
+    flex: initial;
+  }
+}
 
-    .details {
-      flex-grow: 1;
-    }
+.iteration {
+  @include flex-row-justify-between;
+  padding-bottom: 1rem;
 
-    .actions {
-      @include flex-row;
-      gap: 0.5rem;
-      align-items: flex-start;
-    }
+  &:not(:last-of-type) {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .details {
+    flex-grow: 1;
+  }
+
+  .actions {
+    @include flex-row;
+    gap: 0.5rem;
+    align-items: flex-start;
   }
 }
 </style>
