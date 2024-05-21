@@ -11,7 +11,7 @@
         <div class="header-left">
           <h1>{{ chore.name }}</h1>
           <ChoreTags :tags="chore.tags" />
-          <p>due every {{ chore.interval }} days</p>
+          <p class="chore-due"><i class="pi pi-clock"></i> every {{ chore.interval }} days</p>
         </div>
       </template>
       <template #actions>
@@ -103,6 +103,15 @@ const closeDelete = (deleted) => {
 .header-left {
   @include flex-column;
   gap: 1rem;
+}
+
+.chore-due {
+  @include flex-row;
+  align-items: center;
+
+  i {
+    margin-right: 0.5rem;
+  }
 }
 
 .actions {

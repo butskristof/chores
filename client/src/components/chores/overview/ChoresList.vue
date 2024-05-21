@@ -2,10 +2,9 @@
   <div class="chores-list">
     <ul v-if="chores.length > 0">
       <ChoreListItem
-        v-for="(chore, i) in chores"
+        v-for="chore in chores"
         :key="chore.id"
         :chore="chore"
-        :index="i"
       />
     </ul>
   </div>

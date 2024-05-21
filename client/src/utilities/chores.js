@@ -1,5 +1,18 @@
 import { addDays, differenceInCalendarDays } from 'date-fns';
 
+export const CHORE_DUE_STATES = {
+  OK: 'OK',
+  ALMOST_DUE: 'ALMOST_DUE',
+  OVERDUE: 'OVERDUE',
+};
+
+export const getChoreDueState = (chore) => {
+  const dueDays = getDueDays(chore);
+  if (dueDays < 0) return CHORE_DUE_STATES.OVERDUE;
+  else if (dueDays <= 1) return CHORE_DUE_STATES.ALMOST_DUE;
+  return CHORE_DUE_STATES.OK;
+};
+
 export const getLastIteration = (chore) => {
   const mostRecent =
     chore.lastIteration ??

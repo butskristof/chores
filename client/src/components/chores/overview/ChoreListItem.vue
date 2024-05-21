@@ -3,7 +3,7 @@
     <router-link :to="{ name: routes.chores.children.detail.name, params: { id: chore.id } }">
       <li
         class="chore-list-item"
-        :class="STATE_INFO[state].class"
+        :class="stateClass"
       >
         <div class="details">
           <div class="name-tags">
@@ -12,14 +12,7 @@
           </div>
         </div>
         <div class="actions">
-          <div>due X days</div>
-          <PrimeAvatar
-            :icon="STATE_INFO[state].icon"
-            size="large"
-            shape="circle"
-            class="state-icon"
-            :class="STATE_INFO[state].class"
-          />
+          <ChoreListItemNextDue :chore />
         </div>
       </li>
     </router-link>
@@ -28,46 +21,26 @@
 
 <script setup>
 import { computed } from 'vue';
-import PrimeAvatar from 'primevue/avatar';
 import { routes } from '@/router/routes.js';
 import ChoreTags from '@/components/chores/common/ChoreTags.vue';
+import ChoreListItemNextDue from '@/components/chores/overview/ChoreListItemNextDue.vue';
+import { CHORE_DUE_STATES, getChoreDueState } from '@/utilities/chores.js';
 
 const props = defineProps({
   chore: {
     type: Object,
     required: true,
   },
-  // TODO remove
-  index: {
-    type: Number,
-    required: true,
-  },
 });
 
-const STATES = {
-  OK: 'OK',
-  ALMOST_DUE: 'ALMOST_DUE',
-  OVERDUE: 'OVERDUE',
-};
-const STATE_INFO = {
-  [STATES.OK]: {
-    class: 'ok',
-    severity: 'success',
-    icon: 'pi pi-check',
-  },
-  [STATES.ALMOST_DUE]: {
-    class: 'almost-due',
-    severity: 'warn',
-    icon: 'pi pi-exclamation-triangle',
-  },
-  [STATES.OVERDUE]: {
-    class: 'overdue',
-    severity: 'danger',
-    icon: 'pi pi-times',
-  },
+const STATE_CLASSES = {
+  [CHORE_DUE_STATES.OK]: 'ok',
+  [CHORE_DUE_STATES.ALMOST_DUE]: 'almost-due',
+  [CHORE_DUE_STATES.OVERDUE]: 'overdue',
 };
 
-const state = computed(() => Object.values(STATES)[props.index % Object.keys(STATES).length]);
+const state = computed(() => getChoreDueState(props.chore));
+const stateClass = computed(() => STATE_CLASSES[state.value]);
 </script>
 
 <style scoped lang="scss">
@@ -88,39 +61,15 @@ const state = computed(() => Object.values(STATES)[props.index % Object.keys(STA
   border: 1px solid;
 
   &.ok {
-    background-color: var(--p-green-50);
-    border-color: var(--p-green-500);
-    color: var(--p-green-700);
-
-    @include dark-mode {
-      background-color: var(--p-green-950);
-      border-color: var(--p-green-700);
-      color: var(--p-green-300);
-    }
+    @include ok;
   }
 
   &.almost-due {
-    background-color: var(--p-yellow-50);
-    border-color: var(--p-yellow-500);
-    color: var(--p-yellow-700);
-
-    @include dark-mode {
-      background-color: var(--p-yellow-900);
-      border-color: var(--p-yellow-500);
-      color: var(--p-yellow-200);
-    }
+    @include almost-due;
   }
 
   &.overdue {
-    background-color: var(--p-red-50);
-    border-color: var(--p-red-500);
-    color: var(--p-red-700);
-
-    @include dark-mode {
-      background-color: var(--p-red-950);
-      border-color: var(--p-red-700);
-      color: var(--p-red-300);
-    }
+    @include overdue;
   }
 }
 
@@ -135,41 +84,6 @@ const state = computed(() => Object.values(STATES)[props.index % Object.keys(STA
     .name {
       font-size: 120%;
       font-weight: 700;
-    }
-  }
-}
-
-.state-icon {
-  flex-shrink: 0;
-  border: 2px solid;
-
-  &.ok {
-    background-color: var(--p-green-100);
-    border-color: var(--p-green-500);
-
-    @include dark-mode {
-      background-color: var(--p-green-900);
-      border-color: var(--p-green-700);
-    }
-  }
-
-  &.almost-due {
-    background-color: var(--p-yellow-100);
-    border-color: var(--p-yellow-500);
-
-    @include dark-mode {
-      background-color: var(--p-yellow-800);
-      border-color: var(--p-yellow-700);
-    }
-  }
-
-  &.overdue {
-    background-color: var(--p-red-100);
-    border-color: var(--p-red-500);
-
-    @include dark-mode {
-      background-color: var(--p-red-900);
-      border-color: var(--p-red-700);
     }
   }
 }

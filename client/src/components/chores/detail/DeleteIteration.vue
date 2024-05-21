@@ -10,8 +10,8 @@
   >
     <template #confirm-text>
       Delete iteration on
-      <strong>{{ format(new Date(iteration.date), 'dd/MM/yyyy') }}</strong>
-      ?
+      <strong>{{ formatDate(iteration.date) }}</strong
+      >?
     </template>
   </DeleteDialog>
 </template>
@@ -21,7 +21,7 @@ import DeleteDialog from '@/components/common/DeleteDialog.vue';
 import { useQueryClient } from '@tanstack/vue-query';
 import { useToast } from 'vue-toastification';
 import { useChoresApiDeleteChoreIteration } from '@/composables/queries/chores-api.js';
-import { format } from 'date-fns';
+import { formatDate } from '@/utilities/datetime.js';
 
 const props = defineProps({
   choreId: {
