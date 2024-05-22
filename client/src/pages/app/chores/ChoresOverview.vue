@@ -1,14 +1,19 @@
 <template>
   <div class="chores-overview">
-    <PageHeader title="Chores">
-      <template #actions>
-        <PrimeButton
-          label="Add new chore"
-          icon="pi pi-plus"
-          @click="showCreate = true"
-        />
+    <LeftRightHeader class="page-header">
+      <template #left>
+        <h1>Chores</h1>
       </template>
-    </PageHeader>
+      <template #right>
+        <div class="actions">
+          <PrimeButton
+            label="Add new chore"
+            icon="pi pi-plus"
+            @click="showCreate = true"
+          />
+        </div>
+      </template>
+    </LeftRightHeader>
 
     <ChoresList :chores="chores" />
 
@@ -20,7 +25,7 @@
 </template>
 
 <script setup>
-import PageHeader from '@/components/common/PageHeader.vue';
+import LeftRightHeader from '@/components/common/LeftRightHeader.vue';
 import PrimeButton from 'primevue/button';
 import { ref } from 'vue';
 import EditChore from '@/components/chores/common/EditChore.vue';
@@ -31,4 +36,16 @@ const { chores } = useChoresApiChores();
 const showCreate = ref(false);
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+@import '@/styles/_utilities.scss';
+
+.page-header {
+  // .header is also used inside the component, this must be another name
+  // to make sure it gets a higher importance
+  padding-inline: var(--default-padding);
+
+  .actions {
+    @include flex-row-actions;
+  }
+}
+</style>

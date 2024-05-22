@@ -1,10 +1,10 @@
 <template>
   <div class="chore-iterations">
-    <PageHeader :inline-padding="false">
-      <template #title>
+    <LeftRightHeader>
+      <template #left>
         <h2>Iterations</h2>
       </template>
-      <template #actions>
+      <template #right>
         <div class="actions">
           <PrimeButton
             label="Add iteration"
@@ -13,7 +13,7 @@
           />
         </div>
       </template>
-    </PageHeader>
+    </LeftRightHeader>
 
     <ChoreNextDue
       :chore="chore"
@@ -73,7 +73,7 @@
 </template>
 
 <script setup>
-import PageHeader from '@/components/common/PageHeader.vue';
+import LeftRightHeader from '@/components/common/LeftRightHeader.vue';
 import PrimeButton from 'primevue/button';
 import { ref } from 'vue';
 import EditIteration from '@/components/chores/detail/EditIteration.vue';
@@ -110,7 +110,12 @@ const iterationForDelete = ref(null);
 </script>
 
 <style scoped lang="scss">
+@import '@/styles/_custom-vars.scss';
 @import '@/styles/_utilities.scss';
+
+.actions {
+  @include flex-row-actions;
+}
 
 .due-next {
   margin-bottom: 1.25rem;
@@ -137,12 +142,6 @@ const iterationForDelete = ref(null);
 
   .details {
     flex-grow: 1;
-  }
-
-  .actions {
-    @include flex-row;
-    gap: 0.5rem;
-    align-items: flex-start;
   }
 }
 </style>

@@ -1,10 +1,10 @@
 <template>
   <div class="chore-notes">
-    <PageHeader :inline-padding="false">
-      <template #title>
+    <LeftRightHeader>
+      <template #left>
         <h2>Notes</h2>
       </template>
-      <template #actions>
+      <template #right>
         <div class="actions">
           <PrimeButton
             v-if="!showEdit"
@@ -14,7 +14,7 @@
           />
         </div>
       </template>
-    </PageHeader>
+    </LeftRightHeader>
 
     <div
       v-if="showEdit"
@@ -59,7 +59,7 @@
 
 <script setup>
 import { stringIsNullOrWhitespace } from '@/utilities/string.js';
-import PageHeader from '@/components/common/PageHeader.vue';
+import LeftRightHeader from '@/components/common/LeftRightHeader.vue';
 import PrimeButton from 'primevue/button';
 import { ref } from 'vue';
 import { useQueryClient } from '@tanstack/vue-query';
@@ -104,6 +104,10 @@ const save = async () => {
 <style scoped lang="scss">
 @import '@/styles/_utilities.scss';
 
+.actions {
+  @include flex-row-actions;
+}
+
 .edit-mode {
   @include flex-column;
   gap: 1rem;
@@ -114,10 +118,6 @@ const save = async () => {
   .footer {
     @include flex-row;
     justify-content: flex-end;
-    .actions {
-      @include flex-row;
-      gap: 1rem;
-    }
   }
 }
 </style>

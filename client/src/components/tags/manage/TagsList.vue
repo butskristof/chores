@@ -116,9 +116,7 @@ defineEmits(['edit', 'delete']);
       }
 
       .actions {
-        @include flex-row;
-        align-items: center;
-        gap: 0.5rem;
+        @include flex-row-actions;
       }
     }
   }
