@@ -1,13 +1,8 @@
 <template>
-  <PrimeDialog
-    visible
-    modal
-    :draggable="false"
+  <EditDialog
+    :maximizable="false"
     header="Edit chore tags"
-    :style="{
-      width: '50rem',
-    }"
-    @update:visible="updateVisible"
+    @close="$emit('close')"
   >
     <div class="edit-chore-tags">
       <div class="field">
@@ -49,11 +44,10 @@
         </div>
       </div>
     </div>
-  </PrimeDialog>
+  </EditDialog>
 </template>
 
 <script setup>
-import PrimeDialog from 'primevue/dialog';
 import { useQueryClient } from '@tanstack/vue-query';
 import { useChoresApiTags, useChoresApiUpdateChoreTags } from '@/composables/queries/chores-api.js';
 import { useToast } from 'vue-toastification';
@@ -62,6 +56,7 @@ import PrimeButton from 'primevue/button';
 import PrimeMultiSelect from 'primevue/multiselect';
 import PrimeInlineMessage from 'primevue/inlinemessage';
 import ApiError from '@/components/common/ApiError.vue';
+import EditDialog from '@/components/common/EditDialog.vue';
 
 const props = defineProps({
   chore: {
@@ -96,10 +91,6 @@ const save = async () => {
 };
 
 //#endregion
-
-const updateVisible = (value) => {
-  if (value === false) emit('close');
-};
 </script>
 
 <style scoped lang="scss">

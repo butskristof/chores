@@ -1,14 +1,7 @@
 <template>
-  <PrimeDialog
-    visible
-    modal
-    maximizable
-    :draggable="false"
+  <EditDialog
     :header="isEdit ? 'Edit iteration' : 'Create new iteration'"
-    :style="{
-      width: '50rem',
-    }"
-    @update:visible="updateVisible"
+    @close="tryClose"
   >
     <form @submit="save">
       <div class="field">
@@ -91,7 +84,7 @@
         </div>
       </div>
     </form>
-  </PrimeDialog>
+  </EditDialog>
 </template>
 
 <script setup>
@@ -101,13 +94,13 @@ import { useChoresApiUpsertChoreIteration } from '@/composables/queries/chores-a
 import { useField, useForm } from 'vee-validate';
 import { toTypedSchema } from '@vee-validate/yup';
 import * as yup from 'yup';
-import PrimeDialog from 'primevue/dialog';
 import PrimeInlineMessage from 'primevue/inlinemessage';
 import PrimeButton from 'primevue/button';
 import ApiError from '@/components/common/ApiError.vue';
 import PrimeTextarea from 'primevue/textarea';
 import PrimeDatePicker from 'primevue/datepicker';
 import { formatDateAsJson } from '@/utilities/datetime.js';
+import EditDialog from '@/components/common/EditDialog.vue';
 
 const props = defineProps({
   choreId: {
@@ -170,9 +163,6 @@ const save = handleSubmit.withControlled(async (values) => {
 
 //#endregion
 
-const updateVisible = (value) => {
-  if (value === false) tryClose();
-};
 const tryClose = (force = false) => {
   let close = true;
   if (!force && meta.value.dirty && mutation.isSuccess.value !== true)

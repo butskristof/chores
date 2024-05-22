@@ -1,14 +1,7 @@
 <template>
-  <PrimeDialog
-    visible
-    modal
-    maximizable
-    :draggable="false"
+  <EditDialog
     :header="isEdit ? 'Edit tag' : 'Create new tag'"
-    :style="{
-      width: '50rem',
-    }"
-    @update:visible="updateVisible"
+    @close="tryClose"
   >
     <form @submit="save">
       <div class="field">
@@ -133,12 +126,11 @@
         </div>
       </div>
     </form>
-  </PrimeDialog>
+  </EditDialog>
 </template>
 
 <script setup>
 import { computed, ref } from 'vue';
-import PrimeDialog from 'primevue/dialog';
 import PrimeInputText from 'primevue/inputtext';
 import PrimeButton from 'primevue/button';
 import PrimeInlineMessage from 'primevue/inlinemessage';
@@ -153,6 +145,7 @@ import { PrimeIcons } from 'primevue/api';
 import { stringIsNullOrWhitespace } from '@/utilities/string.js';
 import PrimeInputGroup from 'primevue/inputgroup';
 import PrimeInputGroupAddon from 'primevue/inputgroupaddon';
+import EditDialog from '@/components/common/EditDialog.vue';
 
 const props = defineProps({
   tag: {
@@ -226,9 +219,6 @@ const save = handleSubmit.withControlled(async (values) => {
 
 //#endregion
 
-const updateVisible = (value) => {
-  if (value === false) tryClose();
-};
 const tryClose = (force = false) => {
   let close = true;
   if (!force && meta.value.dirty && mutation.isSuccess.value !== true)
