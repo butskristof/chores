@@ -59,12 +59,7 @@
         </div>
       </li>
     </ul>
-    <div
-      v-else
-      class="empty-state"
-    >
-      No tags found, get started by adding a new one.
-    </div>
+    <div v-else>No tags found, get started by adding a new one.</div>
   </div>
 </template>
 
@@ -99,10 +94,7 @@ defineEmits(['edit', 'delete']);
   }
 
   ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-
+    @include unstyled-ul;
     li {
       &.skeleton .details {
         @include flex-column;

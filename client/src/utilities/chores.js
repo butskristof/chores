@@ -27,7 +27,7 @@ export const getLastIteration = (chore) => {
 
 export const getDueDays = (chore, lastIteration = null) => {
   const last = lastIteration ?? getLastIteration(chore);
-  if (last == null) return null;
+  if (last == null) return 0;
   const expectedNext = addDays(last, chore.interval);
   return differenceInCalendarDays(expectedNext, new Date());
 };

@@ -1,22 +1,25 @@
 <template>
-  <div class="items">
-    <router-link :to="{ name: routes.chores.children.detail.name, params: { id: chore.id } }">
-      <li
-        class="chore-list-item"
-        :class="stateClass"
-      >
-        <div class="details">
-          <div class="name-tags">
-            <div class="name">{{ chore.name }}</div>
-            <ChoreTags :tags="chore.tags" />
-          </div>
-        </div>
-        <div class="actions">
-          <ChoreListItemNextDue :chore />
-        </div>
-      </li>
-    </router-link>
-  </div>
+  <router-link
+    :to="{
+      name: routes.chores.children.detail.name,
+      params: {
+        id: chore.id,
+      },
+    }"
+  >
+    <li
+      class="chore-list-item"
+      :class="stateClass"
+    >
+      <div class="left">
+        <div class="name">{{ chore.name }}</div>
+        <ChoreTags :tags="chore.tags" />
+      </div>
+      <div class="right">
+        <ChoreListItemNextDue :chore />
+      </div>
+    </li>
+  </router-link>
 </template>
 
 <script setup>
@@ -49,16 +52,29 @@ const stateClass = computed(() => STATE_CLASSES[state.value]);
 @import '@/styles/_shadows.scss';
 
 .chore-list-item {
+  @include white-content-box;
   @include flex-row-justify-between-wrapping;
   gap: var(--default-padding);
-  border-radius: var(--border-radius);
+
+  transition: all 150ms;
 
   &:hover {
     @include shadow-2;
   }
 
-  padding: 1rem;
-  border: 1px solid;
+  .left {
+    @include flex-column;
+    gap: 0.5rem;
+
+    .name {
+      font-size: 120%;
+      font-weight: 700;
+    }
+  }
+
+  .right {
+    @include flex-row-actions;
+  }
 
   &.ok {
     @include ok;
@@ -71,26 +87,5 @@ const stateClass = computed(() => STATE_CLASSES[state.value]);
   &.overdue {
     @include overdue;
   }
-}
-
-.details {
-  @include flex-row;
-  align-items: center;
-  gap: 1rem;
-
-  .name-tags {
-    @include flex-column;
-    gap: 0.5rem;
-    .name {
-      font-size: 120%;
-      font-weight: 700;
-    }
-  }
-}
-
-.actions {
-  @include flex-row;
-  align-items: center;
-  gap: 1rem;
 }
 </style>

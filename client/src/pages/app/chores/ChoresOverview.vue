@@ -15,7 +15,10 @@
       </template>
     </LeftRightHeader>
 
-    <ChoresList :chores="chores" />
+    <ChoresList
+      :chores="chores"
+      :loading="queryPending"
+    />
 
     <EditChore
       v-if="showCreate"
@@ -32,7 +35,7 @@ import EditChore from '@/components/chores/common/EditChore.vue';
 import ChoresList from '@/components/chores/overview/ChoresList.vue';
 import { useChoresApiChores } from '@/composables/queries/chores-api.js';
 
-const { chores } = useChoresApiChores();
+const { chores, isPending: queryPending } = useChoresApiChores();
 const showCreate = ref(false);
 </script>
 
