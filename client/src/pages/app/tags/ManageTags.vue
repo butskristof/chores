@@ -25,12 +25,12 @@
     <EditTag
       v-if="showEditDialog"
       :tag="tagForEdit"
-      @close="closeEditDialog"
+      @close="closeEditDialog()"
     />
     <DeleteTag
       v-if="tagForDelete != null"
       :tag="tagForDelete"
-      @close="closeDeleteDialog"
+      @close="closeDeleteDialog()"
     />
   </div>
 </template>

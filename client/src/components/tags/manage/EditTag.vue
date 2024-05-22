@@ -1,6 +1,6 @@
 <template>
   <PrimeDialog
-    :visible="true"
+    visible
     modal
     maximizable
     :draggable="false"
@@ -88,13 +88,6 @@
               </template>
             </PrimeAutoComplete>
           </PrimeInputGroup>
-          <PrimeInputText
-            v-if="false"
-            v-model="icon.value.value"
-            type="text"
-            :disabled="isFormDisabled"
-            :invalid="icon.errors.value.length > 0"
-          />
           <small
             v-if="icon.errors.value.length > 0"
             class="p-error"

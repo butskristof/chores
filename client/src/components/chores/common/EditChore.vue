@@ -1,6 +1,6 @@
 <template>
   <PrimeDialog
-    :visible="true"
+    visible
     modal
     maximizable
     :draggable="false"
