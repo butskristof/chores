@@ -22,17 +22,13 @@
 <script setup>
 import PageHeader from '@/components/common/PageHeader.vue';
 import PrimeButton from 'primevue/button';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import EditChore from '@/components/chores/common/EditChore.vue';
 import ChoresList from '@/components/chores/overview/ChoresList.vue';
 import { useChoresApiChores } from '@/composables/queries/chores-api.js';
 
-const choresQuery = useChoresApiChores();
-const chores = computed(() => choresQuery.data.value?.chores ?? []);
-
-//#region create
+const { chores } = useChoresApiChores();
 const showCreate = ref(false);
-//#endregion
 </script>
 
 <style scoped lang="scss"></style>

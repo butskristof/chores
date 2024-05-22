@@ -12,7 +12,7 @@
 
     <TagsList
       :tags="tags"
-      :loading="tagsQuery.isPending.value"
+      :loading="queryPending"
       @edit="openEditDialog"
       @delete="setTagForDelete"
     />
@@ -33,14 +33,13 @@
 <script setup>
 import TagsList from '@/components/tags/manage/TagsList.vue';
 import { useChoresApiTags } from '@/composables/queries/chores-api.js';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import EditTag from '@/components/tags/manage/EditTag.vue';
 import DeleteTag from '@/components/tags/manage/DeleteTag.vue';
 import PrimeButton from 'primevue/button';
 import PageHeader from '@/components/common/PageHeader.vue';
 
-const tagsQuery = useChoresApiTags();
-const tags = computed(() => tagsQuery.data.value?.tags ?? []);
+const { tags, isPending: queryPending } = useChoresApiTags();
 
 //#region edit
 

@@ -75,7 +75,7 @@
 <script setup>
 import { useRouteParams } from '@vueuse/router';
 import { useChoresApiChore } from '@/composables/queries/chores-api.js';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import PrimeButton from 'primevue/button';
 import PageHeader from '@/components/common/PageHeader.vue';
 import ChoreTags from '@/components/chores/common/ChoreTags.vue';
@@ -89,8 +89,7 @@ import PrimeDivider from 'primevue/divider';
 import ChoreIterations from '@/components/chores/detail/ChoreIterations.vue';
 
 const choreId = useRouteParams('id');
-const choreQuery = useChoresApiChore(choreId);
-const chore = computed(() => choreQuery.data.value);
+const { chore } = useChoresApiChore(choreId);
 
 const router = useRouter();
 

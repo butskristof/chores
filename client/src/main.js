@@ -13,7 +13,6 @@ const app = createApp(App);
 //#region router
 
 import router from './router';
-
 app.use(router);
 
 //#endregion
@@ -21,7 +20,6 @@ app.use(router);
 //#region pinia
 
 import { createPinia } from 'pinia';
-
 app.use(createPinia());
 
 //#endregion
@@ -29,7 +27,6 @@ app.use(createPinia());
 //#region tanstack query
 
 import { VueQueryPlugin } from '@tanstack/vue-query';
-
 app.use(VueQueryPlugin);
 
 //#endregion
@@ -97,7 +94,6 @@ app.directive('ripple', Ripple);
 
 import 'vue-toastification/dist/index.css';
 import Toast, { POSITION } from 'vue-toastification';
-
 app.use(Toast, {
   position: POSITION.BOTTOM_RIGHT,
 });

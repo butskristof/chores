@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/vue-query';
 import choresApiService from '@/services/chores-api.service';
+import { computed } from 'vue';
 
 export const CHORES_API_QUERY_KEYS = {
   CHORES: {
@@ -13,11 +14,14 @@ export const CHORES_API_QUERY_KEYS = {
 
 //#region chores
 
-export const useChoresApiChores = () =>
-  useQuery({
+export const useChoresApiChores = () => {
+  const query = useQuery({
     queryKey: CHORES_API_QUERY_KEYS.CHORES.GET,
     queryFn: choresApiService.getChores,
   });
+  query.chores = computed(() => query.data.value?.chores ?? []);
+  return query;
+};
 
 export const useChoresApiUpsertChore = (queryClient) =>
   useMutation({
@@ -34,11 +38,14 @@ export const useChoresApiUpsertChore = (queryClient) =>
     },
   });
 
-export const useChoresApiChore = (id) =>
-  useQuery({
+export const useChoresApiChore = (id) => {
+  const query = useQuery({
     queryKey: CHORES_API_QUERY_KEYS.CHORES.GET_BY_ID(id),
     queryFn: () => choresApiService.getChore(id.value),
   });
+  query.chore = computed(() => query.data.value);
+  return query;
+};
 
 export const useChoresApiDeleteChore = (queryClient) =>
   useMutation({
@@ -105,11 +112,14 @@ export const useChoresApiDeleteChoreIteration = (queryClient) =>
 
 //#region tags
 
-export const useChoresApiTags = () =>
-  useQuery({
+export const useChoresApiTags = () => {
+  const query = useQuery({
     queryKey: CHORES_API_QUERY_KEYS.TAGS.GET,
     queryFn: choresApiService.getTags,
   });
+  query.tags = computed(() => query.data.value?.tags ?? []);
+  return query;
+};
 
 export const useChoresApiUpsertTag = (queryClient) =>
   useMutation({
