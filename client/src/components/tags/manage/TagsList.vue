@@ -106,7 +106,6 @@ defineEmits(['edit', 'delete']);
       padding-block: 1rem;
 
       @include flex-row-justify-between-wrapping;
-      align-items: flex-start;
 
       .details {
         .usage {

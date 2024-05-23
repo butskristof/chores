@@ -16,7 +16,7 @@
     </LeftRightHeader>
 
     <ChoresList
-      :chores="chores"
+      :chores
       :loading="queryPending"
     />
 

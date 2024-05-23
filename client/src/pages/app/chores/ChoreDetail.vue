@@ -45,11 +45,11 @@
 
     <PrimeDivider />
 
-    <ChoreNotes :chore="chore" />
+    <ChoreNotes :chore />
 
     <PrimeDivider />
 
-    <ChoreIterations :chore="chore" />
+    <ChoreIterations :chore />
 
     <EditChoreTags
       v-if="showEditTags"
@@ -92,6 +92,7 @@ const router = useRouter();
 
 const showEditTags = ref(false);
 const showEdit = ref(false);
+
 const showDelete = ref(false);
 const closeDelete = (deleted) => {
   showDelete.value = false;

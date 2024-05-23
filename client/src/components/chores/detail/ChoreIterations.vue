@@ -16,7 +16,7 @@
     </LeftRightHeader>
 
     <ChoreNextDue
-      :chore="chore"
+      :chore
       class="due-next"
     />
 

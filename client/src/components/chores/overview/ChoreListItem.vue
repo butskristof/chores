@@ -27,7 +27,7 @@ import { computed } from 'vue';
 import { routes } from '@/router/routes.js';
 import ChoreTags from '@/components/chores/common/ChoreTags.vue';
 import ChoreListItemNextDue from '@/components/chores/overview/ChoreListItemNextDue.vue';
-import { CHORE_DUE_STATES, getChoreDueState } from '@/utilities/chores.js';
+import { CHORE_DUE_STATES } from '@/utilities/chores.js';
 
 const props = defineProps({
   chore: {
@@ -41,9 +41,7 @@ const STATE_CLASSES = {
   [CHORE_DUE_STATES.ALMOST_DUE]: 'almost-due',
   [CHORE_DUE_STATES.OVERDUE]: 'overdue',
 };
-
-const state = computed(() => getChoreDueState(props.chore));
-const stateClass = computed(() => STATE_CLASSES[state.value]);
+const stateClass = computed(() => STATE_CLASSES[props.chore.dueState]);
 </script>
 
 <style scoped lang="scss">

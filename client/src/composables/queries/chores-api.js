@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/vue-query';
 import choresApiService from '@/services/chores-api.service';
 import { computed } from 'vue';
+import { addPropsToChore } from '@/utilities/chores.js';
 
 export const CHORES_API_QUERY_KEYS = {
   CHORES: {
@@ -19,7 +20,7 @@ export const useChoresApiChores = () => {
     queryKey: CHORES_API_QUERY_KEYS.CHORES.GET,
     queryFn: choresApiService.getChores,
   });
-  query.chores = computed(() => query.data.value?.chores ?? []);
+  query.chores = computed(() => query.data.value?.chores.map(addPropsToChore) ?? []);
   return query;
 };
 
@@ -43,7 +44,9 @@ export const useChoresApiChore = (id) => {
     queryKey: CHORES_API_QUERY_KEYS.CHORES.GET_BY_ID(id),
     queryFn: () => choresApiService.getChore(id.value),
   });
-  query.chore = computed(() => query.data.value);
+  query.chore = computed(() =>
+    query.data.value == null ? null : addPropsToChore(query.data.value),
+  );
   return query;
 };
 

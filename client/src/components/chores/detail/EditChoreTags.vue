@@ -51,7 +51,7 @@
 import { useQueryClient } from '@tanstack/vue-query';
 import { useChoresApiTags, useChoresApiUpdateChoreTags } from '@/composables/queries/chores-api.js';
 import { useToast } from 'vue-toastification';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import PrimeButton from 'primevue/button';
 import PrimeMultiSelect from 'primevue/multiselect';
 import PrimeInlineMessage from 'primevue/inlinemessage';
@@ -66,9 +66,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['close']);
 
-const tagsQuery = useChoresApiTags();
-const tags = computed(() => tagsQuery.data.value?.tags ?? []);
-
+const { tags } = useChoresApiTags();
 const selectedTags = ref(props.chore.tags.map((t) => t.id));
 
 //#region update

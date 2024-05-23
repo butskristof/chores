@@ -19,7 +19,7 @@
 
 @mixin flex-row-justify-between-wrapping {
   @include flex-row-justify-between;
-  align-items: center;
+  align-items: flex-start;
   flex-wrap: wrap;
   gap: var(--default-padding);
 }
