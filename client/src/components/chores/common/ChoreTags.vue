@@ -3,16 +3,16 @@
     v-if="tags.length > 0"
     class="tags"
   >
-    <AppTag
+    <ChoreTag
       v-for="tag in tags"
       :key="tag.id"
-      :tag="tag"
+      :tag
     />
   </div>
 </template>
 
 <script setup>
-import AppTag from '@/components/tags/common/AppTag.vue';
+import ChoreTag from '@/components/tags/common/ChoreTag.vue';
 
 defineProps({
   tags: {

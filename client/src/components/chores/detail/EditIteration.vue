@@ -12,6 +12,9 @@
           :invalid="date.errors.value.length > 0"
           :disabled="isFormDisabled"
           date-format="dd/mm/yy"
+          show-icon
+          show-button-bar
+          :max-date="maxDate"
         />
         <small
           v-if="date.errors.value.length > 0"
@@ -138,6 +141,7 @@ const isFormDisabled = computed(
   () => mutation.isPending.value === true || mutation.isSuccess.value === true,
 );
 
+const maxDate = new Date();
 const date = useField('date');
 const notes = useField('notes');
 //#endregion

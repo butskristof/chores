@@ -32,7 +32,7 @@
         :key="tag.id"
       >
         <div class="details">
-          <AppTag
+          <ChoreTag
             :tag="tag"
             class="tag"
           />
@@ -66,7 +66,7 @@
 <script setup>
 import PrimeButton from 'primevue/button';
 import PrimeSkeleton from 'primevue/skeleton';
-import AppTag from '@/components/tags/common/AppTag.vue';
+import ChoreTag from '@/components/tags/common/ChoreTag.vue';
 import { Tippy } from 'vue-tippy';
 
 defineProps({

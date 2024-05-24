@@ -26,5 +26,3 @@ const SEVERITIES = {
 const severity = computed(() => SEVERITIES[props.chore.dueState]);
 const message = computed(() => getDueDaysMessage(props.chore));
 </script>
-
-<style scoped lang="scss"></style>

@@ -117,10 +117,6 @@ const iterationForDelete = ref(null);
   @include flex-row-actions;
 }
 
-.due-next {
-  margin-bottom: 1.25rem;
-}
-
 .timeline {
   --p-timeline-vertical-event-content-padding: 0;
   :deep(.p-timeline-event-separator) {
@@ -134,11 +130,6 @@ const iterationForDelete = ref(null);
 
 .iteration {
   @include flex-row-justify-between;
-  padding-bottom: 1rem;
-
-  &:not(:last-of-type) {
-    border-bottom: 1px solid var(--border-color);
-  }
 
   .details {
     flex-grow: 1;
