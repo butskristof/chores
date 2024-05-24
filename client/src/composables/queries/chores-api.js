@@ -2,6 +2,7 @@ import { useMutation, useQuery } from '@tanstack/vue-query';
 import choresApiService from '@/services/chores-api.service';
 import { computed } from 'vue';
 import { addPropsToChore } from '@/utilities/chores.js';
+import { sortBy } from 'lodash';
 
 export const CHORES_API_QUERY_KEYS = {
   CHORES: {
@@ -20,7 +21,11 @@ export const useChoresApiChores = () => {
     queryKey: CHORES_API_QUERY_KEYS.CHORES.GET,
     queryFn: choresApiService.getChores,
   });
-  query.chores = computed(() => query.data.value?.chores.map(addPropsToChore) ?? []);
+  query.chores = computed(() => {
+    if (query.data.value == null) return [];
+    const mapped = query.data.value?.chores.map(addPropsToChore);
+    return sortBy(mapped, (c) => c.dueDays);
+  });
   return query;
 };
 
