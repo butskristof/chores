@@ -110,20 +110,4 @@ import 'tippy.js/dist/tippy.css';
 
 //#endregion
 
-//#region multiselect
-
-// import 'vue-multiselect/dist/vue-multiselect.css';
-
-//#endregion
-
-//#region uid
-
-// import { Uid } from '@shimyshack/uid';
-//
-// app
-//   // .use(UidPlugin)
-//   .directive('uid', Uid);
-
-//#endregion
-
 app.mount('#app');
