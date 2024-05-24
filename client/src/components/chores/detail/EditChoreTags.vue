@@ -1,24 +1,25 @@
 <template>
-  <PrimeDialog
-    :visible="true"
-    modal
-    :draggable="false"
+  <EditDialog
+    :maximizable="false"
     header="Edit chore tags"
-    :style="{
-      width: '50rem',
-    }"
-    @update:visible="updateVisible"
+    @close="$emit('close')"
   >
     <div class="edit-chore-tags">
       <div class="field">
+        <div v-if="tagsQueryPending">Loading tags...</div>
         <PrimeMultiSelect
+          v-else
           v-model="selectedTags"
           :options="tags"
+          display="chip"
           option-label="name"
           option-value="id"
           filter
-          :max-selected-labels="3"
-        />
+        >
+          <template #chip="{ value: id }">
+            <ChoreTag :tag="findTag(id)" />
+          </template>
+        </PrimeMultiSelect>
       </div>
       <div class="footer">
         <div class="result">
@@ -44,24 +45,26 @@
             label="Save"
             icon="pi pi-save"
             :loading="mutation.isPending.value"
+            :disabled="tagsQueryPending"
             @click="save"
           />
         </div>
       </div>
     </div>
-  </PrimeDialog>
+  </EditDialog>
 </template>
 
 <script setup>
-import PrimeDialog from 'primevue/dialog';
 import { useQueryClient } from '@tanstack/vue-query';
 import { useChoresApiTags, useChoresApiUpdateChoreTags } from '@/composables/queries/chores-api.js';
 import { useToast } from 'vue-toastification';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import PrimeButton from 'primevue/button';
 import PrimeMultiSelect from 'primevue/multiselect';
 import PrimeInlineMessage from 'primevue/inlinemessage';
 import ApiError from '@/components/common/ApiError.vue';
+import EditDialog from '@/components/common/EditDialog.vue';
+import ChoreTag from '@/components/tags/common/ChoreTag.vue';
 
 const props = defineProps({
   chore: {
@@ -71,10 +74,10 @@ const props = defineProps({
 });
 const emit = defineEmits(['close']);
 
-const tagsQuery = useChoresApiTags();
-const tags = computed(() => tagsQuery.data.value?.tags ?? []);
-
+const { tags, isPending: tagsQueryPending } = useChoresApiTags();
 const selectedTags = ref(props.chore.tags.map((t) => t.id));
+
+const findTag = (id) => tags.value.find((t) => t.id === id);
 
 //#region update
 
@@ -96,10 +99,6 @@ const save = async () => {
 };
 
 //#endregion
-
-const updateVisible = (value) => {
-  if (value === false) emit('close');
-};
 </script>
 
 <style scoped lang="scss">
@@ -107,5 +106,9 @@ const updateVisible = (value) => {
 
 .edit-chore-tags {
   @include form-styling;
+}
+
+:deep(.p-multiselect-label) {
+  flex-wrap: wrap;
 }
 </style>

@@ -19,13 +19,17 @@
 
 @mixin flex-row-justify-between-wrapping {
   @include flex-row-justify-between;
-  align-items: center;
+  align-items: flex-start;
   flex-wrap: wrap;
   gap: var(--default-padding);
+}
 
-  .actions {
-    margin-left: auto;
-  }
+@mixin flex-row-actions {
+  @include flex-row;
+  gap: calc(var(--default-padding) / 2);
+  align-items: flex-start;
+  justify-content: flex-end;
+  margin-left: auto;
 }
 
 @mixin media-min-width($min-width) {
@@ -81,13 +85,19 @@
   background: color-mix(in srgb, var(--p-green-50), transparent 5%);
   border-color: var(--p-green-200);
   color: var(--p-green-600);
-  box-shadow: 0px 4px 8px 0px color-mix(in srgb, var(--p-green-500), transparent 96%);
+
+  &:hover {
+    background: color-mix(in srgb, var(--p-green-100), transparent 25%);
+  }
 
   @include dark-mode {
     background: color-mix(in srgb, var(--p-green-500), transparent 84%);
     border-color: color-mix(in srgb, var(--p-green-700), transparent 64%);
     color: var(--p-green-500);
-    box-shadow: 0px 4px 8px 0px color-mix(in srgb, var(--p-green-500), transparent 96%);
+
+    &:hover {
+      background: color-mix(in srgb, var(--p-green-400), transparent 84%);
+    }
   }
 }
 
@@ -95,13 +105,19 @@
   background: color-mix(in srgb, var(--p-yellow-50), transparent 5%);
   border-color: var(--p-yellow-200);
   color: var(--p-yellow-600);
-  box-shadow: 0px 4px 8px 0px color-mix(in srgb, var(--p-yellow-500), transparent 96%);
+
+  &:hover {
+    background: color-mix(in srgb, var(--p-yellow-100), transparent 25%);
+  }
 
   @include dark-mode {
     background: color-mix(in srgb, var(--p-yellow-500), transparent 84%);
     border-color: color-mix(in srgb, var(--p-yellow-700), transparent 64%);
     color: var(--p-yellow-500);
-    box-shadow: 0px 4px 8px 0px color-mix(in srgb, var(--p-yellow-500), transparent 96%);
+
+    &:hover {
+      background: color-mix(in srgb, var(--p-yellow-400), transparent 84%);
+    }
   }
 }
 
@@ -109,12 +125,24 @@
   background: color-mix(in srgb, var(--p-red-50), transparent 5%);
   border-color: var(--p-red-200);
   color: var(--p-red-600);
-  box-shadow: 0px 4px 8px 0px color-mix(in srgb, var(--p-red-500), transparent 96%);
+
+  &:hover {
+    background: color-mix(in srgb, var(--p-red-100), transparent 25%);
+  }
 
   @include dark-mode {
     background: color-mix(in srgb, var(--p-red-500), transparent 84%);
     border-color: color-mix(in srgb, var(--p-red-700), transparent 64%);
     color: var(--p-red-500);
-    box-shadow: 0px 4px 8px 0px color-mix(in srgb, var(--p-red-500), transparent 96%);
+
+    &:hover {
+      background: color-mix(in srgb, var(--p-red-400), transparent 84%);
+    }
   }
+}
+
+@mixin unstyled-ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }

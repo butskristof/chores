@@ -6,7 +6,7 @@
     :is-loading="mutation.isPending.value"
     :error="mutation.error.value"
     @close="$emit('close')"
-    @delete="deleteTag"
+    @delete="deleteTag()"
   >
     <template #confirm-text>
       Delete tag
@@ -30,9 +30,8 @@ const props = defineProps({
 });
 const emit = defineEmits(['close']);
 
-const queryClient = useQueryClient();
 const toast = useToast();
-
+const queryClient = useQueryClient();
 const mutation = useChoreApiDeleteTag(queryClient);
 const deleteTag = async () => {
   try {

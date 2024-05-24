@@ -9,19 +9,17 @@
         <div class="details">
           <PrimeSkeleton
             width="10rem"
-            height="1.6rem"
+            height="2rem"
           />
           <PrimeSkeleton
             width="6rem"
-            height="0.8rem"
+            height="1rem"
           />
         </div>
         <div class="actions">
           <PrimeSkeleton
-            width="2.5rem"
-            height="calc(2rem + 2px)"
-          />
-          <PrimeSkeleton
+            v-for="j in 2"
+            :key="j"
             width="2.5rem"
             height="calc(2rem + 2px)"
           />
@@ -34,7 +32,7 @@
         :key="tag.id"
       >
         <div class="details">
-          <AppTag
+          <ChoreTag
             :tag="tag"
             class="tag"
           />
@@ -42,35 +40,39 @@
         </div>
         <div class="actions">
           <PrimeButton
+            aria-label="Edit tag"
             icon="pi pi-pencil"
             @click="$emit('edit', tag.id)"
           />
-          <PrimeButton
-            icon="pi pi-trash"
-            severity="danger"
-            @click="$emit('delete', tag.id)"
-          />
+          <Tippy
+            :content="tag.choresCount > 0 ? 'Tag cannot be deleted if it\'s in use' : null"
+            placement="top-end"
+          >
+            <PrimeButton
+              aria-label="Delete tag"
+              icon="pi pi-trash"
+              severity="danger"
+              :disabled="tag.choresCount > 0"
+              @click="$emit('delete', tag.id)"
+            />
+          </Tippy>
         </div>
       </li>
     </ul>
-    <div
-      v-else
-      class="empty-state"
-    >
-      No tags found, get started by adding a new one.
-    </div>
+    <div v-else>No tags found, get started by adding a new one.</div>
   </div>
 </template>
 
 <script setup>
 import PrimeButton from 'primevue/button';
 import PrimeSkeleton from 'primevue/skeleton';
-import AppTag from '@/components/tags/common/AppTag.vue';
+import ChoreTag from '@/components/tags/common/ChoreTag.vue';
+import { Tippy } from 'vue-tippy';
 
 defineProps({
   tags: {
     type: Array,
-    required: true,
+    default: () => [],
   },
   loading: {
     type: Boolean,
@@ -92,21 +94,18 @@ defineEmits(['edit', 'delete']);
   }
 
   ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-
+    @include unstyled-ul;
     li {
       &.skeleton .details {
         @include flex-column;
-        gap: 0.5rem;
+        gap: 0.125rem;
       }
       &:not(:last-of-type) {
         border-bottom: 1px solid var(--border-color);
       }
       padding-block: 1rem;
+
       @include flex-row-justify-between-wrapping;
-      align-items: flex-start;
 
       .details {
         .usage {
@@ -116,9 +115,7 @@ defineEmits(['edit', 'delete']);
       }
 
       .actions {
-        @include flex-row;
-        align-items: center;
-        gap: 0.5rem;
+        @include flex-row-actions;
       }
     }
   }

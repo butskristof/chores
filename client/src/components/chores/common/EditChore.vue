@@ -1,14 +1,7 @@
 <template>
-  <PrimeDialog
-    :visible="true"
-    modal
-    maximizable
-    :draggable="false"
+  <EditDialog
     :header="isEdit ? 'Edit chore' : 'Create new chore'"
-    :style="{
-      width: '50rem',
-    }"
-    @update:visible="updateVisible"
+    @close="tryClose"
   >
     <form @submit="save">
       <div class="field">
@@ -89,7 +82,7 @@
         </div>
       </div>
     </form>
-  </PrimeDialog>
+  </EditDialog>
 </template>
 
 <script setup>
@@ -99,12 +92,12 @@ import { toTypedSchema } from '@vee-validate/yup';
 import * as yup from 'yup';
 import { useQueryClient } from '@tanstack/vue-query';
 import { useChoresApiUpsertChore } from '@/composables/queries/chores-api.js';
-import PrimeDialog from 'primevue/dialog';
 import PrimeInlineMessage from 'primevue/inlinemessage';
 import PrimeButton from 'primevue/button';
 import ApiError from '@/components/common/ApiError.vue';
 import PrimeInputText from 'primevue/inputtext';
 import PrimeInputNumber from 'primevue/inputnumber';
+import EditDialog from '@/components/common/EditDialog.vue';
 
 // TODO enable buttons on interval field when fixed
 // show-buttons
@@ -163,9 +156,6 @@ const save = handleSubmit.withControlled(async (values) => {
 
 //#endregion
 
-const updateVisible = (value) => {
-  if (value === false) tryClose();
-};
 const tryClose = (force = false) => {
   let close = true;
   if (!force && meta.value.dirty && mutation.isSuccess.value !== true)

@@ -3,18 +3,25 @@
     v-if="chore"
     class="chore-detail"
   >
-    <PageHeader
-      :inline-padding="false"
-      class="header"
-    >
-      <template #title>
+    <div class="back-to-overview">
+      <router-link :to="{ name: routes.chores.children.overview.name }">
+        <PrimeButton
+          icon="pi pi-arrow-left"
+          label="Back to overview"
+          severity="secondary"
+        />
+      </router-link>
+    </div>
+
+    <LeftRightHeader class="page-header">
+      <template #left>
         <div class="header-left">
           <h1>{{ chore.name }}</h1>
           <ChoreTags :tags="chore.tags" />
           <p class="chore-due"><i class="pi pi-clock"></i> every {{ chore.interval }} days</p>
         </div>
       </template>
-      <template #actions>
+      <template #right>
         <div class="actions">
           <PrimeButton
             label="Edit tags"
@@ -34,15 +41,15 @@
           />
         </div>
       </template>
-    </PageHeader>
+    </LeftRightHeader>
 
     <PrimeDivider />
 
-    <ChoreNotes :chore="chore" />
+    <ChoreNotes :chore />
 
     <PrimeDivider />
 
-    <ChoreIterations :chore="chore" />
+    <ChoreIterations :chore />
 
     <EditChoreTags
       v-if="showEditTags"
@@ -65,9 +72,9 @@
 <script setup>
 import { useRouteParams } from '@vueuse/router';
 import { useChoresApiChore } from '@/composables/queries/chores-api.js';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import PrimeButton from 'primevue/button';
-import PageHeader from '@/components/common/PageHeader.vue';
+import LeftRightHeader from '@/components/common/LeftRightHeader.vue';
 import ChoreTags from '@/components/chores/common/ChoreTags.vue';
 import EditChore from '@/components/chores/common/EditChore.vue';
 import { routes } from '@/router/routes.js';
@@ -79,13 +86,13 @@ import PrimeDivider from 'primevue/divider';
 import ChoreIterations from '@/components/chores/detail/ChoreIterations.vue';
 
 const choreId = useRouteParams('id');
-const choreQuery = useChoresApiChore(choreId);
-const chore = computed(() => choreQuery.data.value);
+const { chore } = useChoresApiChore(choreId);
 
 const router = useRouter();
 
 const showEditTags = ref(false);
 const showEdit = ref(false);
+
 const showDelete = ref(false);
 const closeDelete = (deleted) => {
   showDelete.value = false;
@@ -94,10 +101,23 @@ const closeDelete = (deleted) => {
 </script>
 
 <style scoped lang="scss">
+@import '@/styles/_custom-vars.scss';
 @import '@/styles/_utilities.scss';
 
-.header {
+.back-to-overview {
+  @include media-min-width($md) {
+    margin-bottom: 1rem;
+  }
+}
+
+.page-header {
+  // .header is also used inside the component, this must be another name
+  // to make sure it gets a higher importance
   align-items: flex-start;
+
+  .actions {
+    @include flex-row-actions;
+  }
 }
 
 .header-left {
@@ -112,12 +132,5 @@ const closeDelete = (deleted) => {
   i {
     margin-right: 0.5rem;
   }
-}
-
-.actions {
-  @include flex-row;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 1rem;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <PrimeDialog
-    :visible="true"
+    visible
     modal
     :draggable="false"
     :style="{ width: isError ? '40rem' : '25rem' }"

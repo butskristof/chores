@@ -178,10 +178,7 @@ header {
 
 .links,
 .actions {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-
+  @include unstyled-ul;
   @include flex-column;
   @include media-min-width($md) {
     flex-direction: row;

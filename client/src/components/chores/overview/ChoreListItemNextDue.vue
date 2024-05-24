@@ -1,15 +1,11 @@
 <template>
-  <div
-    class="next-due"
-    :class="severityClass"
-  >
+  <div class="next-due">
     <div>{{ message }}</div>
     <PrimeAvatar
       :icon="icon"
       size="large"
       shape="circle"
       class="state-icon"
-      :class="severityClass"
     />
   </div>
 </template>
@@ -17,7 +13,7 @@
 <script setup>
 import PrimeAvatar from 'primevue/avatar';
 import { computed } from 'vue';
-import { CHORE_DUE_STATES, getChoreDueState, getDueDays } from '@/utilities/chores.js';
+import { getDueDaysMessage, getDueStateIcon } from '@/utilities/chores.js';
 
 const props = defineProps({
   chore: {
@@ -25,27 +21,9 @@ const props = defineProps({
     required: true,
   },
 });
-const dueDays = computed(() => getDueDays(props.chore));
-const state = computed(() => getChoreDueState(props.chore));
-const CLASSES = {
-  [CHORE_DUE_STATES.OK]: 'ok',
-  [CHORE_DUE_STATES.ALMOST_DUE]: 'almost-due',
-  [CHORE_DUE_STATES.OVERDUE]: 'overdue',
-};
-const ICONS = {
-  [CHORE_DUE_STATES.OK]: 'pi pi-check',
-  [CHORE_DUE_STATES.ALMOST_DUE]: 'pi pi-exclamation-triangle',
-  [CHORE_DUE_STATES.OVERDUE]: 'pi pi-times',
-};
-const severityClass = computed(() => CLASSES[state.value]);
-const icon = computed(() => ICONS[state.value] ?? ICONS[CHORE_DUE_STATES.ALMOST_DUE]);
-const message = computed(() => {
-  if (dueDays.value == null) return 'due now';
-  if (dueDays.value < 0) return `due ${Math.abs(dueDays.value)} days ago`;
-  else if (dueDays.value === 1) return `due tomorrow`;
-  else if (dueDays.value === 0) return `due today`;
-  return `due in ${dueDays.value} days`;
-});
+
+const icon = computed(() => getDueStateIcon(props.chore));
+const message = computed(() => getDueDaysMessage(props.chore));
 </script>
 
 <style scoped lang="scss">
@@ -62,17 +40,6 @@ const message = computed(() => {
 .state-icon {
   flex-shrink: 0;
   border: 2px solid;
-
-  &.ok {
-    @include ok;
-  }
-
-  &.almost-due {
-    @include almost-due;
-  }
-
-  &.overdue {
-    @include overdue;
-  }
+  background-color: transparent;
 }
 </style>

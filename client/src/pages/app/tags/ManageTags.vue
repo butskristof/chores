@@ -1,18 +1,23 @@
 <template>
   <div class="manage-tags">
-    <PageHeader title="Tags">
-      <template #actions>
-        <PrimeButton
-          label="Add new tag"
-          icon="pi pi-plus"
-          @click="openEditDialog()"
-        />
+    <LeftRightHeader class="page-header">
+      <template #left>
+        <h1>Tags</h1>
       </template>
-    </PageHeader>
+      <template #right>
+        <div class="actions">
+          <PrimeButton
+            label="Add new tag"
+            icon="pi pi-plus"
+            @click="openEditDialog()"
+          />
+        </div>
+      </template>
+    </LeftRightHeader>
 
     <TagsList
       :tags="tags"
-      :loading="tagsQuery.isPending.value"
+      :loading="queryPending"
       @edit="openEditDialog"
       @delete="setTagForDelete"
     />
@@ -20,12 +25,12 @@
     <EditTag
       v-if="showEditDialog"
       :tag="tagForEdit"
-      @close="closeEditDialog"
+      @close="closeEditDialog()"
     />
     <DeleteTag
       v-if="tagForDelete != null"
       :tag="tagForDelete"
-      @close="closeDeleteDialog"
+      @close="closeDeleteDialog()"
     />
   </div>
 </template>
@@ -33,14 +38,13 @@
 <script setup>
 import TagsList from '@/components/tags/manage/TagsList.vue';
 import { useChoresApiTags } from '@/composables/queries/chores-api.js';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import EditTag from '@/components/tags/manage/EditTag.vue';
 import DeleteTag from '@/components/tags/manage/DeleteTag.vue';
 import PrimeButton from 'primevue/button';
-import PageHeader from '@/components/common/PageHeader.vue';
+import LeftRightHeader from '@/components/common/LeftRightHeader.vue';
 
-const tagsQuery = useChoresApiTags();
-const tags = computed(() => tagsQuery.data.value?.tags ?? []);
+const { tags, isPending: queryPending } = useChoresApiTags();
 
 //#region edit
 
@@ -66,3 +70,15 @@ const closeDeleteDialog = () => (tagForDelete.value = null);
 
 //#endregion
 </script>
+
+<style scoped lang="scss">
+@import '@/styles/_utilities.scss';
+
+.page-header {
+  padding-inline: var(--default-padding);
+
+  .actions {
+    @include flex-row-actions;
+  }
+}
+</style>
