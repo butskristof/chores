@@ -45,7 +45,6 @@ try
         .UseStatusCodePages();
 
     app.UseAuthorization();
-    app.UseCors(ApplicationConstants.CorsPolicy);
 
     app.MapHealthChecks(ApplicationConstants.HealthCheckPattern);
     // add endpoint to retrieve OpenAPI definition

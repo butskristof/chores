@@ -16,8 +16,7 @@ internal static class DependencyInjection
     internal static IServiceCollection AddConfiguration(this IServiceCollection services)
     {
         services
-            .AddValidatedSettings<AuthenticationSettings>(ConfigurationConstants.Authentication)
-            .AddValidatedSettings<ClientSettings>(ConfigurationConstants.Clients);
+            .AddValidatedSettings<AuthenticationSettings>(ConfigurationConstants.Authentication);
 
         return services;
     }
@@ -28,9 +27,9 @@ internal static class DependencyInjection
     {
         services
             .AddOptions<TOptions>()
-            .BindConfiguration(sectionName)
-            .FluentValidateOptions()
-            .ValidateOnStart();
+            .BindConfiguration(sectionName);
+            // .FluentValidateOptions()
+            // .ValidateOnStart();
 
         return services;
     }
@@ -60,8 +59,7 @@ internal static class DependencyInjection
             .AddScoped<IAuthenticationInfo, ApiAuthenticationInfo>();
 
         services
-            .AddAuthentication(TestAuthHandler.AuthenticationScheme)
-            .AddScheme<TestAuthHandlerOptions, TestAuthHandler>(TestAuthHandler.AuthenticationScheme, _ => { })
+            .AddAuthentication()
             .AddJwtBearer(options =>
             {
                 using var serviceProvider = services.BuildServiceProvider();
@@ -84,29 +82,9 @@ internal static class DependencyInjection
             });
         services.AddAuthorization();
 
-        services.AddCorsPolicy();
-
         services
             .AddHealthChecks()
             .AddDbContextCheck<AppDbContext>();
-
-        return services;
-    }
-
-    private static IServiceCollection AddCorsPolicy(this IServiceCollection services)
-    {
-        using var serviceProvider = services.BuildServiceProvider();
-        var configuration = serviceProvider.GetRequiredService<IOptions<ClientSettings>>().Value;
-
-        services
-            .AddCors(options => options
-                .AddPolicy(ApplicationConstants.CorsPolicy,
-                    builder =>
-                    {
-                        builder.WithOrigins(configuration.ClientUrls);
-                        builder.AllowAnyMethod();
-                        builder.AllowAnyHeader();
-                    }));
 
         return services;
     }
