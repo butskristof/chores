@@ -9,28 +9,17 @@ RUN npm ci
 COPY ${SPA_PATH}/. .
 RUN npm run build
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER $APP_UID
-WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
-
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-bff
 ARG BFF_PATH=./bff
 WORKDIR /src
-COPY ["${BFF_PATH}/Chores.Bff.csproj", "./"]
-RUN dotnet restore "Chores.Bff.csproj"
+
+COPY ${BFF_PATH}/Chores.Bff.csproj ./
+RUN dotnet restore
 COPY ${BFF_PATH}/. .
 COPY --from=build-spa /app/dist ./wwwroot
-WORKDIR "/src/"
-RUN dotnet build "Chores.Bff.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet publish -c Release -o /app/publish --no-restore
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "Chores.Bff.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
-FROM base AS final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build-bff /app/publish .
 ENTRYPOINT ["dotnet", "Chores.Bff.dll"]
