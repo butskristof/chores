@@ -1,6 +1,12 @@
 import axios from 'axios';
 
-const createAxiosInstance = (baseUrl) => axios.create({ baseURL: baseUrl });
+const createAxiosInstance = (baseUrl) =>
+  axios.create({
+    baseURL: baseUrl,
+    headers: {
+      'x-csrf': 1,
+    },
+  });
 
 export class AuthenticatedApiService {
   #axiosInstance;
