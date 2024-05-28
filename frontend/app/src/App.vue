@@ -2,9 +2,7 @@
   <div class="app-layout">
     <AppHeader class="app-header" />
     <div class="app-body">
-      <main class="page">
-        <RouterView />
-      </main>
+      <AppMain class="page" />
       <AppFooter class="app-footer" />
     </div>
   </div>
@@ -13,6 +11,7 @@
 <script setup>
 import AppHeader from '@/components/layout/AppHeader.vue';
 import AppFooter from '@/components/layout/AppFooter.vue';
+import AppMain from '@/components/layout/AppMain.vue';
 </script>
 
 <style scoped lang="scss">
