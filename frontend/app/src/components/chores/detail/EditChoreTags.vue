@@ -19,6 +19,9 @@
           <template #chip="{ value: id }">
             <ChoreTag :tag="findTag(id)" />
           </template>
+          <template #option="{ option }">
+            <ChoreTag :tag="option" />
+          </template>
         </PrimeMultiSelect>
       </div>
       <div class="footer">
