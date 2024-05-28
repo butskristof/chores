@@ -8,7 +8,7 @@
         <label for="name">Name</label>
         <PrimeInputText
           id="name"
-          v-model.trim="name.value.value"
+          v-model="name.value.value"
           type="text"
           :disabled="isFormDisabled"
           :invalid="name.errors.value.length > 0"
@@ -33,14 +33,14 @@
           <label for="color">Color</label>
           <PrimeInputText
             id="color"
-            v-model.trim="color.value.value"
+            v-model="color.value.value"
             type="color"
             class="color-picker"
             :disabled="isFormDisabled"
             :invalid="color.errors.value.length > 0"
           />
           <PrimeInputText
-            v-model.trim="color.value.value"
+            v-model="color.value.value"
             type="text"
             :disabled="isFormDisabled"
             :invalid="color.errors.value.length > 0"
@@ -143,9 +143,10 @@ const isEdit = computed(() => props.tag != null);
 const { handleSubmit, meta } = useForm({
   validationSchema: toTypedSchema(
     yup.object({
-      name: yup.string().required().label('Name'),
+      name: yup.string().trim().required().label('Name'),
       color: yup
         .string()
+        .trim()
         .matches(/^#(([0-9a-fA-F]{2}){3})$/u, 'Color must be a valid hex code (e.g. #ffffff)')
         .label('Color'),
       icon: yup.string().max(32).label('Icon'),

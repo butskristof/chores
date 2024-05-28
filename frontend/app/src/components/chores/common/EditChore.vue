@@ -8,7 +8,7 @@
         <label for="name">Name</label>
         <PrimeInputText
           id="name"
-          v-model.trim="name.value.value"
+          v-model="name.value.value"
           type="text"
           :disabled="isFormDisabled"
           :invalid="name.errors.value.length > 0"
@@ -117,7 +117,7 @@ const isEdit = computed(() => props.chore != null);
 const { handleSubmit, meta } = useForm({
   validationSchema: toTypedSchema(
     yup.object({
-      name: yup.string().required().label('Name'),
+      name: yup.string().trim().required().label('Name'),
       interval: yup.number().required().positive().integer().label('Interval'),
     }),
   ),

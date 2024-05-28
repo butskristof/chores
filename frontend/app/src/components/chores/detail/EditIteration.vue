@@ -35,7 +35,7 @@
         <label for="notes">Notes</label>
         <PrimeTextarea
           id="notes"
-          v-model.trim="notes.value.value"
+          v-model="notes.value.value"
           :rows="5"
           auto-resize
           class="editor"
@@ -123,7 +123,7 @@ const { handleSubmit, meta } = useForm({
   validationSchema: toTypedSchema(
     yup.object({
       date: yup.date().required().label('Date'),
-      notes: yup.string().label('Notes'),
+      notes: yup.string().trim().label('Notes'),
     }),
   ),
   initialValues: {
