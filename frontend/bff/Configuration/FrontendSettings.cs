@@ -4,6 +4,6 @@ internal sealed class FrontendSettings
 {
     internal const string SectionName = "Frontend";
 
-    public string? DevServerUrl { get; init; }
-    public Uri? DevServerUri => Uri.TryCreate(DevServerUrl, UriKind.Absolute, out var uri) ? uri : null;
+    public string? ClientUrl { get; init; }
+    public Uri? ClientUri => Uri.TryCreate(ClientUrl, UriKind.Absolute, out var uri) ? uri : null;
 }

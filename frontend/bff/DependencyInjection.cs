@@ -41,8 +41,7 @@ internal static class DependencyInjection
         services
             .AddBff()
             .AddRemoteApis();
-        if (isDevelopment) // allow passing in the configured dev server url as return url
-            services.AddTransient<IReturnUrlValidator, FrontendHostReturnUrlValidator>();
+        services.AddTransient<IReturnUrlValidator, FrontendHostReturnUrlValidator>();
 
         services
             .AddAuthentication(options =>
