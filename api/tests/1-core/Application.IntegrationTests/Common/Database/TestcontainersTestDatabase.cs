@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using NSubstitute;
 using Respawn;
 using Respawn.Graph;
-using Testcontainers.MsSql;
+using Testcontainers.PostgreSql;
 
 namespace Chores.Application.IntegrationTests.Common.Database;
 
@@ -17,14 +17,14 @@ namespace Chores.Application.IntegrationTests.Common.Database;
 
 internal sealed class TestcontainersTestDatabase : ITestDatabase
 {
-    private readonly MsSqlContainer _container;
+    private readonly PostgreSqlContainer _container;
     private DbConnection _connection = null!;
     private string _connectionString = null!;
     private Respawner _respawner = null!;
 
     public TestcontainersTestDatabase()
     {
-        _container = new MsSqlBuilder()
+        _container = new PostgreSqlBuilder()
             .WithAutoRemove(true)
             .Build();
     }
@@ -35,7 +35,7 @@ internal sealed class TestcontainersTestDatabase : ITestDatabase
         _connectionString = _container.GetConnectionString();
         _connection = new SqlConnection(_connectionString);
         var options = new DbContextOptionsBuilder<AppDbContext>()
-            .UseSqlServer(_connectionString)
+            .UseNpgsql(_connectionString)
             .Options;
         var context = new AppDbContext(options, Substitute.For<IAuthenticationInfo>());
         context.Database.Migrate();
