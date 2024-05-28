@@ -22,14 +22,6 @@ import PrimeButton from 'primevue/button';
 @import '@/styles/_utilities.scss';
 
 .page-not-found {
-  padding-block: 4rem;
-  height: 100%;
-  text-align: center;
-
-  @include flex-column;
-
-  .actions {
-    margin-top: 2rem;
-  }
+  @include info-page;
 }
 </style>

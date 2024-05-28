@@ -14,7 +14,10 @@
       </div>
       <div>Chores</div>
     </router-link>
-    <div class="toggle">
+    <div
+      v-if="isAuthenticated"
+      class="toggle"
+    >
       <PrimeButton
         icon="pi pi-bars"
         severity="secondary"
@@ -22,6 +25,7 @@
       />
     </div>
     <div
+      v-if="isAuthenticated"
       class="content"
       :class="{ visible: showMobileMenu }"
     >
@@ -65,8 +69,10 @@ import { ref } from 'vue';
 import { routes } from '@/router/routes';
 import { useAppDarkMode } from '@/composables/app.js';
 import PrimeButton from 'primevue/button';
+import { useBffUser } from '@/composables/queries/auth.js';
 
 const darkMode = useAppDarkMode();
+const { isAuthenticated } = useBffUser();
 
 const showMobileMenu = ref(false);
 const navigationRoutes = [
