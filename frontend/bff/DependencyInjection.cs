@@ -82,7 +82,8 @@ internal static class DependencyInjection
         services
             .AddAuthorization();
 
-        services.Configure<ForwardedHeadersOptions>(options =>
+        services
+            .Configure<ForwardedHeadersOptions>(options =>
         {
             options.ForwardedHeaders =
                 ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
@@ -91,6 +92,9 @@ internal static class DependencyInjection
             options.KnownNetworks.Clear();
             options.KnownProxies.Clear();
         });
+
+        services
+            .AddHealthChecks();
 
         return services;
     }
