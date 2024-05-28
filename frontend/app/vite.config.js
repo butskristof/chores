@@ -4,6 +4,7 @@ import { fileURLToPath, URL } from 'node:url';
 import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import eslint from 'vite-plugin-eslint';
+import basicSsl from '@vitejs/plugin-basic-ssl';
 
 export default ({ mode }) => {
   // the env isn't readily available, so we first create an object using Node's environment
@@ -28,7 +29,7 @@ export default ({ mode }) => {
 
   // https://vitejs.dev/config/
   return defineConfig({
-    plugins: [vue(), eslint()],
+    plugins: [vue(), eslint(), basicSsl()],
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
