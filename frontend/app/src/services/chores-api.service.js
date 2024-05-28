@@ -1,9 +1,8 @@
 import { AuthenticatedApiService } from '@/services/authenticated-api.service';
-import { CHORES_API_BASEURL } from '@/utilities/env';
 
 class ChoresApiService extends AuthenticatedApiService {
   constructor() {
-    super(CHORES_API_BASEURL);
+    super('/api');
   }
 
   //#region chores

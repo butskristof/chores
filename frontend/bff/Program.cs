@@ -13,6 +13,7 @@ builder.Services
 
 var app = builder.Build();
 
+app.UseForwardedHeaders();
 if (isProduction) // serve SPA assets from wwwroot
 {
     app.UseDefaultFiles();

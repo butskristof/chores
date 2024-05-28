@@ -4,6 +4,7 @@ using Duende.Bff;
 using Duende.Bff.Yarp;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
 
 namespace Chores.Bff;
@@ -63,7 +64,7 @@ internal static class DependencyInjection
                 var configuration = serviceProvider
                     .GetRequiredService<IOptions<AuthenticationSettings>>()
                     .Value;
-                
+
                 options.Authority = configuration.Authority;
                 options.ClientId = configuration.ClientId;
                 options.ClientSecret = configuration.ClientSecret;
@@ -80,6 +81,16 @@ internal static class DependencyInjection
             });
         services
             .AddAuthorization();
+
+        services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders =
+                ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            // Only loopback proxies are allowed by default. Clear that restriction because forwarders are
+            // being enabled by explicit configuration.
+            options.KnownNetworks.Clear();
+            options.KnownProxies.Clear();
+        });
 
         return services;
     }
