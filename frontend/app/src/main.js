@@ -112,4 +112,13 @@ import 'tippy.js/dist/tippy.css';
 
 //#endregion
 
+//#region icons
+
+import { addIcons } from 'oh-vue-icons';
+import { ICONS } from '@/utilities/icons.js';
+
+addIcons(...ICONS);
+
+//#endregion
+
 app.mount('#app');

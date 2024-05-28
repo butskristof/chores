@@ -61,26 +61,12 @@
         </div>
         <div class="field">
           <label for="icon">Icon</label>
-          <PrimeInputGroup>
-            <PrimeInputGroupAddon>
-              <i :class="icon.value.value" />
-            </PrimeInputGroupAddon>
-            <PrimeAutoComplete
-              id="icon"
-              v-model="icon.value.value"
-              :suggestions="filteredIcons"
-              :disabled="isFormDisabled"
-              :invalid="icon.errors.value.length > 0"
-              @complete="searchIcon"
-            >
-              <template #option="slotProps">
-                <div class="option">
-                  <i :class="slotProps.option" />
-                  {{ slotProps.option }}
-                </div>
-              </template>
-            </PrimeAutoComplete>
-          </PrimeInputGroup>
+          <AppIconPicker
+            v-model="icon.value.value"
+            input-id="icon"
+            :disabled="isFormDisabled"
+            :invalid="icon.errors.value.length > 0"
+          />
           <small
             v-if="icon.errors.value.length > 0"
             class="p-error"
@@ -130,7 +116,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import PrimeInputText from 'primevue/inputtext';
 import PrimeButton from 'primevue/button';
 import PrimeInlineMessage from 'primevue/inlinemessage';
@@ -140,12 +126,8 @@ import * as yup from 'yup';
 import { useChoresApiUpsertTag } from '@/composables/queries/chores-api.js';
 import { useQueryClient } from '@tanstack/vue-query';
 import ApiError from '@/components/common/ApiError.vue';
-import PrimeAutoComplete from 'primevue/autocomplete';
-import { PrimeIcons } from 'primevue/api';
-import { stringIsNullOrWhitespace } from '@/utilities/string.js';
-import PrimeInputGroup from 'primevue/inputgroup';
-import PrimeInputGroupAddon from 'primevue/inputgroupaddon';
 import EditDialog from '@/components/common/EditDialog.vue';
+import AppIconPicker from '@/components/common/AppIconPicker.vue';
 
 const props = defineProps({
   tag: {
@@ -183,18 +165,6 @@ const isFormDisabled = computed(
 const name = useField('name');
 const color = useField('color');
 const icon = useField('icon');
-
-//#region icon
-const icons = Object.values(PrimeIcons);
-const filteredIcons = ref(Object.values(icons));
-const searchIcon = (event) => {
-  if (stringIsNullOrWhitespace(event.query)) filteredIcons.value = [...icons];
-  else {
-    const query = event.query.trim().toLowerCase();
-    filteredIcons.value = icons.filter((i) => i.toLowerCase().includes(query));
-  }
-};
-//#endregion
 
 //#endregion
 
