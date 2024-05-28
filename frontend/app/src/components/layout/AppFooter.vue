@@ -36,6 +36,20 @@
           />
         </a>
       </Tippy>
+      <Tippy
+        v-if="isAuthenticated"
+        content="Sign out"
+      >
+        <a href="/bff/logout">
+          <PrimeButton
+            icon="pi pi-sign-out"
+            text
+            rounded
+            severity="secondary"
+            aria-label="Sign out"
+          />
+        </a>
+      </Tippy>
     </div>
   </footer>
 </template>
@@ -44,8 +58,10 @@
 import PrimeButton from 'primevue/button';
 import { useAppDarkMode } from '@/composables/app.js';
 import { Tippy } from 'vue-tippy';
+import { useBffUser } from '@/composables/queries/auth.js';
 
 const darkMode = useAppDarkMode();
+const { isAuthenticated } = useBffUser();
 </script>
 
 <style scoped lang="scss">
