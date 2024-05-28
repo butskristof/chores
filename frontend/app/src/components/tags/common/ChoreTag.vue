@@ -1,8 +1,8 @@
 <template>
   <PrimeTag class="tag">
-    <i
+    <AppIcon
       v-if="!stringIsNullOrWhitespace(tag.icon)"
-      :class="tag.icon"
+      :name="tag.icon"
     />
     <span class="name">{{ tag.name }}</span>
   </PrimeTag>
@@ -11,6 +11,7 @@
 <script setup>
 import PrimeTag from 'primevue/tag';
 import { stringIsNullOrWhitespace } from '@/utilities/string.js';
+import AppIcon from '@/components/common/AppIcon.vue';
 
 defineProps({
   tag: {
