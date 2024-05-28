@@ -26,6 +26,7 @@ app.UseAuthentication();
 app.UseBff();
 app.UseAuthorization();
 
+app.MapHealthChecks("/health");
 app.MapBffManagementEndpoints();
 var remoteApiSettings = app.Services.GetRequiredService<IOptions<RemoteApiSettings>>().Value;
 app.MapRemoteBffApiEndpoint("/api", remoteApiSettings.ChoresApiUrl)
