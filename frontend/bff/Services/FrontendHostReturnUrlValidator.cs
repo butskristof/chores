@@ -19,9 +19,9 @@ internal sealed class FrontendHostReturnUrlValidator : IReturnUrlValidator
     public Task<bool> IsValidAsync(string returnUrl)
     {
         var uri = new Uri(returnUrl);
-        var result = _settings.DevServerUri is not null &&
-        uri.Host == _settings.DevServerUri.Host &&
-        uri.Port == _settings.DevServerUri.Port;
+        var result = _settings.ClientUri is not null &&
+        uri.Host == _settings.ClientUri.Host &&
+        uri.Port == _settings.ClientUri.Port;
         return Task.FromResult(result);
     }
 }
