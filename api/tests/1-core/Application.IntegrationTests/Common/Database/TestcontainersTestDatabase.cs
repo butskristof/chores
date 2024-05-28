@@ -1,8 +1,8 @@
 using System.Data.Common;
 using Chores.Application.Common.Authentication;
 using Chores.Persistence;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using NSubstitute;
 using Respawn;
 using Respawn.Graph;
@@ -26,6 +26,7 @@ internal sealed class TestcontainersTestDatabase : ITestDatabase
     {
         _container = new PostgreSqlBuilder()
             .WithAutoRemove(true)
+            .WithDatabase("chores")
             .Build();
     }
 
@@ -33,21 +34,23 @@ internal sealed class TestcontainersTestDatabase : ITestDatabase
     {
         await _container.StartAsync();
         _connectionString = _container.GetConnectionString();
-        _connection = new SqlConnection(_connectionString);
+        _connection = new NpgsqlConnection(_connectionString);
+        await _connection.OpenAsync();
         var options = new DbContextOptionsBuilder<AppDbContext>()
             .UseNpgsql(_connectionString)
             .Options;
         var context = new AppDbContext(options, Substitute.For<IAuthenticationInfo>());
         context.Database.Migrate();
-        _respawner = await Respawner.CreateAsync(_connectionString, new RespawnerOptions
+        _respawner = await Respawner.CreateAsync(_connection, new RespawnerOptions
         {
             TablesToIgnore = new Table[] { "__EFMigrationsHistory" },
+            DbAdapter = DbAdapter.Postgres,
         });
     }
 
     public DbConnection GetConnection() => _connection;
 
-    public Task ResetAsync() => _respawner.ResetAsync(_connectionString);
+    public Task ResetAsync() => _respawner.ResetAsync(_connection);
 
     public async Task DisposeAsync()
     {
