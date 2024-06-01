@@ -121,4 +121,9 @@ addIcons(...ICONS);
 
 //#endregion
 
+//#region dompurify
+import VueDOMPurifyHTML from 'vue-dompurify-html';
+app.use(VueDOMPurifyHTML);
+//#endregion
+
 app.mount('#app');

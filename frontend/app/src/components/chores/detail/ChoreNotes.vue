@@ -20,11 +20,10 @@
       v-if="showEdit"
       class="edit-mode"
     >
-      <PrimeTextarea
-        v-model.trim="notes"
-        :rows="5"
-        auto-resize
-        class="editor"
+      <PrimeEditor
+        v-model="notes"
+        editor-style="height: 15rem;"
+        @load="initializeEditor"
       />
       <div class="footer">
         <div class="actions">
@@ -45,8 +44,14 @@
       </div>
     </div>
 
-    <div v-else>
-      <div v-if="!stringIsNullOrWhitespace(chore.notes)">{{ chore.notes }}</div>
+    <div
+      v-else
+      class="notes-content"
+    >
+      <div
+        v-if="!stringIsNullOrWhitespace(chore.notes)"
+        v-dompurify-html="chore.notes"
+      />
       <div
         v-else
         class="no-notes"
@@ -64,8 +69,9 @@ import PrimeButton from 'primevue/button';
 import { ref } from 'vue';
 import { useQueryClient } from '@tanstack/vue-query';
 import { useChoresApiUpdateChoreNotes } from '@/composables/queries/chores-api.js';
-import PrimeTextarea from 'primevue/textarea';
 import { useToast } from 'vue-toastification';
+import PrimeEditor from 'primevue/editor';
+import { generateQuillInitializer } from '@/utilities/editor.js';
 
 const props = defineProps({
   chore: {
@@ -81,6 +87,7 @@ const startEdit = () => {
   notes.value = props.chore.notes;
   showEdit.value = true;
 };
+const initializeEditor = generateQuillInitializer(notes);
 
 const toast = useToast();
 const queryClient = useQueryClient();
@@ -111,9 +118,6 @@ const save = async () => {
 .edit-mode {
   @include flex-column;
   gap: 1rem;
-  .editor {
-    width: 100%;
-  }
 
   .footer {
     @include flex-row;
