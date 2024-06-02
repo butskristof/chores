@@ -27,31 +27,32 @@
     >
       <template #content="{ item: iteration }">
         <div class="iteration">
-          <div class="details">
-            <div class="date">{{ formatDate(iteration.date) }}</div>
-            <div
-              v-if="!stringIsNullOrWhitespace(iteration.notes)"
-              class="notes"
-            >
-              {{ iteration.notes }}
+          <div class="details-actions">
+            <div class="details">
+              <div class="date">{{ formatDate(iteration.date) }}</div>
+            </div>
+            <div class="actions">
+              <Tippy
+                content="Not implemented yet"
+                placement="bottom-end"
+              >
+                <PrimeButton
+                  icon="pi pi-pencil"
+                  disabled
+                />
+              </Tippy>
+              <PrimeButton
+                icon="pi pi-trash"
+                severity="danger"
+                @click="iterationForDelete = iteration"
+              />
             </div>
           </div>
-          <div class="actions">
-            <Tippy
-              content="Not implemented yet"
-              placement="bottom-end"
-            >
-              <PrimeButton
-                icon="pi pi-pencil"
-                disabled
-              />
-            </Tippy>
-            <PrimeButton
-              icon="pi pi-trash"
-              severity="danger"
-              @click="iterationForDelete = iteration"
-            />
-          </div>
+          <QuillContent
+            v-if="!stringIsNullOrWhitespace(iteration.notes)"
+            class="notes"
+            :content="iteration.notes"
+          />
         </div>
       </template>
     </PrimeTimeline>
@@ -83,6 +84,7 @@ import { Tippy } from 'vue-tippy';
 import ChoreNextDue from '@/components/chores/detail/ChoreNextDue.vue';
 import { formatDate } from '@/utilities/datetime.js';
 import PrimeTimeline from 'primevue/timeline';
+import QuillContent from '@/components/common/QuillContent.vue';
 
 const props = defineProps({
   chore: {
@@ -129,10 +131,13 @@ const iterationForDelete = ref(null);
 }
 
 .iteration {
-  @include flex-row-justify-between;
+  padding-bottom: 1rem;
+  .details-actions {
+    @include flex-row-justify-between;
 
-  .details {
-    flex-grow: 1;
+    .details {
+      flex-grow: 1;
+    }
   }
 }
 </style>

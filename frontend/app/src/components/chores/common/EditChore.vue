@@ -36,6 +36,8 @@
           :disabled="isFormDisabled"
           :invalid="interval.errors.value.length > 0"
           :min="1"
+          show-buttons
+          button-layout="horizontal"
         />
         <small
           v-if="interval.errors.value.length > 0"
@@ -98,11 +100,6 @@ import ApiError from '@/components/common/ApiError.vue';
 import PrimeInputText from 'primevue/inputtext';
 import PrimeInputNumber from 'primevue/inputnumber';
 import EditDialog from '@/components/common/EditDialog.vue';
-
-// TODO enable buttons on interval field when fixed
-// show-buttons
-// button-layout="horizontal"
-// https://github.com/primefaces/primevue/issues/5754
 
 const props = defineProps({
   chore: {

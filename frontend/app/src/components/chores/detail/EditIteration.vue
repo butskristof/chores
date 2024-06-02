@@ -33,14 +33,12 @@
 
       <div class="field">
         <label for="notes">Notes</label>
-        <PrimeTextarea
+        <PrimeEditor
           id="notes"
           v-model="notes.value.value"
-          :rows="5"
-          auto-resize
-          class="editor"
-          :invalid="notes.errors.value.length > 0"
-          :disabled="isFormDisabled"
+          :readonly="isFormDisabled"
+          editor-style="height: 10rem;"
+          @load="initializeNotesEditor"
         />
         <small
           v-if="notes.errors.value.length > 0"
@@ -100,10 +98,11 @@ import * as yup from 'yup';
 import PrimeInlineMessage from 'primevue/inlinemessage';
 import PrimeButton from 'primevue/button';
 import ApiError from '@/components/common/ApiError.vue';
-import PrimeTextarea from 'primevue/textarea';
 import PrimeDatePicker from 'primevue/datepicker';
 import { formatDateAsJson } from '@/utilities/datetime.js';
 import EditDialog from '@/components/common/EditDialog.vue';
+import { generateQuillInitializer } from '@/utilities/editor.js';
+import PrimeEditor from 'primevue/editor';
 
 const props = defineProps({
   choreId: {
@@ -144,6 +143,7 @@ const isFormDisabled = computed(
 const maxDate = new Date();
 const date = useField('date');
 const notes = useField('notes');
+const initializeNotesEditor = generateQuillInitializer(notes.value);
 //#endregion
 
 //#region create/update

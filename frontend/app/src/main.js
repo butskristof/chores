@@ -121,4 +121,19 @@ addIcons(...ICONS);
 
 //#endregion
 
+//#region quill
+
+import 'quill/dist/quill.core.css';
+// the editor itself is wrapped by PrimeVue, so we don't have to register
+// or configure it here
+// importing the styles into the app is necessary to correctly show
+// Quill-formatted markup
+
+//#endregion
+
+//#region dompurify
+import VueDOMPurifyHTML from 'vue-dompurify-html';
+app.use(VueDOMPurifyHTML);
+//#endregion
+
 app.mount('#app');
