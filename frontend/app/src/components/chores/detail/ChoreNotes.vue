@@ -44,13 +44,10 @@
       </div>
     </div>
 
-    <div
-      v-else
-      class="notes-content"
-    >
-      <div
+    <div v-else>
+      <QuillContent
         v-if="!stringIsNullOrWhitespace(chore.notes)"
-        v-dompurify-html="chore.notes"
+        :content="chore.notes"
       />
       <div
         v-else
@@ -72,6 +69,7 @@ import { useChoresApiUpdateChoreNotes } from '@/composables/queries/chores-api.j
 import { useToast } from 'vue-toastification';
 import PrimeEditor from 'primevue/editor';
 import { generateQuillInitializer } from '@/utilities/editor.js';
+import QuillContent from '@/components/common/QuillContent.vue';
 
 const props = defineProps({
   chore: {
